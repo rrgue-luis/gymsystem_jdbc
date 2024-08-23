@@ -1,0 +1,42 @@
+package imp;
+
+import dao.DAO;
+import dao.MySQLDBConnection;
+import entities.Payment;
+
+import java.sql.Connection;
+import java.util.List;
+
+public class PaymentDAOImp implements MySQLDBConnection, DAO<Payment, Integer> {
+    @Override
+    public boolean insert(Payment entity) {
+
+
+        return false;
+    }
+
+    @Override
+    public void update(Payment entity) {
+
+    }
+
+    @Override
+    public List<Payment> obtainAll() {
+        return null;
+    }
+
+    @Override
+    public void delete(Payment entity) {
+
+    }
+
+    @Override
+    public Payment searchForId(Integer key) {
+        return null;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return MySQLDBConnection.super.getConnection();
+    }
+}
