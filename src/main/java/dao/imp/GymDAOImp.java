@@ -1,35 +1,35 @@
-package imp;
+package dao.imp;
 
 import dao.DAO;
 import dao.MySQLDBConnection;
-import entities.Employee;
+import entities.Gym;
 
 import java.sql.Connection;
 import java.util.List;
 
-public class EmployeeDAOImp implements MySQLDBConnection, DAO<Employee, Integer> {
+public class GymDAOImp implements MySQLDBConnection, DAO<Gym, Integer> {
     @Override
-    public boolean insert(Employee entity) {
+    public boolean insert(Gym entity) {
         return false;
     }
 
     @Override
-    public void update(Employee entity) {
+    public void update(Gym entity) {
 
     }
 
     @Override
-    public List<Employee> obtainAll() {
+    public List<Gym> obtainAll() {
         return null;
     }
 
     @Override
-    public void delete(Employee entity) {
+    public void delete(Gym entity) {
 
     }
 
     @Override
-    public Employee searchForId(Integer key) {
+    public Gym searchForId(Integer key) {
         return null;
     }
 

@@ -1,19 +1,18 @@
-package entities;
+package presentation;
 
-import dao.DAO;
-import imp.MemberDAOImp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import business.MemberService;
+import business.MemberServiceImp;
+import dao.imp.MemberDAOImp;
 
 public class Main {
     public static void main(String[] args) {
 
-        try {
+        /* CREAR MIEMBRO try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-            java.util.Date birthDate = formatter.parse("2003-05-17");
-            java.util.Date registrationDate = formatter.parse("2023-05-15");
-            java.util.Date membershipEndDate = formatter.parse("2024-09-24");
+
+            Date registrationDate = formatter.parse("2023-05-15");
+            Date membershipEndDate = formatter.parse("2024-09-24");
 
             Member member = new Member();
 
@@ -22,6 +21,14 @@ public class Main {
             member.setGender("male");
             member.setPhone("1165250302");
             member.setAddress("machain");
+
+            Scanner scanner = new Scanner(System.in);
+            String birthDateScanner;
+
+            birthDateScanner = scanner.next();
+            Date birthDate = formatter.parse(birthDateScanner);
+
+
             member.setBirthDate(birthDate);
             member.setRegistrationDate(registrationDate);
             member.setMembershipEndDate(membershipEndDate);
@@ -36,7 +43,7 @@ public class Main {
             e.printStackTrace();
         }
 
-
+         */
 
 
 

@@ -1,17 +1,17 @@
-package imp;
+package dao.imp;
 
+import com.sun.jdi.connect.Connector;
 import dao.DAO;
+import dao.MemberDAO;
 import dao.MySQLDBConnection;
 import entities.Member;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
-import java.sql.Date;
+
 //String SQLSentence = "INSERT INTO member(name, surname, gender, phone, address, birth_date, registration_date, membership_end_date, membership_type) " +
 //                "VALUES('"+entity.getName()+", "+entity.getSurname()+", "+entity.getGender()+", "+entity.getPhone()+", "+entity.getAddress()+", "+entity.getBirthDate()+", "+entity.getRegistrationDate()+", "+entity.getMembershipEndDate()+", "+entity.getMembershipType()+"')";
-public class MemberDAOImp implements MySQLDBConnection, DAO<Member, Integer> {
+public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     @Override
     public boolean insert(Member entity) {
 
@@ -44,11 +44,24 @@ public class MemberDAOImp implements MySQLDBConnection, DAO<Member, Integer> {
             return false;
         }
 
-
     }
 
     @Override
     public void update(Member entity) {
+
+        Connection connection = getConnection();
+        String SQLSentence = "UPDATE member SET name='"+entity.getName()+"'WHERE id="+entity.getId()+";";
+
+        try {
+
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+
+            SQLSentenceObject.execute();
+            SQLSentenceObject.close();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -64,11 +77,52 @@ public class MemberDAOImp implements MySQLDBConnection, DAO<Member, Integer> {
 
     @Override
     public Member searchForId(Integer key) {
+
+        Member searchedMember = null;
+
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM member WHERE ID = "+key;
+        Statement ObjectSQLSentence = null;
+
+        try {
+
+            ObjectSQLSentence = connection.createStatement();
+            ResultSet result = ObjectSQLSentence.executeQuery(SQLSentence);
+
+            while(result.next()) {
+                int id = result.getInt("ID: ");
+                String name = result.getString("name: ");
+                String surname = result.getString("surname: ");
+                String phone = result.getString("phone: ");
+                String address = result.getString("address: ");
+
+                /*searchedMember.setBirthDate(birthDate);
+                searchedMember.setRegistrationDate(registrationDate);
+                searchedMember.setMembershipEndDate(membershipEndDate);
+                searchedMember.setMembershipType(Member.MembershipType.MONTHLY);
+
+                searchedMember = new Member(id, name, surname, phone, address, );
+
+                 */
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
     @Override
     public Connection getConnection() {
         return MySQLDBConnection.super.getConnection();
+    }
+    @Override
+    public void udpateMember(Member member) {
+    }
+
+    @Override
+    public Member findMemberById(int id) {
+        return null;
     }
 }

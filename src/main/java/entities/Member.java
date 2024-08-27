@@ -35,7 +35,7 @@ public class Member {
         return formatter.format(membershipEndDate);
     }
 
-    private void renewMembership(){
+    /* private void renewMembership(){
         //renovar membresia
         //if payment == valid ...
     }
@@ -54,6 +54,8 @@ public class Member {
         //membresia activa o no
         return false;
     }
+
+     */
 
     public Member() {
     }
