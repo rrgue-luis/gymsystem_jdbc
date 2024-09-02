@@ -1,17 +1,17 @@
 package dao.imp;
 
-import com.sun.jdi.connect.Connector;
-import dao.DAO;
 import dao.MemberDAO;
 import dao.MySQLDBConnection;
 import entities.Member;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-//String SQLSentence = "INSERT INTO member(name, surname, gender, phone, address, birth_date, registration_date, membership_end_date, membership_type) " +
-//                "VALUES('"+entity.getName()+", "+entity.getSurname()+", "+entity.getGender()+", "+entity.getPhone()+", "+entity.getAddress()+", "+entity.getBirthDate()+", "+entity.getRegistrationDate()+", "+entity.getMembershipEndDate()+", "+entity.getMembershipType()+"')";
+
 public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
+    //MemberDAOImp memberDAOImp = new MemberDAOImp();
     @Override
     public boolean insert(Member entity) {
 
@@ -27,10 +27,11 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
             SQLSentenceObject.setString(3, entity.getGender());
             SQLSentenceObject.setString(4, entity.getPhone());
             SQLSentenceObject.setString(5, entity.getAddress());
-            SQLSentenceObject.setDate(6, new java.sql.Date(entity.getBirthDate().getTime()));
-            SQLSentenceObject.setDate(7, new java.sql.Date(entity.getRegistrationDate().getTime()));
-            SQLSentenceObject.setDate(8, new java.sql.Date(entity.getMembershipEndDate().getTime()));
+            SQLSentenceObject.setDate(6, java.sql.Date.valueOf(entity.getBirthDate()));
+            SQLSentenceObject.setDate(7, java.sql.Date.valueOf(entity.getRegistrationDate()));
             SQLSentenceObject.setString(9, entity.getMembershipType().name());
+            SQLSentenceObject.setDate(8, java.sql.Date.valueOf(entity.getMembershipEndDate()));
+
 
             int rosInserted = SQLSentenceObject.executeUpdate();
             //SQLSentenceObject.execute();
@@ -67,8 +68,47 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
 
     @Override
     public List<Member> obtainAll() {
-        return null;
+
+        List<Member> members = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM member";
+        Statement ObjectSQLSentence = null;
+
+        try {
+            ObjectSQLSentence = connection.createStatement();
+            ResultSet result = ObjectSQLSentence.executeQuery(SQLSentence);
+
+            while(result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String surname = result.getString("surname");
+                String gender = result.getString("gender");
+                String phone = result.getString("phone");
+                String address = result.getString("address");
+                LocalDate birthDate = result.getDate("birth_date").toLocalDate();
+                LocalDate registrationDate = result.getDate("registration_date").toLocalDate();
+                String membershipTypeString = result.getString("membership_type");
+                Member.MembershipType membershipType = Member.MembershipType.valueOf(membershipTypeString.toUpperCase());
+                LocalDate membershipEndDate = result.getDate("membership_end_date").toLocalDate();
+
+                Member searchedMember = new Member(id, name, surname, gender, phone, address, birthDate, registrationDate, membershipType, membershipEndDate);
+                members.add(searchedMember);
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ObjectSQLSentence.close();
+                connection.close();
+            } catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return members;
     }
+
 
     @Override
     public void delete(Member entity) {

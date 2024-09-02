@@ -1,66 +1,39 @@
 package entities;
 
-import java.text.SimpleDateFormat;
+import business.impl.MemberServiceImp;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Member {
 
     private int id;
     private String name, surname, gender, phone, address;
-    private Date birthDate;
+    private LocalDate birthDate;
 
 
-    private Date registrationDate;
-    private Date membershipEndDate;
-    public MembershipType membershipType;
-
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private LocalDate registrationDate;
+    private LocalDate membershipEndDate;
+    private MembershipType membershipType;
 
     public enum MembershipType{
         DAILY,
         WEEKLY,
-        MONTHLY
-    }
+        MONTHLY;
 
-    public String FormattedBirthDate() {
-        return formatter.format(birthDate);
-    }
+        public static MembershipType fromString(String type) {
+            try {
+                return MembershipType.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de membresia invalido, recibido: " + type + " Esperado: ('DAILY', 'WEEKLY', 'MONTHLY')");
+            }
+        }
 
-    public String FormattedRegistrationDate() {
-        return formatter.format(registrationDate);
     }
-
-    public String FormattedMembershipEndDate() {
-        return formatter.format(membershipEndDate);
-    }
-
-    /* private void renewMembership(){
-        //renovar membresia
-        //if payment == valid ...
-    }
-
-    private void updateContactInfo(Date newEndDate, Payment payment){
-        //actualizar datos de contacto
-        //pedir x consola, etc
-    }
-
-    private String getMemberDetails(Member member){
-        //mostrar datos de un miembro
-        return member.toString();
-    }
-
-    public boolean isMemberShipActive(){
-        //membresia activa o no
-        return false;
-    }
-
-     */
 
     public Member() {
     }
 
-    public Member(int id, String name, String surname, String gender, String phone, String address, Date birthDate, Date registrationDate, Date membershipEndDate, Member.MembershipType membershipType) {
+    public Member(int id, String name, String surname, String gender, String phone, String address, LocalDate birthDate, LocalDate registrationDate, Member.MembershipType membershipType, LocalDate membershipEndDate) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -69,8 +42,8 @@ public class Member {
         this.address = address;
         this.birthDate = birthDate;
         this.registrationDate = registrationDate;
-        this.membershipEndDate = membershipEndDate;
         this.membershipType = membershipType;
+        this.membershipEndDate = membershipEndDate;
     }
 
     public int getId() {
@@ -121,29 +94,31 @@ public class Member {
         this.address = address;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDate getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public Date getMembershipEndDate() {
+    public LocalDate getMembershipEndDate() {
         return membershipEndDate;
     }
 
-    public void setMembershipEndDate(Date membershipEndDate) {
+    public void setMembershipEndDate(LocalDate membershipEndDate) {
         this.membershipEndDate = membershipEndDate;
     }
+
+    MemberServiceImp memberServiceImp;
 
     public MembershipType getMembershipType() {
         return membershipType;
@@ -153,11 +128,20 @@ public class Member {
         this.membershipType = membershipType;
     }
 
-    public SimpleDateFormat getFormatter() {
-        return formatter;
-    }
-
-    public void setFormatter(SimpleDateFormat formatter) {
-        this.formatter = formatter;
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", birthDate=" + birthDate +
+                ", registrationDate=" + registrationDate +
+                ", membershipEndDate=" + membershipEndDate +
+                ", membershipType=" + membershipType +
+                ", memberServiceImp=" + memberServiceImp +
+                '}';
     }
 }

@@ -1,52 +1,80 @@
 package presentation;
 
 import business.MemberService;
-import business.MemberServiceImp;
-import dao.imp.MemberDAOImp;
+import business.impl.MemberServiceImp;
+import entities.Member;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        /* CREAR MIEMBRO try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //PRUEBA CREACION, DESPUES ES LLAMAR A UN METODO QUE HAGA ESTE CRUD
+       /* MemberService memberService = new MemberServiceImp();
+        Member member = new Member();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Ingrese el nombre del miembro:");
+        member.setName(scanner.nextLine());
+
+        System.out.println("Ingrese el apellido del miembro:");
+        member.setSurname(scanner.nextLine());
+
+        System.out.println("Ingrese el genero del miembro:");
+        member.setGender(scanner.nextLine());
+
+        System.out.println("Ingrese el numero de telefono del miembro:");
+        member.setPhone(scanner.nextLine());
+
+        System.out.println("Ingrese la direccion del miembro:");
+        member.setAddress(scanner.nextLine());
 
 
-            Date registrationDate = formatter.parse("2023-05-15");
-            Date membershipEndDate = formatter.parse("2024-09-24");
+        System.out.println("Ingrese la fecha de nacimiento del miembro:");
+        String parsingDate = scanner.nextLine();
 
-            Member member = new Member();
-
-            member.setName("Luis");
-            member.setSurname("Carrizo");
-            member.setGender("male");
-            member.setPhone("1165250302");
-            member.setAddress("machain");
-
-            Scanner scanner = new Scanner(System.in);
-            String birthDateScanner;
-
-            birthDateScanner = scanner.next();
-            Date birthDate = formatter.parse(birthDateScanner);
+        LocalDate parsedDate = memberService.parsedDate(parsingDate);
+        member.setBirthDate(parsedDate);
 
 
-            member.setBirthDate(birthDate);
-            member.setRegistrationDate(registrationDate);
-            member.setMembershipEndDate(membershipEndDate);
-            member.setMembershipType(Member.MembershipType.MONTHLY);
+        System.out.println("Ingrese la fecha de registro del miembro:");
+        parsingDate = scanner.next();
+        parsedDate = memberService.parsedDate(parsingDate);
+        member.setRegistrationDate(parsedDate);
 
-            DAO<Member, Integer> MemberDAO = new MemberDAOImp();
-            boolean isInsert = MemberDAO.insert(member);
+        System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
+        String input = scanner.next().toUpperCase();
 
-            System.out.println(isInsert);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+        Member.MembershipType membershipType = null;
+
+        try {
+            membershipType = Member.MembershipType.valueOf(input);
+            member.setMembershipType(membershipType);
+            System.out.println("M.E: " + membershipType);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
+            return;
         }
 
-         */
+        LocalDate membershipEndDate = memberService.membershipEndDate(member, parsedDate);
+
+        member.setMembershipEndDate(membershipEndDate);
+
+        System.out.println("Fecha de vencimiento: " + membershipEndDate);
 
 
+        DAO<Member, Integer> MemberDAO = new MemberDAOImp();
+        boolean isInsert = MemberDAO.insert(member);
 
+        System.out.println(isInsert);
+        */
+        MemberService memberService = new MemberServiceImp();
+
+        List<Member> memberList = memberService.obtainAll();
+        for (Member member : memberList){
+            System.out.println(member);
+        }
 
     }
 }
