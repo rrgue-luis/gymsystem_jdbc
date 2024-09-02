@@ -56,6 +56,14 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
+    public Member searchForId(Integer key) {
+
+        MemberDAOImp memberDAO = new MemberDAOImp();
+        Member searchedMember = memberDAO.searchForId(key);
+        return searchedMember;
+    }
+
+    @Override
     public List<Member> obtainAll() {
         List<Member> members = new ArrayList<>();
         MemberDAOImp memberDAOImp = new MemberDAOImp();

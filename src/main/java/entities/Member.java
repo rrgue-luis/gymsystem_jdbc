@@ -15,6 +15,8 @@ public class Member {
     private LocalDate membershipEndDate;
     private MembershipType membershipType;
 
+
+
     public enum MembershipType{
         DAILY,
         WEEKLY,

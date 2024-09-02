@@ -117,41 +117,55 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
 
     @Override
     public Member searchForId(Integer key) {
-
         Member searchedMember = null;
 
         Connection connection = getConnection();
-        String SQLSentence = "SELECT * FROM member WHERE ID = "+key;
-        Statement ObjectSQLSentence = null;
+        String SQLSentence = "SELECT * FROM member WHERE ID = ?";
+        PreparedStatement preparedStatement = null;
 
         try {
 
-            ObjectSQLSentence = connection.createStatement();
-            ResultSet result = ObjectSQLSentence.executeQuery(SQLSentence);
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
-                int id = result.getInt("ID: ");
-                String name = result.getString("name: ");
-                String surname = result.getString("surname: ");
-                String phone = result.getString("phone: ");
-                String address = result.getString("address: ");
+            if (result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String surname = result.getString("surname");
+                String gender = result.getString("gender");
+                String phone = result.getString("phone");
+                String address = result.getString("address");
 
-                /*searchedMember.setBirthDate(birthDate);
-                searchedMember.setRegistrationDate(registrationDate);
-                searchedMember.setMembershipEndDate(membershipEndDate);
-                searchedMember.setMembershipType(Member.MembershipType.MONTHLY);
+                LocalDate birthDate = result.getDate("birth_date").toLocalDate();
+                LocalDate registrationDate = result.getDate("registration_date").toLocalDate();
 
-                searchedMember = new Member(id, name, surname, phone, address, );
+                String membershipTypeString = result.getString("membership_type");
+                Member.MembershipType membershipType = Member.MembershipType.valueOf(membershipTypeString.toUpperCase());
 
-                 */
+                LocalDate membershipEndDate = result.getDate("membership_end_date").toLocalDate();
+
+
+                searchedMember = new Member(id, name, surname, gender, phone, address, birthDate, registrationDate, membershipType, membershipEndDate);
             }
 
         } catch(SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                } if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
-        return null;
+        return searchedMember;
     }
+
 
     @Override
     public Connection getConnection() {
@@ -161,8 +175,5 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     public void udpateMember(Member member) {
     }
 
-    @Override
-    public Member findMemberById(int id) {
-        return null;
-    }
+
 }

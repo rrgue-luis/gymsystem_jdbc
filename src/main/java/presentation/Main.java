@@ -69,6 +69,8 @@ public class Main {
 
         System.out.println(isInsert);
         */
+
+        /* PRUEBA MOSTRAR TODOS OK
         MemberService memberService = new MemberServiceImp();
 
         List<Member> memberList = memberService.obtainAll();
@@ -76,5 +78,14 @@ public class Main {
             System.out.println(member);
         }
 
+         */
+
+        /* BUSCAR POR ID OK
+        MemberService memberService = new MemberServiceImp();
+
+        Member searchedMember = memberService.searchForId(5);
+        System.out.println(searchedMember);
+
+         */
     }
 }

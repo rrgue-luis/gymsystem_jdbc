@@ -25,6 +25,8 @@ public interface MemberService {
 
     String formattedBirthDate = null;
 
+    Member searchForId(Integer key);
+
     LocalDate parsedDate(String parsingDate);
 
 
