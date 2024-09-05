@@ -9,8 +9,8 @@ import java.util.List;
 
 public class EmployeeDAOImp implements MySQLDBConnection, DAO<Employee, Integer> {
     @Override
-    public boolean insert(Employee entity) {
-        return false;
+    public Employee insert(Employee entity) {
+        return entity;
     }
 
     @Override

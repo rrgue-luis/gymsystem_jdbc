@@ -1,21 +1,46 @@
 package business.impl;
 
 import business.MemberService;
+import dao.DAO;
+import dao.MemberDAO;
 import dao.imp.MemberDAOImp;
 import entities.Member;
-import dao.MySQLDBConnection;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import presentation.MemberPresentation;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MemberServiceImp implements MemberService {
 //DEFINE COMO SE USAN LOS METODOS
     private final MemberDAOImp memberDAOImp;
+    @Override
+    public Member insert(Member member) {
+        MemberDAO memberDAO = new MemberDAOImp();
+
+        member = memberDAO.insert(member);
+
+       /* boolean isInserted;
+        if (member.getId() > 0) {
+            isInserted = true;
+        } else {
+            isInserted = false;
+        }*/
+
+        return member;
+    }
+
+    @Override
+    public void delete(Member member) {
+        MemberDAO memberDAO = new MemberDAOImp();
+
+
+        memberDAO.delete(member);
+
+    }
+
     @Override
     public LocalDate membershipEndDate(Member member, LocalDate parsedDate) {
 
@@ -35,7 +60,7 @@ public class MemberServiceImp implements MemberService {
 
     @Override
     public void renewMembership(int memberId) {
-        //usando memberDAOImp
+        //usando memberDAOImp Y PAYMENT
     }
 
     @Override
@@ -44,30 +69,27 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
-    public Member getMemberDetails(int memberId) {
-        //usando memberDAOImp
-        return null;
-    }
-
-    @Override
     public boolean isMemberShipActive(int memberId) {
         //usando memberDAOImp
         return false;
     }
 
+
     @Override
     public Member searchForId(Integer key) {
 
-        MemberDAOImp memberDAO = new MemberDAOImp();
+        MemberDAO memberDAO = new MemberDAOImp();
         Member searchedMember = memberDAO.searchForId(key);
         return searchedMember;
     }
 
+
+
     @Override
     public List<Member> obtainAll() {
         List<Member> members = new ArrayList<>();
-        MemberDAOImp memberDAOImp = new MemberDAOImp();
-        members = memberDAOImp.obtainAll();
+        MemberDAO memberDAO = new MemberDAOImp();
+        members = memberDAO.obtainAll();
 
         return members;
     }
@@ -84,10 +106,6 @@ public class MemberServiceImp implements MemberService {
         }
     }
 
-    public void parseMembershipEndDate(){
-
-    }
-
     public MemberServiceImp() {
         this.memberDAOImp = new MemberDAOImp();
     }
@@ -95,4 +113,7 @@ public class MemberServiceImp implements MemberService {
     public MemberServiceImp(MemberDAOImp memberDAOImp) {
         this.memberDAOImp = memberDAOImp;
     }
+
+
+
 }

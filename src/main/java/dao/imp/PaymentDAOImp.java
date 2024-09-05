@@ -9,10 +9,10 @@ import java.util.List;
 
 public class PaymentDAOImp implements MySQLDBConnection, DAO<Payment, Integer> {
     @Override
-    public boolean insert(Payment entity) {
+    public Payment insert(Payment entity) {
 
 
-        return false;
+        return entity;
     }
 
     @Override

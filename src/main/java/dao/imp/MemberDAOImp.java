@@ -13,14 +13,15 @@ import java.util.List;
 public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     //MemberDAOImp memberDAOImp = new MemberDAOImp();
     @Override
-    public boolean insert(Member entity) {
+    public Member insert(Member entity) {
 
         Connection connection = getConnection();
         String SQLSentence = "INSERT INTO member(name, surname, gender, phone, address, birth_date, registration_date, membership_end_date, membership_type) " +
                 "VALUES(?,?,?,?,?,?,?,?,?)";
 
+
         try{
-            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence, Statement.RETURN_GENERATED_KEYS);
 
             SQLSentenceObject.setString(1, entity.getName());
             SQLSentenceObject.setString(2, entity.getSurname());
@@ -33,16 +34,36 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
             SQLSentenceObject.setDate(8, java.sql.Date.valueOf(entity.getMembershipEndDate()));
 
 
-            int rosInserted = SQLSentenceObject.executeUpdate();
+            // ID | NOMBRE | DNI
+            //RESULSET =
+            // 1 | JORGE | 445512515
+
+            int rowsInserted = SQLSentenceObject.executeUpdate();
+            //int rowsInserted = 1; 3;2;  4; 0;
             //SQLSentenceObject.execute();
+
+            /**
+             * Acá llega si ya se creo en base de datos
+             * lo que hace es obtener el ID con el que se creo en la base de datos
+             * y setearselo al entity que voy a retornar, entonces
+             * si se logro crear en base de datos (rowsInserted > 0) le voy a poder setear
+             * a mi entity el id (setId) si no se creo en base de datos (rowsInserted < 1)
+             * entonces mi entity va a quedar con el id 0 porque no se lo seteo ese quiere
+             * decir que no se inserto.
+             */
+            if (rowsInserted > 0) {
+                try (ResultSet generatedKeys = SQLSentenceObject.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                       entity.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
             SQLSentenceObject.close();
-
-            return rosInserted > 0;
-
+            return entity; // false = no se inserto || true = se inserto
         }catch(SQLException e){
 
             e.printStackTrace();
-            return false;
+            return entity;
         }
 
     }
@@ -51,13 +72,16 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     public void update(Member entity) {
 
         Connection connection = getConnection();
-        String SQLSentence = "UPDATE member SET name='"+entity.getName()+"'WHERE id="+entity.getId()+";";
+        String SQLSentence = "UPDATE member SET name= ? WHERE id= ?;";
 
         try {
 
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
 
-            SQLSentenceObject.execute();
+            SQLSentenceObject.setString(1, entity.getName());
+            SQLSentenceObject.setInt(2, entity.getId());
+
+            SQLSentenceObject.executeUpdate();
             SQLSentenceObject.close();
 
         } catch(SQLException e){
@@ -113,7 +137,21 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     @Override
     public void delete(Member entity) {
 
+        Connection connection = getConnection();
+        String SQLSentence = "DELETE FROM member WHERE id = ?";
+
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+            SQLSentenceObject.setInt(1, entity.getId());
+            SQLSentenceObject.executeUpdate();
+            SQLSentenceObject.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     @Override
     public Member searchForId(Integer key) {
@@ -170,9 +208,6 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     @Override
     public Connection getConnection() {
         return MySQLDBConnection.super.getConnection();
-    }
-    @Override
-    public void udpateMember(Member member) {
     }
 
 

@@ -6,8 +6,5 @@ import java.util.List;
 
 public interface MemberDAO extends DAO<Member, Integer>{
 
-    void udpateMember(Member member);
-
-
 
 }

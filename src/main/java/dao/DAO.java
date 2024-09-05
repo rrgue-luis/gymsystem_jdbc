@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface DAO<E, K>{
 
-    boolean insert(E entity);
+    E insert(E entity);
     void update(E entity);
     List<E> obtainAll();
     void delete(E entity);

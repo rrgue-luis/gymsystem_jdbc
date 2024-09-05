@@ -9,8 +9,8 @@ import java.util.List;
 
 public class GymDAOImp implements MySQLDBConnection, DAO<Gym, Integer> {
     @Override
-    public boolean insert(Gym entity) {
-        return false;
+    public Gym insert(Gym entity) {
+        return entity;
     }
 
     @Override
