@@ -5,6 +5,8 @@ import business.impl.MemberServiceImp;
 import entities.Member;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MemberPresentation {
@@ -72,12 +74,48 @@ public class MemberPresentation {
         member = memberService.insert(member);
 
         if (member.getId() > 0) {
-            System.out.println("SE CREO CRRECTAMENTE EL MEMBER CON EL ID #" + member.getId());
+            System.out.println("SE CREO CORRECTAMENTE EL MEMBER CON EL ID #" + member.getId());
         } else {
-            System.out.println("NO SE CREO CRRECTAMENTE EL MEMBER");
+            System.out.println("NO SE CREO CORRECTAMENTE EL MEMBER");
         }
 
         return member;
+    }
+
+    public List<Member> obtainAll() {
+
+        MemberService memberService = new MemberServiceImp();
+
+        List<Member> memberList = memberService.obtainAll();
+        for (Member member : memberList){
+
+            System.out.println("---------------------");
+            System.out.println("Nombre: " + member.getName());
+            System.out.println("Apellido: " + member.getSurname());
+            System.out.println("Genero: " + member.getGender());
+            System.out.println("Telefono: " + member.getPhone());
+            System.out.println("Direccion: " + member.getAddress());
+            System.out.println("Fecha de nacimiento: " + member.getBirthDate());
+            System.out.println("Fecha de registro: " + member.getRegistrationDate());
+            System.out.println("Fin de membresía: " + member.getMembershipEndDate());
+            System.out.println("Tipo de membresía: " + member.getMembershipType());
+
+            //proximamente llamar al boolean isMembershipActive en MemberService y devolver si está activa o no.
+
+            System.out.println("Membresia: ACTIVA/INACTIVA");
+
+        }
+        return memberList;
+    }
+
+    public Member searchForId(Integer key) {
+        Member searchedMember;
+
+        for (int i=0; i > searchedMember; i++){
+
+        }
+
+        return searchedMember;
     }
 
 }

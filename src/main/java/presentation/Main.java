@@ -13,25 +13,19 @@ public class Main {
     public static void main(String[] args) {
 
 
-        MemberPresentation memberPresentation = new MemberPresentation();
+
+       /* MemberPresentation memberPresentation = new MemberPresentation();
         memberPresentation.insertMenu();
 
-
-        /* MemberService memberService = new MemberServiceImp();
-        Member member = new Member();
-        memberService.insert(member);
-         */
+        */
 
 
-        // PRUEBA MOSTRAR TODOS OK
+       /*
+       MemberPresentation memberPresentation = new MemberPresentation();
+       memberPresentation.obtainAll();
+        */
 
 
-        /*List<Member> memberList = memberService.obtainAll();
-        for (Member member : memberList){
-            System.out.println(member);
-        }
-
-         */
 
 /*
         MemberService memberService = new MemberServiceImp();

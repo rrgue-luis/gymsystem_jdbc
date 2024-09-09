@@ -36,7 +36,6 @@ public class MemberServiceImp implements MemberService {
     public void delete(Member member) {
         MemberDAO memberDAO = new MemberDAOImp();
 
-
         memberDAO.delete(member);
 
     }
