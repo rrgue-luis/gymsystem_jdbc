@@ -19,10 +19,10 @@ public interface MemberService {
     Member insert(Member member);
 
     /**
-     * Elimina un miembro
-     * @param member
+     * Borra un miembro
+     * @param key ID a borrar
      */
-    public void delete(Member member);
+    public void delete(Integer key);
 
     /**
      * Busca un miembro de la DB segun su ID
@@ -30,6 +30,8 @@ public interface MemberService {
      * @return Devuelve el miembro y todos sus datos
      */
     Member searchForId(Integer key);
+
+    Member updateMember(Member member);
 
     List<Member> obtainAll();
 

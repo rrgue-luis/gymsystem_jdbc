@@ -24,7 +24,7 @@ public class GymDAOImp implements MySQLDBConnection, DAO<Gym, Integer> {
     }
 
     @Override
-    public void delete(Gym entity) {
+    public void delete(Integer key) {
 
     }
 

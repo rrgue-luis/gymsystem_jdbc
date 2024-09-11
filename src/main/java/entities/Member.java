@@ -132,18 +132,17 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender='" + gender + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", birthDate=" + birthDate +
-                ", registrationDate=" + registrationDate +
-                ", membershipEndDate=" + membershipEndDate +
-                ", membershipType=" + membershipType +
-                ", memberServiceImp=" + memberServiceImp +
-                '}';
+        return "---------------------\n" +
+                "Id: " + id + "\n" +
+                "Nombre: " + name + "\n" +
+                "Apellido: " + surname + "\n" +
+                "Genero: " + gender + "\n" +
+                "Telefono: " + phone + "\n" +
+                "Direccion: " + address + "\n" +
+                "F. Nacimiento: " + birthDate + "\n" +
+                "F. Registro: " + registrationDate + "\n" +
+                "F. Memb. Vencimiento: " + membershipEndDate + "\n" +
+                "Tipo de membresía: " + membershipType + "\n"
+                ;
     }
 }

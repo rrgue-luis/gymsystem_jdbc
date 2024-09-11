@@ -26,7 +26,7 @@ public class PaymentDAOImp implements MySQLDBConnection, DAO<Payment, Integer> {
     }
 
     @Override
-    public void delete(Payment entity) {
+    public void delete(Integer key) {
 
     }
 

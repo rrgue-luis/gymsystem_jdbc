@@ -11,12 +11,15 @@ import java.util.Scanner;
 
 public class MemberPresentation {
 
+    Scanner scanner = new Scanner(System.in);
+    MemberService memberService = new MemberServiceImp();
+
     public Member insertMenu(){
 
         //En java los objetos se pasan por referencia
         Scanner scanner = new Scanner(System.in);
         Member member = new Member();
-        MemberService memberService = new MemberServiceImp();
+
 
         System.out.println("Ingrese el nombre del miembro:");
         member.setName(scanner.nextLine());
@@ -82,14 +85,23 @@ public class MemberPresentation {
         return member;
     }
 
-    public List<Member> obtainAll() {
+    public void deleteMember() {
 
-        MemberService memberService = new MemberServiceImp();
+        System.out.println("Ingrese el ID del miembro a eliminar: ");
+        obtainAll();
+        int option = scanner.nextInt();
+        memberService.delete(option);
+        System.out.println("Miembro borrado, ID: " + option);
+
+    }
+
+    public List<Member> obtainAll() {
 
         List<Member> memberList = memberService.obtainAll();
         for (Member member : memberList){
 
             System.out.println("---------------------");
+            System.out.println("ID: " + member.getId());
             System.out.println("Nombre: " + member.getName());
             System.out.println("Apellido: " + member.getSurname());
             System.out.println("Genero: " + member.getGender());
@@ -108,14 +120,24 @@ public class MemberPresentation {
         return memberList;
     }
 
-    public Member searchForId(Integer key) {
+    public void updateMember() {
+
+        System.out.println("Ingrese el miembro a modificar: ");
+        int input = scanner.nextInt();
+        memberService.updateMember();
+    }
+
+    public void searchForId() {
         Member searchedMember;
 
-        for (int i=0; i > searchedMember; i++){
+        System.out.println("Ingrese un ID a buscar");
 
-        }
+        int option = scanner.nextInt();
+        scanner.close();
 
-        return searchedMember;
+        searchedMember = memberService.searchForId(option);
+        System.out.println(searchedMember);
+
     }
 
 }

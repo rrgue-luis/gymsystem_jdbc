@@ -33,10 +33,10 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
-    public void delete(Member member) {
+    public void delete(Integer key) {
         MemberDAO memberDAO = new MemberDAOImp();
 
-        memberDAO.delete(member);
+        memberDAO.delete(key);
 
     }
 

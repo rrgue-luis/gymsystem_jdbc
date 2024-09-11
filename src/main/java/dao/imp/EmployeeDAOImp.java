@@ -24,7 +24,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, DAO<Employee, Integer>
     }
 
     @Override
-    public void delete(Employee entity) {
+    public void delete(Integer key) {
 
     }
 

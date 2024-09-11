@@ -72,19 +72,15 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     public void update(Member entity) {
 
         Connection connection = getConnection();
-        String SQLSentence = "UPDATE member SET name= ? WHERE id= ?;";
+        String SQLSentence = "UPDATE member SET name='"+entity.getName()+"' WHERE id="+entity.getId()+";";
 
-        try {
-
+        try{
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
 
-            SQLSentenceObject.setString(1, entity.getName());
-            SQLSentenceObject.setInt(2, entity.getId());
-
-            SQLSentenceObject.executeUpdate();
+            SQLSentenceObject.execute();
             SQLSentenceObject.close();
 
-        } catch(SQLException e){
+        }catch(SQLException e){
             e.printStackTrace();
         }
 
@@ -135,14 +131,14 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
 
 
     @Override
-    public void delete(Member entity) {
+    public void delete(Integer key) {
 
         Connection connection = getConnection();
         String SQLSentence = "DELETE FROM member WHERE id = ?";
 
         try {
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
-            SQLSentenceObject.setInt(1, entity.getId());
+            SQLSentenceObject.setInt(1, key);
             SQLSentenceObject.executeUpdate();
             SQLSentenceObject.close();
             connection.close();
