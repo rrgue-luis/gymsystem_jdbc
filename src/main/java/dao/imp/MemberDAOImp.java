@@ -72,17 +72,73 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
     public void update(Member entity) {
 
         Connection connection = getConnection();
-        String SQLSentence = "UPDATE member SET name='"+entity.getName()+"' WHERE id="+entity.getId()+";";
+        String checkId = "SELECT COUNT(*) FROM member WHERE id=?";
+        String SQLSentenceUpdate = "UPDATE member SET name=?, surname=?, gender=?, phone=?, address=?, birth_date=?" +
+                ", registration_date=?, membership_end_date=?, membership_type=? WHERE id=?";
 
-        try{
-            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+        try {
 
-            SQLSentenceObject.execute();
-            SQLSentenceObject.close();
+            PreparedStatement checkStmt = connection.prepareStatement(checkId);
+            checkStmt.setInt(1, entity.getId());
+            ResultSet resultSet = checkStmt.executeQuery();
 
-        }catch(SQLException e){
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            if (count > 0) {
+
+                PreparedStatement updateStmt = connection.prepareStatement(SQLSentenceUpdate);
+                updateStmt.setString(1, entity.getName());
+                updateStmt.setString(2, entity.getSurname());
+                updateStmt.setString(3, entity.getGender());
+                updateStmt.setString(4, entity.getPhone());
+                updateStmt.setString(5, entity.getAddress());
+                updateStmt.setDate(6, java.sql.Date.valueOf(entity.getBirthDate()));
+                updateStmt.setDate(7, java.sql.Date.valueOf(entity.getRegistrationDate()));
+                updateStmt.setDate(8, java.sql.Date.valueOf(entity.getMembershipEndDate()));
+                updateStmt.setString(9, entity.getMembershipType().name());
+                updateStmt.setInt(10, entity.getId());
+
+                updateStmt.executeUpdate();
+                updateStmt.close();
+                System.out.println("Actualización realizada con éxito.");
+            } else {
+                System.out.println("No existe miembro con ese ID: " + entity.getId());
+            }
+
+            resultSet.close();
+            checkStmt.close();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public boolean memberExists(Integer key) {
+
+        Connection connection = getConnection();
+        String checkSQL = "SELECT COUNT(*) FROM member WHERE id=?";
+
+        try {
+            PreparedStatement checkSQLStatement = connection.prepareStatement(checkSQL);
+            checkSQLStatement.setInt(1, key);
+            ResultSet resultSet = checkSQLStatement.executeQuery();
+
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            if(count > 0){
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+       return false;
 
     }
 

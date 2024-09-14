@@ -4,7 +4,6 @@ import entities.Member;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 //DEFINE QUE METODOS EXISTEN EN MEMBER
@@ -31,8 +30,9 @@ public interface MemberService {
      */
     Member searchForId(Integer key);
 
-    Member updateMember(Member member);
+    void updateMember(Member member);
 
+    public boolean memberExists(Integer key);
     List<Member> obtainAll();
 
     LocalDate membershipEndDate(Member member, LocalDate parsedDate);

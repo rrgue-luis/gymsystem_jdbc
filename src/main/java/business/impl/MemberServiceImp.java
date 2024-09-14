@@ -1,60 +1,49 @@
 package business.impl;
 
 import business.MemberService;
-import dao.DAO;
 import dao.MemberDAO;
 import dao.imp.MemberDAOImp;
 import entities.Member;
-import presentation.MemberPresentation;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MemberServiceImp implements MemberService {
 //DEFINE COMO SE USAN LOS METODOS
     private final MemberDAOImp memberDAOImp;
+    MemberDAO memberDAO = new MemberDAOImp();
     @Override
     public Member insert(Member member) {
-        MemberDAO memberDAO = new MemberDAOImp();
 
         member = memberDAO.insert(member);
-
-       /* boolean isInserted;
-        if (member.getId() > 0) {
-            isInserted = true;
-        } else {
-            isInserted = false;
-        }*/
-
         return member;
+
     }
 
     @Override
     public void delete(Integer key) {
-        MemberDAO memberDAO = new MemberDAOImp();
 
         memberDAO.delete(key);
 
     }
 
+
+
     @Override
     public LocalDate membershipEndDate(Member member, LocalDate parsedDate) {
 
-        int membershipTypeNumber;
         String membershipType = member.getMembershipType().name();
 
-        if(membershipType.equals("DAILY")){
-             membershipTypeNumber = 1;
-        }else if(membershipType.equals("WEEKLY")){
-            membershipTypeNumber = 7;
-        }else{
-            membershipTypeNumber = 30;
+        if (membershipType.equals("DAILY")) {
+            parsedDate = parsedDate.plusDays(1);
+        } else if (membershipType.equals("WEEKLY")) {
+            parsedDate = parsedDate.plusWeeks(1);
+        } else {
+            parsedDate = parsedDate.plusMonths(1);
         }
-
-        return parsedDate.plusDays(membershipTypeNumber);
+        return parsedDate;
     }
 
     @Override
@@ -82,6 +71,25 @@ public class MemberServiceImp implements MemberService {
         return searchedMember;
     }
 
+    @Override
+    public void updateMember(Member member) {
+
+        memberDAO.update(member);
+
+    }
+
+    @Override
+    public boolean memberExists(Integer key) {
+
+        MemberDAO memberDAO = new MemberDAOImp();
+        boolean memberExists = memberDAO.memberExists(key);
+
+        if (memberExists) {
+            return true ;
+        } else {
+            return false;
+        }
+    }
 
 
     @Override

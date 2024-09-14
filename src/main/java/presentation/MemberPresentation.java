@@ -85,17 +85,17 @@ public class MemberPresentation {
         return member;
     }
 
-    public void deleteMember() {
+    public void deleteMemberMenu() {
 
         System.out.println("Ingrese el ID del miembro a eliminar: ");
-        obtainAll();
+        obtainAllMenu();
         int option = scanner.nextInt();
         memberService.delete(option);
         System.out.println("Miembro borrado, ID: " + option);
 
     }
 
-    public List<Member> obtainAll() {
+    public List<Member> obtainAllMenu() {
 
         List<Member> memberList = memberService.obtainAll();
         for (Member member : memberList){
@@ -120,22 +120,99 @@ public class MemberPresentation {
         return memberList;
     }
 
-    public void updateMember() {
 
-        System.out.println("Ingrese el miembro a modificar: ");
+    /**
+     * TEMPORAL, PARA TESTING
+     */
+    public void memberExistsMenu(){
+        System.out.println("Ingrese el id a corroborar que exista: ");
         int input = scanner.nextInt();
-        memberService.updateMember();
+        boolean memberExists = memberService.memberExists(input);
+        if (memberExists) {
+
+            System.out.println("Existe.");
+        } else {
+            System.out.println("No existe");
+        }
     }
 
-    public void searchForId() {
+    public void updateMemberMenu() {
+
+        System.out.println("Ingrese el ID del miembro a modificar: ");
+        int input = scanner.nextInt();
+        scanner.nextLine();
+        boolean memberExists = memberService.memberExists(input);
+
+
+        if(memberExists) {
+
+            Member member = new Member();
+
+            member.setId(input);
+            System.out.println("Ingrese el nombre del miembro:");
+            member.setName(scanner.nextLine());
+
+            System.out.println("Ingrese el apellido del miembro:");
+            member.setSurname(scanner.nextLine());
+
+            System.out.println("Ingrese el genero del miembro:");
+            member.setGender(scanner.nextLine());
+
+            System.out.println("Ingrese el numero de telefono del miembro:");
+            member.setPhone(scanner.nextLine());
+
+            System.out.println("Ingrese la direccion del miembro:");
+            member.setAddress(scanner.nextLine());
+
+
+            System.out.println("Ingrese la fecha de nacimiento del miembro:");
+            String parsingDate = scanner.nextLine();
+
+            LocalDate parsedDate = memberService.parsedDate(parsingDate);
+            member.setBirthDate(parsedDate);
+
+
+            System.out.println("Ingrese la fecha de registro del miembro:");
+            parsingDate = scanner.next();
+            parsedDate = memberService.parsedDate(parsingDate);
+            member.setRegistrationDate(parsedDate);
+
+            LocalDate membershipEndDate = parsedDate;
+
+            member.setMembershipEndDate(membershipEndDate);
+
+            System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
+            String inputString = scanner.next().toUpperCase();
+
+
+
+            Member.MembershipType membershipType = null;
+
+            try {
+                membershipType = Member.MembershipType.valueOf(inputString);
+                member.setMembershipType(membershipType);
+                System.out.println("M.E: " + membershipType);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
+                e.printStackTrace();
+            }
+
+            memberService.updateMember(member);
+
+        } else {
+            System.out.println("El miembro no existe");
+        }
+
+    }
+
+    public void searchForIdMenu() {
         Member searchedMember;
 
         System.out.println("Ingrese un ID a buscar");
 
-        int option = scanner.nextInt();
-        scanner.close();
+        int input = scanner.nextInt();
 
-        searchedMember = memberService.searchForId(option);
+        searchedMember = memberService.searchForId(input);
         System.out.println(searchedMember);
 
     }

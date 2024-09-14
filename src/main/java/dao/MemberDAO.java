@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface MemberDAO extends DAO<Member, Integer>{
 
+    boolean memberExists(Integer key);
 
 }
