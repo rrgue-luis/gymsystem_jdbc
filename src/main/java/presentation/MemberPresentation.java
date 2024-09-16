@@ -49,20 +49,27 @@ public class MemberPresentation {
         parsedDate = memberService.parsedDate(parsingDate);
         member.setRegistrationDate(parsedDate);
 
-        System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
-        String input = scanner.next().toUpperCase();
-
-
+        String input = null;
         Member.MembershipType membershipType = null;
+        System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY'");
 
-        try {
-            membershipType = Member.MembershipType.valueOf(input);
-            member.setMembershipType(membershipType);
-            System.out.println("M.E: " + membershipType);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
-            e.printStackTrace();
+        scanner.nextLine();
+
+        while(membershipType == null) {
+
+            input = scanner.nextLine().trim().toUpperCase();
+
+            try {
+                membershipType = Member.MembershipType.valueOf(input);
+                System.out.println("Membresía elegida: " + membershipType);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
+            }
+
         }
+
+        member.setMembershipType(membershipType);
+
 
         // Member se crea por primera vez en MemberPresentation (UN OBJETO SIEMPRE NACE CON new )
         // -> viaja a MemberService
@@ -173,7 +180,7 @@ public class MemberPresentation {
 
 
             System.out.println("Ingrese la fecha de registro del miembro:");
-            parsingDate = scanner.next();
+            parsingDate = scanner.nextLine();
             parsedDate = memberService.parsedDate(parsingDate);
             member.setRegistrationDate(parsedDate);
 
@@ -182,7 +189,7 @@ public class MemberPresentation {
             member.setMembershipEndDate(membershipEndDate);
 
             System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
-            String inputString = scanner.next().toUpperCase();
+            String inputString = scanner.nextLine().toUpperCase();
 
 
 

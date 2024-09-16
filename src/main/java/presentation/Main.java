@@ -23,6 +23,8 @@ public class Main {
         //memberPresentation.updateMemberMenu();
         //memberPresentation.searchForIdMenu();
 
+        //primer menu temporal
+
         do {
             System.out.println("-------MENU-------");
             System.out.println("--//--GYMSYSTEM--//--");
@@ -69,8 +71,5 @@ public class Main {
 
     }
 
-
-
-        //memberPresentation.searchForIdMenu();
 
 }
