@@ -14,7 +14,7 @@ public class MemberPresentation {
     Scanner scanner = new Scanner(System.in);
     MemberService memberService = new MemberServiceImp();
 
-    public Member insertMenu(){
+    public Member insertMenu() {
 
         //En java los objetos se pasan por referencia
         Scanner scanner = new Scanner(System.in);

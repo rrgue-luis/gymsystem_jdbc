@@ -39,8 +39,6 @@ public interface MemberService {
 
     void renewMembership(int memberId);
 
-    void updateContactInfo(int memberId, String newContactInfo);
-
     public boolean isMemberShipActive(int memberId);
 
     LocalDate parsedDate(String parsingDate);

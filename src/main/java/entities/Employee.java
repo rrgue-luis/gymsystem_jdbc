@@ -1,51 +1,62 @@
 package entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Employee {
 
     private int id;
-    private String name, surname, phone;
-    private Date hiringDate;
+    private String name, surname, phone, address;
+    private LocalDate hiringDate;
     private float salary;
 
-    private role role;
+    private EmployeeRole employeeRole;
+    private EmployeeShift employeeShift;
 
-    private enum status{
+    private EmployeeStatus employeeStatus;
+
+    public enum EmployeeStatus{
         ACTIVE,
         INACTIVE,
         VACATIONS;
     }
 
-    private enum role{
+    public enum EmployeeShift {
+        MORNING,
+        AFTERNOON,
+        NIGHT;
+    }
+
+    public enum EmployeeRole{
         BOSS,
         MANAGER,
         TRAINER,
         EMPLOYEE;
-    }
 
-    private void updateRole(){
-        //actualizar rol
-    }
-    private void updateContactInfo(){
-        //ACTUALIZAR INFFO DE CONTACTO
-    }
-    private Employee getEmployeeDetails(Employee employee){
-        //mostrar detalles del empleado
-        return employee;
+        public static EmployeeRole fromString(String type) {
+            try {
+                return EmployeeRole.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de rol inválido, recibido: " + type + " Esperado: ('BOSS', 'MANAGER, 'TRAINER', 'EMPLOYEE')");
+            }
+        }
+
     }
 
     public Employee() {
     }
 
-    public Employee(int id, String name, String surname, String phone, Date hiringDate, float salary, Employee.role role) {
+    public Employee(int id, String name, String surname, String phone, String address, LocalDate hiringDate, float salary, Employee.EmployeeRole employeeRole, Employee.EmployeeShift employeeShift, Employee.EmployeeStatus employeeStatus) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
+        this.address = address;
         this.hiringDate = hiringDate;
         this.salary = salary;
-        this.role = role;
+        this.employeeRole = employeeRole;
+        this.employeeShift = employeeShift;
+        this.employeeStatus = employeeStatus;
     }
 
     public int getId() {
@@ -68,6 +79,14 @@ public class Employee {
         return surname;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -80,11 +99,11 @@ public class Employee {
         this.phone = phone;
     }
 
-    public Date getHiringDate() {
+    public LocalDate getHiringDate() {
         return hiringDate;
     }
 
-    public void setHiringDate(Date hiringDate) {
+    public void setHiringDate(LocalDate hiringDate) {
         this.hiringDate = hiringDate;
     }
 
@@ -96,11 +115,27 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Employee.role getRole() {
-        return role;
+    public EmployeeRole getEmployeeRole() {
+        return employeeRole;
     }
 
-    public void setRole(Employee.role role) {
-        this.role = role;
+    public void setEmployeeRole(EmployeeRole employeeRole) {
+        this.employeeRole = employeeRole;
+    }
+
+    public EmployeeShift getEmployeeShift() {
+        return employeeShift;
+    }
+
+    public void setEmployeeShift(EmployeeShift employeeShift) {
+        this.employeeShift = employeeShift;
+    }
+
+    public EmployeeStatus getEmployeeStatus() {
+        return employeeStatus;
+    }
+
+    public void setEmployeeStatus(EmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
     }
 }

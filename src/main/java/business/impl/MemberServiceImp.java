@@ -54,10 +54,7 @@ public class MemberServiceImp implements MemberService {
         //usando memberDAOImp Y PAYMENT
     }
 
-    @Override
-    public void updateContactInfo(int memberId, String newContactInfo) {
-        //usando memberDAOImp
-    }
+
 
     @Override
     public boolean isMemberShipActive(int memberId) {
