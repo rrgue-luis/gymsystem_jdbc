@@ -19,12 +19,28 @@ public class Employee {
         ACTIVE,
         INACTIVE,
         VACATIONS;
+
+        public static EmployeeStatus fromString(String type) {
+            try {
+                return EmployeeStatus.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de estado inválido, recibido: " + type + " Esperado: ('ACTIVE', 'INACTIVE, 'VACATIONS')");
+            }
+        }
     }
 
     public enum EmployeeShift {
         MORNING,
         AFTERNOON,
         NIGHT;
+
+        public static EmployeeShift fromString(String type) {
+            try {
+                return EmployeeShift.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de turno inválido, recibido: " + type + " Esperado: ('MORNING', 'AFTERNOON, 'NIGHT')");
+            }
+        }
     }
 
     public enum EmployeeRole{
@@ -133,6 +149,22 @@ public class Employee {
 
     public EmployeeStatus getEmployeeStatus() {
         return employeeStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "---------------------\n" +
+                "Id: " + id + "\n" +
+                "Nombre: " + name + "\n" +
+                "Salario: " + salary + "\n" +
+                "Apellido: " + surname + "\n" +
+                "Telefono: " + phone + "\n" +
+                "Direccion: " + address + "\n" +
+                "Fecha contrato: " + hiringDate + "\n" +
+                "Rol: " + employeeRole + "\n" +
+                "Horario: " + employeeShift + "\n" +
+                "Estado: " + employeeStatus + "\n"
+                ;
     }
 
     public void setEmployeeStatus(EmployeeStatus employeeStatus) {

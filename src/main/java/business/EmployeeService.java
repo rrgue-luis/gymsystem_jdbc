@@ -25,4 +25,8 @@ public interface EmployeeService {
 
     LocalDate parsedDate(String parsingDate);
 
+    public float calculateSalary(Employee.EmployeeRole employeeRole);
+
+    public float updateSalary(Employee entity, float newSalary);
+
 }

@@ -1,6 +1,8 @@
 package presentation;
 
+import business.EmployeeService;
 import business.MemberService;
+import business.impl.EmployeeServiceImp;
 import business.impl.MemberServiceImp;
 import entities.Member;
 
@@ -12,7 +14,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        MemberPresentation memberPresentation = new MemberPresentation();
+       /* MemberPresentation memberPresentation = new MemberPresentation();
         Scanner scanner = new Scanner(System.in);
         int input;
         //funcionando abstraido:
@@ -68,6 +70,13 @@ public class Main {
             }
 
         } while (input!=6);
+
+        */
+
+        EmployeePresentation employeePresentation = new EmployeePresentation();
+
+        employeePresentation.updateSalary();
+
 
     }
 

@@ -6,6 +6,7 @@ import entities.Employee;
 import entities.Member;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class EmployeePresentation {
@@ -35,14 +36,10 @@ public class EmployeePresentation {
         LocalDate parsedDate = employeeService.parsedDate(parsingDate);
         employee.setHiringDate(parsedDate);
 
-        System.out.println("Ingrese el sueldo del empleado:");
-        employee.setSalary(scanner.nextFloat());
-
 
         String input = null;
         Employee.EmployeeRole employeeRole = null;
         System.out.println("Ingrese el rol del empleado: ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE')");
-        scanner.nextLine();
 
         while(employeeRole == null) {
 
@@ -54,15 +51,17 @@ public class EmployeePresentation {
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de ROL no valido. Intente nuevamente ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE'):");
             }
-
         }
 
-        employee.setEmployeeRole(employeeRole);
 
+        employee.setEmployeeRole(employeeRole);
+        float salary = employeeService.calculateSalary(employeeRole);
+        employee.setSalary(employeeService.calculateSalary(employeeRole));
+
+        System.out.println("Sueldo asignado por defecto: " + salary);
 
         Employee.EmployeeShift employeeShift = null;
         System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
-        scanner.nextLine();
 
         while(employeeShift == null) {
 
@@ -79,10 +78,70 @@ public class EmployeePresentation {
 
         employee.setEmployeeShift(employeeShift);
 
+        employee.setEmployeeStatus(Employee.EmployeeStatus.valueOf("ACTIVE"));
 
+        employee = employeeService.insert(employee);
 
+        if (employee.getId() > 0) {
+            System.out.println("Se creo correctamente al empleado con ID: " + employee.getId());
+        } else {
+            System.out.println("NO se creo al empleado.");
+        }
 
         return employee;
+    }
+
+    public List<Employee> obtainallMenu() {
+
+        List<Employee> employeeList = employeeService.obtainAll();
+
+        for(Employee employee : employeeList) {
+
+            System.out.println("---------------");
+            System.out.println("ID: " + employee.getId());
+            System.out.println("Nombre: " + employee.getName());
+            System.out.println("Apellido: " + employee.getSurname());
+            System.out.println("Telefono: " + employee.getPhone());
+            System.out.println("Direccion: " + employee.getAddress());
+            System.out.println("Fecha de contratación: " + employee.getHiringDate());
+            System.out.println("Estado: " + employee.getEmployeeStatus());
+            System.out.println("Rol: " + employee.getEmployeeRole());
+            System.out.println("Turno: " + employee.getEmployeeShift());
+            System.out.println("Salario: " + employee.getSalary());
+        }
+
+        return employeeList;
+    }
+
+    /**Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.
+     * No recibe nada
+     */
+    public void updateSalary() {
+        System.out.println("Ingrese el ID del empleado a modificar el sueldo: ");
+        int input = scanner.nextInt();
+
+        Employee searchedEmployee = employeeService.searchForID(input);
+
+        System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
+        float newSalary = scanner.nextFloat();
+
+       employeeService.updateSalary(searchedEmployee, newSalary);
+
+    }
+
+    /**Muestra los datos del empleado, buscandolo por ID
+     * Devuelve todos los datos
+     */
+    public void searchForIdMenu() {
+
+        Employee searchedEmployee;
+
+        System.out.println("Ingrese el ID que desea buscar: ");
+        int input = scanner.nextInt();
+
+        searchedEmployee = employeeService.searchForID(input);
+        System.out.println(searchedEmployee);
+
     }
 
 }

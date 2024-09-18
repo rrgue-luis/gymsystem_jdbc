@@ -71,6 +71,7 @@ public class MemberPresentation {
         member.setMembershipType(membershipType);
 
 
+
         // Member se crea por primera vez en MemberPresentation (UN OBJETO SIEMPRE NACE CON new )
         // -> viaja a MemberService
         // -> viaja a MemberDao
