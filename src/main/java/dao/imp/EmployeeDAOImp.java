@@ -91,14 +91,14 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 String phone = result.getString("phone");
                 String address = result.getString("address");
 
-                String employeeRoleString = result.getString("employee_role");
+                String employeeRoleString = result.getString("role");
                 Employee.EmployeeRole employeeRole = Employee.EmployeeRole.valueOf(employeeRoleString.toUpperCase());
 
-                String employeeShiftString = result.getString("employee_shift");
-                Employee.EmployeeShift employeeShift = Employee.EmployeeShift.valueOf(employeeShiftString.toUpperCase());
-
-                String employeeStatusString = result.getString("employee_status");
+                String employeeStatusString = result.getString("status");
                 Employee.EmployeeStatus employeeStatus = Employee.EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
+
+                String employeeShiftString = result.getString("shift");
+                Employee.EmployeeShift employeeShift = Employee.EmployeeShift.valueOf(employeeShiftString.toUpperCase());
 
                 float salary = result.getFloat("salary");
 
@@ -124,7 +124,19 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
 
     @Override
     public void delete(Integer key) {
+        Connection connection = getConnection();
+        //EMPLOYEE TIENE FOREIGN KEY CON GYM EMPLOYEES, NECESITA ON CASCADE
+        String SQLSentence = "DELETE FROM employee WHERE id = ?";
 
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+            SQLSentenceObject.setInt(1, key);
+            SQLSentenceObject.executeUpdate();
+            SQLSentenceObject.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -163,7 +175,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 String employeeStatusString = result.getString("status");
                 Employee.EmployeeStatus employeeStatus = Employee.EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
 
-                searchedEmployee = new Employee(id, name, surname, phone, address, hiringDate, salary, employeeRole, employeeShift, employeeStatus);
+                searchedEmployee = new Employee(id, name, surname, address, phone, hiringDate, salary, employeeRole, employeeShift, employeeStatus);
             }
 
         } catch (SQLException e) {
@@ -222,5 +234,27 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
         }
 
         return newSalary;
+    }
+
+    @Override
+    public boolean employeeExists(Integer key) {
+        Connection connection = getConnection();
+        String checkSQL = "SELECT COUNT(*) FROM employee WHERE id=?";
+
+        try {
+            PreparedStatement checkSQLStatement = connection.prepareStatement(checkSQL);
+            checkSQLStatement.setInt(1, key);
+            ResultSet resultSet = checkSQLStatement.executeQuery();
+
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            return count > 0;
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

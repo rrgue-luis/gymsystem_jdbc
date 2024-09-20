@@ -75,10 +75,14 @@ public class Main {
 
         EmployeePresentation employeePresentation = new EmployeePresentation();
 
-        employeePresentation.updateSalary();
+        //metodos funcionando:
 
+        //employeePresentation.updateSalary();
+        //employeePresentation.searchForIdMenu();
+        //employeePresentation.insertMenu();
+        //employeePresentation.obtainAllMenu();
+        //employeePresentation.deleteMenu();
 
     }
-
 
 }

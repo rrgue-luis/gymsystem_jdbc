@@ -2,11 +2,14 @@ package business.impl;
 
 import business.EmployeeService;
 import dao.EmployeeDAO;
+import dao.MemberDAO;
 import dao.imp.EmployeeDAOImp;
+import dao.imp.MemberDAOImp;
 import entities.Employee;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,15 +31,14 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public void delete(Integer key) {
-
+        employeeDAO.delete(key);
     }
 
     @Override
-    public Employee searchForID(Integer key) {
+    public Employee searchForId(Integer key) {
 
         EmployeeDAO employeeDAO = new EmployeeDAOImp();
-        Employee searchedEmployee = employeeDAO.searchForId(key);
-        return searchedEmployee;
+        return employeeDAO.searchForId(key);
 
     }
 
@@ -45,15 +47,17 @@ public class EmployeeServiceImp implements EmployeeService {
 
     }
 
-    public float calculateSalary (Employee.EmployeeRole employeeRole) {
+    public float calculateSalary (Employee employee, Employee.EmployeeRole employeeRole) {
+
+        String employeeRoleString = employee.getEmployeeRole().name();
 
         float finalSalary;
 
-        if(employeeRole.equals("BOSS")) {
+        if(employeeRoleString.equals("BOSS")) {
              finalSalary = 9000.32f;
-        } else if (employeeRole.equals("MANAGER")) {
+        } else if (employeeRoleString.equals("MANAGER")) {
             finalSalary = 5300.93f;
-        } else if (employeeRole.equals("TRAINER")) {
+        } else if (employeeRoleString.equals("TRAINER")) {
             finalSalary = 1500.32f;
         } else {
             finalSalary = 1200.33f;
@@ -75,12 +79,23 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public boolean employeeExists(Integer key) {
-        return false;
+
+        boolean employeeExists = employeeDAO.employeeExists(key);
+
+        if (employeeExists) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public List<Employee> obtainAll() {
-        return null;
+
+        List<Employee> employees = new ArrayList<>();
+        employees = employeeDAO.obtainAll();
+
+        return employees;
     }
 
     @Override

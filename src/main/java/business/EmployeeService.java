@@ -13,7 +13,7 @@ public interface EmployeeService {
 
     public void delete(Integer key);
 
-    Employee searchForID(Integer key);
+    Employee searchForId(Integer key);
 
     void updateEmployee(Employee employee);
 
@@ -25,7 +25,7 @@ public interface EmployeeService {
 
     LocalDate parsedDate(String parsingDate);
 
-    public float calculateSalary(Employee.EmployeeRole employeeRole);
+    public float calculateSalary(Employee employee, Employee.EmployeeRole employeeRole);
 
     public float updateSalary(Employee entity, float newSalary);
 

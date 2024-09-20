@@ -32,8 +32,6 @@ public class MemberServiceImp implements MemberService {
 
     }
 
-
-
     @Override
     public LocalDate membershipEndDate(Member member, LocalDate parsedDate) {
 
@@ -85,7 +83,7 @@ public class MemberServiceImp implements MemberService {
         boolean memberExists = memberDAO.memberExists(key);
 
         if (memberExists) {
-            return true ;
+            return true;
         } else {
             return false;
         }

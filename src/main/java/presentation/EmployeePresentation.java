@@ -55,8 +55,8 @@ public class EmployeePresentation {
 
 
         employee.setEmployeeRole(employeeRole);
-        float salary = employeeService.calculateSalary(employeeRole);
-        employee.setSalary(employeeService.calculateSalary(employeeRole));
+        float salary = employeeService.calculateSalary(employee, employeeRole);
+        employee.setSalary(employeeService.calculateSalary(employee, employeeRole));
 
         System.out.println("Sueldo asignado por defecto: " + salary);
 
@@ -91,7 +91,27 @@ public class EmployeePresentation {
         return employee;
     }
 
-    public List<Employee> obtainallMenu() {
+    public void deleteMenu() {
+
+        boolean employeeExists;
+        do {
+            System.out.println("Ingrese el id del miembro a eliminar: ");
+            obtainAllMenu();
+            System.out.println("-----------LISTA-----------");
+            int input = scanner.nextInt();
+
+            employeeExists = employeeService.employeeExists(input);
+            if (employeeService.employeeExists(input)) {
+                System.out.println("Empleado eliminado: " + input);
+                employeeService.delete(input);
+            } else {
+                System.out.println("No existe empleado con ese ID, intente nuevamente");
+            }
+        } while (!employeeExists);
+
+    }
+
+    public void obtainAllMenu() {
 
         List<Employee> employeeList = employeeService.obtainAll();
 
@@ -110,7 +130,7 @@ public class EmployeePresentation {
             System.out.println("Salario: " + employee.getSalary());
         }
 
-        return employeeList;
+        return;
     }
 
     /**Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.
@@ -120,7 +140,7 @@ public class EmployeePresentation {
         System.out.println("Ingrese el ID del empleado a modificar el sueldo: ");
         int input = scanner.nextInt();
 
-        Employee searchedEmployee = employeeService.searchForID(input);
+        Employee searchedEmployee = employeeService.searchForId(input);
 
         System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
         float newSalary = scanner.nextFloat();
@@ -135,12 +155,26 @@ public class EmployeePresentation {
     public void searchForIdMenu() {
 
         Employee searchedEmployee;
+        int input;
+        do {
 
-        System.out.println("Ingrese el ID que desea buscar: ");
-        int input = scanner.nextInt();
+            System.out.println("Ingrese el ID que desea buscar: ");
+            input = scanner.nextInt();
 
-        searchedEmployee = employeeService.searchForID(input);
-        System.out.println(searchedEmployee);
+            searchedEmployee = employeeService.searchForId(input);
+
+            if(searchedEmployee!= null) {
+                System.out.println(searchedEmployee);
+            } else {
+                System.out.println("No existe ese miembro, intente con otro ID. \n Volver al menú: --(0)--");
+            }
+
+            if(input == 0) {
+                System.out.println("Volviendo al menú");
+                break;
+            }
+
+        } while(searchedEmployee == null);
 
     }
 

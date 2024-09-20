@@ -103,7 +103,7 @@ public class MemberPresentation {
 
     }
 
-    public List<Member> obtainAllMenu() {
+    public void obtainAllMenu() {
 
         List<Member> memberList = memberService.obtainAll();
         for (Member member : memberList){
@@ -125,7 +125,7 @@ public class MemberPresentation {
             System.out.println("Membresia: ACTIVA/INACTIVA");
 
         }
-        return memberList;
+        return;
     }
 
 
@@ -216,12 +216,7 @@ public class MemberPresentation {
     public void searchForIdMenu() {
         Member searchedMember;
 
-        System.out.println("Ingrese un ID a buscar");
 
-        int input = scanner.nextInt();
-
-        searchedMember = memberService.searchForId(input);
-        System.out.println(searchedMember);
 
     }
 
