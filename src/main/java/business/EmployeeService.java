@@ -23,7 +23,7 @@ public interface EmployeeService {
 
     public boolean isEmployeeActive(int employeeId);
 
-    LocalDate parsedDate(String parsingDate);
+    LocalDate parseDate(String parsingDate);
 
     public float calculateSalary(Employee employee, Employee.EmployeeRole employeeRole);
 

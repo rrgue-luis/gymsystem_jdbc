@@ -192,8 +192,6 @@ public class MemberPresentation {
             System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
             String inputString = scanner.nextLine().toUpperCase();
 
-
-
             Member.MembershipType membershipType = null;
 
             try {

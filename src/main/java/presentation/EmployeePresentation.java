@@ -33,7 +33,7 @@ public class EmployeePresentation {
         System.out.println("Ingrese la fecha de contratacion del empleado: ");
         String parsingDate = scanner.nextLine();
 
-        LocalDate parsedDate = employeeService.parsedDate(parsingDate);
+        LocalDate parsedDate = employeeService.parseDate(parsingDate);
         employee.setHiringDate(parsedDate);
 
 
@@ -91,6 +91,77 @@ public class EmployeePresentation {
         return employee;
     }
 
+    public void updateEmployee(){
+
+        System.out.println("Ingrese el ID del empleado a actualizar:");
+        obtainAllMenu();
+        int input = scanner.nextInt();
+
+        boolean employeeExists = employeeService.employeeExists(input);
+
+        if(employeeExists) {
+            Employee employee = new Employee();
+
+            employee.setId(input);
+
+            System.out.println("Ingrese el nombre del empleado: ");
+            scanner.nextLine();
+            employee.setName(scanner.nextLine());
+
+            System.out.println("Ingrese el apellido del empleado: ");
+            employee.setSurname(scanner.nextLine());
+
+            System.out.println("Ingrese el telefono del empleado: ");
+            employee.setPhone(scanner.nextLine());
+
+            System.out.println("Ingrese la direccion del empleado");
+            employee.setAddress(scanner.nextLine());
+
+            System.out.println("Ingrese la fecha de contrato del empleado");
+            String parsingDate = scanner.nextLine();
+
+            LocalDate parsedDate = employeeService.parseDate(parsingDate);
+
+            employee.setHiringDate(parsedDate);
+
+            System.out.println("Ingrese el rol del empleado: ");
+            String inputString = scanner.nextLine().toUpperCase();
+
+            Employee.EmployeeRole employeeRole = null;
+
+            try {
+                employeeRole = Employee.EmployeeRole.valueOf(inputString);
+                employee.setEmployeeRole(employeeRole);
+                System.out.println("Rol elegido: " + employeeRole);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+                e.printStackTrace();
+            }
+
+            System.out.println("Ingrese el turno del empleado: ");
+            inputString = scanner.nextLine().toUpperCase();
+
+            Employee.EmployeeShift employeeShift = null;
+
+            try {
+                employeeShift = Employee.EmployeeShift.valueOf(inputString);
+                employee.setEmployeeShift(employeeShift);
+                System.out.println("Turno elegido: " + employeeShift);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT')");
+                e.printStackTrace();
+            }
+
+            employee.setEmployeeStatus(Employee.EmployeeStatus.ACTIVE);
+
+            employeeService.updateEmployee(employee);
+        } else {
+            System.out.println("El empleado no existe.");
+        }
+
+
+    }
+
     public void deleteMenu() {
 
         boolean employeeExists;
@@ -130,7 +201,6 @@ public class EmployeePresentation {
             System.out.println("Salario: " + employee.getSalary());
         }
 
-        return;
     }
 
     /**Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.

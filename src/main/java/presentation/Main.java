@@ -82,6 +82,7 @@ public class Main {
         //employeePresentation.insertMenu();
         //employeePresentation.obtainAllMenu();
         //employeePresentation.deleteMenu();
+        employeePresentation.updateEmployee();
 
     }
 

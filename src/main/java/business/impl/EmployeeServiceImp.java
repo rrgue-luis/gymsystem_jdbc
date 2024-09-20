@@ -44,7 +44,7 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public void updateEmployee(Employee employee) {
-
+        employeeDAO.update(employee);
     }
 
     public float calculateSalary (Employee employee, Employee.EmployeeRole employeeRole) {
@@ -104,7 +104,7 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
-    public LocalDate parsedDate(String parsingDate) {
+    public LocalDate parseDate(String parsingDate) {
         LocalDate parsedDate = null;
 
         while (parsedDate == null) {

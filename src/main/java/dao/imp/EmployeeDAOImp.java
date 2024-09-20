@@ -70,6 +70,47 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
     @Override
     public void update(Employee entity) {
 
+        Connection connection = getConnection();
+        String checkId = "SELECT COUNT(*) FROM employee WHERE id=?";
+        String SQLSentenceUpdate = "UPDATE employee SET name=?, surname=?, hiring_date=?, salary=?, role=?, status=?, shift=?, phone=?, address=? WHERE id=?";
+
+        try {
+
+            PreparedStatement checkStmt = connection.prepareStatement(checkId);
+            checkStmt.setInt(1, entity.getId());
+            ResultSet resultSet = checkStmt.executeQuery();
+
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            if (count > 0) {
+
+                PreparedStatement updateStmt = connection.prepareStatement(SQLSentenceUpdate);
+                updateStmt.setString(1, entity.getName());
+                updateStmt.setString(2, entity.getSurname());
+                updateStmt.setDate(3, java.sql.Date.valueOf(entity.getHiringDate()));
+                updateStmt.setFloat(4, entity.getSalary());
+                updateStmt.setString(5, entity.getEmployeeRole().name());
+                updateStmt.setString(6, entity.getEmployeeStatus().name());
+                updateStmt.setString(7, entity.getEmployeeShift().name());
+                updateStmt.setString(8, entity.getPhone());
+                updateStmt.setString(9, entity.getAddress());
+                updateStmt.setInt(10, entity.getId());
+
+                updateStmt.executeUpdate();
+                updateStmt.close();
+                System.out.println("Actualización realizada con éxito.");
+            } else {
+                System.out.println("No existe empleado con ese ID: " + entity.getId());
+            }
+
+            resultSet.close();
+            checkStmt.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
