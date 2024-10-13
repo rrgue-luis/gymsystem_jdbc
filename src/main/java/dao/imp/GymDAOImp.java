@@ -1,13 +1,14 @@
 package dao.imp;
 
 import dao.DAO;
+import dao.GymDAO;
 import dao.MySQLDBConnection;
 import entities.Gym;
 
 import java.sql.Connection;
 import java.util.List;
 
-public class GymDAOImp implements MySQLDBConnection, DAO<Gym, Integer> {
+public class GymDAOImp implements MySQLDBConnection, GymDAO {
     @Override
     public Gym insert(Gym entity) {
         return entity;
@@ -36,5 +37,10 @@ public class GymDAOImp implements MySQLDBConnection, DAO<Gym, Integer> {
     @Override
     public Connection getConnection() {
         return MySQLDBConnection.super.getConnection();
+    }
+
+    @Override
+    public boolean gymExists(Integer key) {
+        return false;
     }
 }

@@ -1,46 +1,39 @@
 package entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Gym {
 
     private int id;
-    private String name, address, schedule, phone, email;
+    private String name, address, phone, email;
     private int capacity;
-    private status status;
-
-    private List<Employee> employeeList = new ArrayList<>();
-    private List<String> registeredMembersList = new ArrayList<>();
-    private enum status{
+    public Status status;
+    private LocalDateTime schedule;
+    private List<Employee> employees = new ArrayList<>();
+    private List<String> members = new ArrayList<>();
+    public enum Status{
         OPEN,
         CLOSED,
+        OPERATIVE,
         MAINTENANCE;
-    }
 
-    private void addEmployee(){
-        Employee employee = new Employee();
-        //agregar employee
-    }
+        public static Status fromString(String type) {
+            try {
+                return Status.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de estado invalido, recibido: " + type + " Esperado: ('OPERATIVE', 'MAINTENANCE')");
+            }
+        }
 
-    private void removeEmployee(){
-        //borrar employee [de esta sucursal]
-    }
-
-    private void addMember(){
-        Member member = new Member();
-        //agregar member
-    }
-
-    private Gym getGymDetails(Gym gym){
-        //mostrar detalles del gym
-        return gym;
     }
 
     public Gym() {
     }
 
-    public Gym(int id, String name, String address, String schedule, String phone, String email, int capacity, Gym.status status, List<Employee> employeeList, List<String> registeredMembersList) {
+    public Gym(int id, String name, String address, LocalDateTime schedule, String phone, String email, int capacity, Gym.Status status, List<Employee> employees, List<String> members) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -49,8 +42,8 @@ public class Gym {
         this.email = email;
         this.capacity = capacity;
         this.status = status;
-        this.employeeList = employeeList;
-        this.registeredMembersList = registeredMembersList;
+        this.employees = employees;
+        this.members = members;
     }
 
     public int getId() {
@@ -77,11 +70,11 @@ public class Gym {
         this.address = address;
     }
 
-    public String getSchedule() {
+    public LocalDateTime getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(String schedule) {
+    public void setSchedule(LocalDateTime schedule) {
         this.schedule = schedule;
     }
 
@@ -109,27 +102,26 @@ public class Gym {
         this.capacity = capacity;
     }
 
-    public Gym.status getstatus() {
+    public Gym.Status getStatus() {
         return status;
     }
-
-    public void setstatus(Gym.status status) {
+    public void setStatus(Gym.Status status) {
         this.status = status;
     }
 
     public List<Employee> getEmployeeList() {
-        return employeeList;
+        return employees;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setEmployeeList(List<Employee> employeesList) {
+        this.employees = employeesList;
     }
 
     public List<String> getRegisteredMembersList() {
-        return registeredMembersList;
+        return members;
     }
 
-    public void setRegisteredMembersList(List<String> registeredMembersList) {
-        this.registeredMembersList = registeredMembersList;
+    public void setRegisteredMembersList(List<String> membersList) {
+        this.members = membersList;
     }
 }

@@ -10,7 +10,6 @@ public class Member {
     private String name, surname, gender, phone, address;
     private LocalDate birthDate;
 
-
     private LocalDate registrationDate;
     private LocalDate membershipEndDate;
     private MembershipType membershipType;
