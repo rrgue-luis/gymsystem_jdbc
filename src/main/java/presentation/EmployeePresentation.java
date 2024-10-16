@@ -78,6 +78,7 @@ public class EmployeePresentation {
 
         employee.setEmployeeShift(employeeShift);
 
+        //asignacion a activo por defecto
         employee.setEmployeeStatus(Employee.EmployeeStatus.valueOf("ACTIVE"));
 
         employee = employeeService.insert(employee);

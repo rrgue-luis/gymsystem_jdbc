@@ -9,16 +9,14 @@ public class Gym {
 
     private int id;
     private String name, address, phone, email;
-    private int capacity;
     public Status status;
-    private LocalDateTime schedule;
+    private String schedule;
     private List<Employee> employees = new ArrayList<>();
     private List<String> members = new ArrayList<>();
     public enum Status{
-        OPEN,
-        CLOSED,
         OPERATIVE,
-        MAINTENANCE;
+        MAINTENANCE,
+        UNKNOWN;
 
         public static Status fromString(String type) {
             try {
@@ -33,17 +31,16 @@ public class Gym {
     public Gym() {
     }
 
-    public Gym(int id, String name, String address, LocalDateTime schedule, String phone, String email, int capacity, Gym.Status status, List<Employee> employees, List<String> members) {
+    public Gym(int id, String name, String address, String schedule, String phone, String email, Gym.Status status) {//, List<Employee> employees, List<String> members) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.schedule = schedule;
         this.phone = phone;
         this.email = email;
-        this.capacity = capacity;
         this.status = status;
-        this.employees = employees;
-        this.members = members;
+        //this.employees = employees;
+        //this.members = members;
     }
 
     public int getId() {
@@ -70,13 +67,15 @@ public class Gym {
         this.address = address;
     }
 
-    public LocalDateTime getSchedule() {
+   public String getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(LocalDateTime schedule) {
+    public void setSchedule(String schedule) {
         this.schedule = schedule;
     }
+
+
 
     public String getPhone() {
         return phone;
@@ -92,14 +91,6 @@ public class Gym {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
     }
 
     public Gym.Status getStatus() {

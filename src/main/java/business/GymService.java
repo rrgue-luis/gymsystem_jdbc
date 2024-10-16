@@ -19,6 +19,5 @@ public interface GymService {
 
     List<Gym> obtainAll();
 
-    LocalDate parseDate(String parsingDate);
 
 }

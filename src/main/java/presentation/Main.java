@@ -73,16 +73,25 @@ public class Main {
 
         */
 
-        EmployeePresentation employeePresentation = new EmployeePresentation();
+        //EmployeePresentation employeePresentation = new EmployeePresentation();
 
         //metodos funcionando:
+
 
         //employeePresentation.updateSalary();
         //employeePresentation.searchForIdMenu();
         //employeePresentation.insertMenu();
         //employeePresentation.obtainAllMenu();
         //employeePresentation.deleteMenu();
-        employeePresentation.updateEmployee();
+
+        //employeePresentation.updateEmployee();
+
+        GymPresentation gymPresentation = new GymPresentation();
+
+        //funcionando:
+
+        //gymPresentation.insertMenu();
+        //gymPresentation.obtainAllMenu();
 
     }
 

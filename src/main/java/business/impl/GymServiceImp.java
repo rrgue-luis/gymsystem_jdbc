@@ -7,6 +7,8 @@ import dao.imp.GymDAOImp;
 import entities.Gym;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,7 +30,10 @@ public class GymServiceImp implements GymService {
 
     @Override
     public Gym insert(Gym gym) {
-        return null;
+
+        gym = gymDAO.insert(gym);
+        return gym;
+
     }
 
     @Override
@@ -53,11 +58,13 @@ public class GymServiceImp implements GymService {
 
     @Override
     public List<Gym> obtainAll() {
-        return null;
+
+        List<Gym> gyms = new ArrayList<>();
+        gyms = gymDAO.obtainAll();
+
+        return gyms;
+
     }
 
-    @Override
-    public LocalDate parseDate(String parsingDate) {
-        return null;
-    }
+
 }
