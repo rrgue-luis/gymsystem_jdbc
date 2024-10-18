@@ -38,22 +38,30 @@ public class GymServiceImp implements GymService {
 
     @Override
     public void delete(Integer key) {
-
+        gymDAO.delete(key);
     }
 
     @Override
     public Gym searchForId(Integer key) {
-        return null;
+        return gymDAO.searchForId(key);
     }
 
     @Override
-    public boolean gymExists(Gym gym) {
-        return false;
+    public boolean gymExists(Integer key) {
+
+        boolean gymExists = gymDAO.gymExists(key);
+
+        if(gymExists) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     @Override
     public void updateGym(Gym gym) {
-
+        gymDAO.update(gym);
     }
 
     @Override

@@ -92,7 +92,9 @@ public class Main {
 
         //gymPresentation.insertMenu();
         //gymPresentation.obtainAllMenu();
-
+        //gymPresentation.searchForIdMenu();
+        //gymPresentation.deleteMenu();
+        gymPresentation.updateMenu();
     }
 
 }

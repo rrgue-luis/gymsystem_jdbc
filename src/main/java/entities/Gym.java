@@ -75,7 +75,18 @@ public class Gym {
         this.schedule = schedule;
     }
 
-
+    @Override
+    public String toString() {
+        return "---------------------\n" +
+                "ID: " + id + "\n" +
+                "Nombre : " + name + "\n" +
+                "Direccion : " + address + "\n" +
+                "Telefono: " + phone + "\n" +
+                "E-mail : " + email + "\n" +
+                "Horario : " + schedule + "\n" +
+                "Estado: " + status + "\n"
+                ;
+    }
 
     public String getPhone() {
         return phone;

@@ -5,6 +5,7 @@ import dao.GymDAO;
 import dao.MySQLDBConnection;
 import entities.Gym;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,44 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
     @Override
     public void update(Gym entity) {
+        Connection connection = getConnection();
+        String checkId = "SELECT COUNT(*) FROM gym WHERE id=?";
+        String SQLSentenceUpdate = "UPDATE gym SET name=?, address=?, schedule=?, phone=?, email=?, status=? WHERE id=?";
+
+        try {
+            PreparedStatement checkStmt = connection.prepareStatement(checkId);
+            checkStmt.setInt(1, entity.getId());
+            ResultSet result = checkStmt.executeQuery();
+
+            result.next();
+            int count = result.getInt(1);
+
+            if (count > 0) {
+
+                PreparedStatement updateStmt = connection.prepareStatement(SQLSentenceUpdate);
+                updateStmt.setString(1, entity.getName());
+                updateStmt.setString(2, entity.getAddress());
+                updateStmt.setString(3, entity.getSchedule());
+                updateStmt.setString(4, entity.getPhone());
+                updateStmt.setString(5, entity.getEmail());
+                updateStmt.setString(6, entity.getStatus().name());
+                updateStmt.setInt(7, entity.getId());
+
+                updateStmt.executeUpdate();
+                updateStmt.close();
+                System.out.println("Actualizacion realizada con éxito.");
+
+            } else {
+                System.out.println("No existe gym con ese ID: " + entity.getId());
+            }
+
+            result.close();
+            checkStmt.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -76,7 +115,6 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
                 try {
                     status = Gym.Status.valueOf(statusString.toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    // Valor predeterminado si el valor no coincide con el ENUM
                     status = Gym.Status.UNKNOWN;
                 }
 
@@ -101,12 +139,63 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
     @Override
     public void delete(Integer key) {
+        Connection connection = getConnection();
 
+        String SQLSentence = "DELETE FROM gym WHERE id = ?";
+
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+            SQLSentenceObject.setInt(1, key);
+            SQLSentenceObject.executeUpdate();
+            SQLSentenceObject.close();
+            connection.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Gym searchForId(Integer key) {
-        return null;
+
+        Gym searchedGym = null;
+
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM gym WHERE ID = ?";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            ResultSet result = preparedStatement.executeQuery();
+
+            if(result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String address = result.getString("address");
+                String schedule = result.getString("schedule");
+                String phone = result.getString("phone");
+                String email = result.getString("email");
+
+                String statusString = result.getString("status");
+                Gym.Status status = Gym.Status.valueOf(statusString.toUpperCase());
+
+                searchedGym = new Gym(id, name, address, phone, email, schedule, status);
+
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+        } try {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            } if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return searchedGym;
     }
 
     @Override
@@ -116,6 +205,22 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
     @Override
     public boolean gymExists(Integer key) {
+        Connection connection = getConnection();
+        String checkSQL = "SELECT COUNT(*) FROM gym WHERE id=?";
+
+        try {
+            PreparedStatement checkSQLStatement = connection.prepareStatement(checkSQL);
+            checkSQLStatement.setInt(1, key);
+            ResultSet result = checkSQLStatement.executeQuery();
+
+            result.next();
+            int count = result.getInt(1);
+
+            return count > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }

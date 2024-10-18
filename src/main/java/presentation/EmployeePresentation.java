@@ -92,7 +92,7 @@ public class EmployeePresentation {
         return employee;
     }
 
-    public void updateEmployee(){
+    public void updateMenu(){
 
         System.out.println("Ingrese el ID del empleado a actualizar:");
         obtainAllMenu();

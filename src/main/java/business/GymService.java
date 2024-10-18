@@ -13,7 +13,7 @@ public interface GymService {
 
     Gym searchForId(Integer key);
 
-    public boolean gymExists(Gym gym);
+    public boolean gymExists(Integer key);
 
     void updateGym(Gym gym);
 

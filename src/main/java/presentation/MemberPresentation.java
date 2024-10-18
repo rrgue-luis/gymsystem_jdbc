@@ -213,9 +213,6 @@ public class MemberPresentation {
 
     public void searchForIdMenu() {
         Member searchedMember;
-
-
-
     }
 
 }
