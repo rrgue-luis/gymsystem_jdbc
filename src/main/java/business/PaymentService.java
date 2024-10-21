@@ -2,6 +2,7 @@ package business;
 
 import entities.Payment;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PaymentService {
@@ -17,5 +18,7 @@ public interface PaymentService {
     boolean paymentExists(Integer key);
 
     List<Payment> obtainAll();
+
+    LocalDate parsedDate(String parsingDate);
 
 }

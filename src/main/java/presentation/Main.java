@@ -17,6 +17,9 @@ public class Main {
         MemberPresentation memberPresentation = new MemberPresentation();
         EmployeePresentation employeePresentation = new EmployeePresentation();
         GymPresentation gymPresentation = new GymPresentation();
+        PaymentPresentation paymentPresentation = new PaymentPresentation();
+
+        paymentPresentation.insertMenu();
 
        /* MemberPresentation memberPresentation = new MemberPresentation();
         Scanner scanner = new Scanner(System.in);

@@ -1,15 +1,16 @@
 package entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Payment {
 
     private int id;
     private float amount;
-    private Date paymentDate;
+    private LocalDate paymentDate;
 
     private PaymentMethod paymentMethod;
-    private enum PaymentMethod{
+    public enum PaymentMethod{
         CREDIT,
         DEBIT,
         CASH,
@@ -38,7 +39,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int id, Member member, float amount, Date paymentDate, Payment.PaymentMethod paymentMethod) {
+    public Payment(int id, Member member, float amount, LocalDate paymentDate, Payment.PaymentMethod paymentMethod) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
@@ -61,11 +62,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Date getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
