@@ -14,8 +14,6 @@ import java.util.Scanner;
 
 public class GymServiceImp implements GymService {
 
-    Scanner scanner = new Scanner(System.in);
-
     private final GymDAOImp gymDAOImp;
 
     GymDAO gymDAO = new GymDAOImp();

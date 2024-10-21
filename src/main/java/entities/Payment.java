@@ -5,36 +5,41 @@ import java.util.Date;
 public class Payment {
 
     private int id;
-    private Member member;
     private float amount;
     private Date paymentDate;
 
-    private paymentMethod paymentMethod;
-    private enum paymentMethod{
+    private PaymentMethod paymentMethod;
+    private enum PaymentMethod{
         CREDIT,
         DEBIT,
         CASH,
         TRANSFER;
+
+        public static PaymentMethod fromString(String type) {
+            try {
+                return PaymentMethod.valueOf(type.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo de pago invalido, recibido: " + type + " Esperado: ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
+            }
+        }
+
     }
 
-    public void processPayment(){
-        //procesar pago
-    }
-    public Payment getPaymentDetails(Payment payment){
-        //mostrar datos del pago
-        return payment;
-    }
-    public boolean isPaymentValid(){
-        //es valido el pago? if else
-        return false;
+    @Override
+    public String toString() {
+        return "---------------------\n" +
+                "ID: " + id + "\n" +
+                "Cantidad: " + amount + "\n" +
+                "Fecha: " + paymentDate + "\n" +
+                "Metodo: " + paymentMethod + "\n"
+                ;
     }
 
     public Payment() {
     }
 
-    public Payment(int id, Member member, float amount, Date paymentDate, Payment.paymentMethod paymentMethod) {
+    public Payment(int id, Member member, float amount, Date paymentDate, Payment.PaymentMethod paymentMethod) {
         this.id = id;
-        this.member = member;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
@@ -46,14 +51,6 @@ public class Payment {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
     }
 
     public float getAmount() {
@@ -72,11 +69,11 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public Payment.paymentMethod getPaymentMethod() {
+    public Payment.PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(Payment.paymentMethod paymentMethod) {
+    public void setPaymentMethod(Payment.PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 }

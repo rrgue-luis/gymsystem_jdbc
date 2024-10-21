@@ -14,6 +14,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+        MemberPresentation memberPresentation = new MemberPresentation();
+        EmployeePresentation employeePresentation = new EmployeePresentation();
+        GymPresentation gymPresentation = new GymPresentation();
+
        /* MemberPresentation memberPresentation = new MemberPresentation();
         Scanner scanner = new Scanner(System.in);
         int input;
@@ -83,10 +87,9 @@ public class Main {
         //employeePresentation.insertMenu();
         //employeePresentation.obtainAllMenu();
         //employeePresentation.deleteMenu();
-
         //employeePresentation.updateEmployee();
 
-        GymPresentation gymPresentation = new GymPresentation();
+
 
         //funcionando:
 
@@ -94,7 +97,8 @@ public class Main {
         //gymPresentation.obtainAllMenu();
         //gymPresentation.searchForIdMenu();
         //gymPresentation.deleteMenu();
-        gymPresentation.updateMenu();
+        //gymPresentation.updateMenu();
+
     }
 
 }

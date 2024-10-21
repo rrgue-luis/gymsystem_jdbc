@@ -9,11 +9,11 @@ public interface GymService {
 
     Gym insert(Gym gym);
 
-    public void delete(Integer key);
+    void delete(Integer key);
 
     Gym searchForId(Integer key);
 
-    public boolean gymExists(Integer key);
+    boolean gymExists(Integer key);
 
     void updateGym(Gym gym);
 

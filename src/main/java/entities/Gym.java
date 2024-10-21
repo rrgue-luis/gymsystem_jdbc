@@ -79,11 +79,11 @@ public class Gym {
     public String toString() {
         return "---------------------\n" +
                 "ID: " + id + "\n" +
-                "Nombre : " + name + "\n" +
-                "Direccion : " + address + "\n" +
+                "Nombre: " + name + "\n" +
+                "Direccion: " + address + "\n" +
                 "Telefono: " + phone + "\n" +
-                "E-mail : " + email + "\n" +
-                "Horario : " + schedule + "\n" +
+                "E-mail: " + email + "\n" +
+                "Horario: " + schedule + "\n" +
                 "Estado: " + status + "\n"
                 ;
     }

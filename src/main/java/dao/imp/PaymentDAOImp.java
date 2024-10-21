@@ -2,12 +2,13 @@ package dao.imp;
 
 import dao.DAO;
 import dao.MySQLDBConnection;
+import dao.PaymentDAO;
 import entities.Payment;
 
 import java.sql.Connection;
 import java.util.List;
 
-public class PaymentDAOImp implements MySQLDBConnection, DAO<Payment, Integer> {
+public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
     @Override
     public Payment insert(Payment entity) {
 
@@ -38,5 +39,10 @@ public class PaymentDAOImp implements MySQLDBConnection, DAO<Payment, Integer> {
     @Override
     public Connection getConnection() {
         return MySQLDBConnection.super.getConnection();
+    }
+
+    @Override
+    public boolean paymentExists(Integer key) {
+        return false;
     }
 }
