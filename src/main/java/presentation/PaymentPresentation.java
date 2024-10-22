@@ -14,11 +14,19 @@ public class PaymentPresentation {
     PaymentService paymentService = new PaymentServiceImp();
 
     public Payment insertMenu() {
-        Payment payment = new Payment();
 
-        System.out.println("Ingrese la cantidad del pago: ");
+        Payment payment = new Payment();
+        boolean checkPayment;
+        do {
+            System.out.println("Ingrese la cantidad del pago: ");
+            float amount = scanner.nextFloat();
+            //checkeamos que el pago sea mayor que cero y alcance para algun tipo de membresía
+            checkPayment = paymentService.checkPayment(amount, payment);
+
+        } while(!checkPayment);
+
         payment.setAmount(scanner.nextFloat());
-        scanner.nextLine();
+
         System.out.println("Ingrese la fecha (ENTER: FECHA ACTUAL)");
         String parsingDate = scanner.nextLine();
 
@@ -49,7 +57,9 @@ public class PaymentPresentation {
         }
         payment.setPaymentMethod(paymentMethod);
 
+
         //checkear que el pago sea suficiente y no negativo para la membresia.
+        //hs despues: eso es trabajo del membershipService (nueva clase)
 
         payment = paymentService.insert(payment);
 

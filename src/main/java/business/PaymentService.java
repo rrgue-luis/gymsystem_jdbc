@@ -17,6 +17,8 @@ public interface PaymentService {
 
     boolean paymentExists(Integer key);
 
+    boolean checkPayment(Float amount, Payment payment);
+
     List<Payment> obtainAll();
 
     LocalDate parsedDate(String parsingDate);

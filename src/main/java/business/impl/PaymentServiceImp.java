@@ -5,6 +5,7 @@ import dao.GymDAO;
 import dao.PaymentDAO;
 import dao.imp.GymDAOImp;
 import dao.imp.PaymentDAOImp;
+import entities.Member;
 import entities.Payment;
 
 import java.time.LocalDate;
@@ -50,6 +51,25 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public boolean paymentExists(Integer key) {
         return false;
+    }
+
+    /**
+     *
+     * @param amount
+     * @return
+     */
+    @Override
+    public boolean checkPayment(Float amount, Payment payment) {
+
+            if (amount > 0) {
+                payment.setPaymentIsValid(true);
+                return true;
+            } else {
+                payment.setPaymentIsValid(false);
+                System.out.println("El pago ingresado es menor a cero. Ingreselo nuevamente");
+            }
+            return false;
+
     }
 
     @Override

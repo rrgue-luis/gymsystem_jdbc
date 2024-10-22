@@ -8,8 +8,9 @@ public class Payment {
     private int id;
     private float amount;
     private LocalDate paymentDate;
-
     private PaymentMethod paymentMethod;
+
+    private boolean paymentIsValid;
     public enum PaymentMethod{
         CREDIT,
         DEBIT,
@@ -32,18 +33,20 @@ public class Payment {
                 "ID: " + id + "\n" +
                 "Cantidad: " + amount + "\n" +
                 "Fecha: " + paymentDate + "\n" +
-                "Metodo: " + paymentMethod + "\n"
+                "Metodo: " + paymentMethod + "\n" +
+                "Valido: " + paymentIsValid
                 ;
     }
 
     public Payment() {
     }
 
-    public Payment(int id, Member member, float amount, LocalDate paymentDate, Payment.PaymentMethod paymentMethod) {
+    public Payment(int id, Member member, float amount, LocalDate paymentDate, Payment.PaymentMethod paymentMethod, Boolean paymentIsValid) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
+        this.paymentIsValid = paymentIsValid;
     }
 
     public int getId() {
@@ -72,6 +75,14 @@ public class Payment {
 
     public Payment.PaymentMethod getPaymentMethod() {
         return paymentMethod;
+    }
+
+    public boolean isPaymentIsValid() {
+        return paymentIsValid;
+    }
+
+    public void setPaymentIsValid(boolean paymentIsValid) {
+        this.paymentIsValid = paymentIsValid;
     }
 
     public void setPaymentMethod(Payment.PaymentMethod paymentMethod) {
