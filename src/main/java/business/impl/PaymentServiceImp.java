@@ -10,6 +10,7 @@ import entities.Payment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,17 +31,17 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Payment insert(Payment payment) {
-        return null;
+        payment = paymentDAO.insert(payment);
+        return payment;
     }
 
     @Override
     public void delete(Integer key) {
-
+        paymentDAO.delete(key);
     }
 
     @Override
     public void updatePayment(Payment payment) {
-
     }
 
     @Override
@@ -50,7 +51,7 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public boolean paymentExists(Integer key) {
-        return false;
+        return paymentDAO.paymentExists(key);
     }
 
     /**
@@ -69,12 +70,20 @@ public class PaymentServiceImp implements PaymentService {
                 System.out.println("El pago ingresado es menor a cero. Ingreselo nuevamente");
             }
             return false;
+    }
 
+    @Override
+    public List<Payment> listMemberPayments(Integer key) {
+        List<Payment> memberPayments;
+        memberPayments = paymentDAO.listMemberPayments(key);
+        return memberPayments;
     }
 
     @Override
     public List<Payment> obtainAll() {
-        return null;
+        List<Payment> payments = new ArrayList<>();
+        payments = paymentDAO.obtainAll();
+        return payments;
     }
 
     @Override

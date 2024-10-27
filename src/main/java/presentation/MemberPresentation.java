@@ -93,7 +93,7 @@ public class MemberPresentation {
         return member;
     }
 
-    public void deleteMemberMenu() {
+    public void deleteMenu() {
 
         System.out.println("Ingrese el ID del miembro a eliminar: ");
         obtainAllMenu();
@@ -144,7 +144,7 @@ public class MemberPresentation {
         }
     }
 
-    public void updateMemberMenu() {
+    public void updateMenu() {
 
         System.out.println("Ingrese el ID del miembro a modificar: ");
         int input = scanner.nextInt();

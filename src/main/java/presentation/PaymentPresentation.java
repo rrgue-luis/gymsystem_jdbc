@@ -5,6 +5,7 @@ import business.impl.PaymentServiceImp;
 import entities.Payment;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class PaymentPresentation {
@@ -13,19 +14,26 @@ public class PaymentPresentation {
 
     PaymentService paymentService = new PaymentServiceImp();
 
+    /**
+     * Funcion encargada de subir pagos a mano
+     * ideal para solucionar problemas de caja.
+     * @return devuelve un pago.
+     */
     public Payment insertMenu() {
 
         Payment payment = new Payment();
         boolean checkPayment;
+        float amount;
         do {
             System.out.println("Ingrese la cantidad del pago: ");
-            float amount = scanner.nextFloat();
-            //checkeamos que el pago sea mayor que cero y alcance para algun tipo de membresía
+            amount = scanner.nextFloat();
+            //checkeamos que el pago sea mayor que cero, si alcanza o no, se encarga memberservice
             checkPayment = paymentService.checkPayment(amount, payment);
-
         } while(!checkPayment);
 
-        payment.setAmount(scanner.nextFloat());
+        payment.setAmount(amount);
+
+        scanner.nextLine();
 
         System.out.println("Ingrese la fecha (ENTER: FECHA ACTUAL)");
         String parsingDate = scanner.nextLine();
@@ -42,7 +50,7 @@ public class PaymentPresentation {
         String input = null;
         Payment.PaymentMethod paymentMethod = null;
 
-        System.out.println("Ingrese el metodo de pago utilizado: ");
+        System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
 
         while(paymentMethod == null) {
 
@@ -57,9 +65,8 @@ public class PaymentPresentation {
         }
         payment.setPaymentMethod(paymentMethod);
 
-
-        //checkear que el pago sea suficiente y no negativo para la membresia.
-        //hs despues: eso es trabajo del membershipService (nueva clase)
+        System.out.println("Ingrese el ID del miembro que realizó el pago: ");
+        payment.setMemberId(scanner.nextInt());
 
         payment = paymentService.insert(payment);
 
@@ -70,6 +77,113 @@ public class PaymentPresentation {
         }
 
         return payment;
+    }
+
+    /**
+     * Muestra todos los pagos y los miembros a los que están asociados
+     */
+    public void obtainAllMenu() {
+
+        List<Payment> payments = paymentService.obtainAll();
+        for(Payment payment : payments) {
+            System.out.println("---------------------");
+            System.out.println("ID: " + payment.getId());
+            System.out.println("ID Miembro: " + payment.getMemberId());
+            System.out.println("Cantidad: " + payment.getAmount());
+            System.out.println("Fecha: " + payment.getPaymentDate());
+            System.out.println("Metodo: " + payment.getPaymentMethod());
+            System.out.println("Valido: " + payment.PaymentIsValid());
+        }
+
+    }
+
+    /**
+     * Pide un ID de un pago y lo actualiza.
+     */
+    public void updateMenu() {
+
+        System.out.println("Ingrese el ID del pago a modificar: ");
+        int input = scanner.nextInt();
+        boolean paymentExists = paymentService.paymentExists(input);
+
+        if(paymentExists) {
+            Payment payment = new Payment();
+
+            payment.setId(input);
+            System.out.println("Ingrese el ID del miembro que hizo el pago: ");
+            payment.setMemberId(scanner.nextInt());
+
+            System.out.println("Ingrese el monto: ");
+            payment.setAmount(scanner.nextFloat());
+
+            System.out.println("Ingrese la fecha del pago: (ENTER: FECHA ACTUAL)");
+            String parsingDate = scanner.nextLine();
+
+            if(parsingDate.equals("")) {
+                System.out.println("Fecha del pago: Hoy " + LocalDate.now());
+                payment.setPaymentDate(LocalDate.now());
+            } else {
+                LocalDate parsedDate = paymentService.parsedDate(parsingDate);
+                System.out.println("Fecha asignada: " + parsedDate);
+                payment.setPaymentDate(parsedDate);
+            }
+
+            String stringInput = null;
+            Payment.PaymentMethod paymentMethod = null;
+            System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
+
+            while(paymentMethod == null) {
+
+                stringInput = scanner.nextLine().trim().toUpperCase();
+
+                try {
+                    paymentMethod = Payment.PaymentMethod.valueOf(stringInput);
+                    System.out.println("Tipo de pago elegido: " + paymentMethod);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("ERROR");
+                }
+            }
+
+
+        }
+
+    }
+
+    /**
+     * Pide un ID de un pago y lo elimina.
+     */
+    public void deleteMenu() {
+        System.out.println("Ingrese el ID del pago a eliminar: ");
+        obtainAllMenu();
+        int option = scanner.nextInt();
+        paymentService.delete(option);
+        System.out.println("Pago borrado, ID: " + option);
+    }
+
+    public void listMemberPayments(){
+
+        System.out.println("Ingrese el ID del miembro del que desea saber sus pagos: ");
+        int input = scanner.nextInt();
+        boolean paymentExists = paymentService.paymentExists(input);
+
+        if(paymentExists) {
+            List<Payment> memberPayments = paymentService.listMemberPayments(input);
+            for(Payment payment : memberPayments) {
+                System.out.println("---------------------");
+                System.out.println("ID Miembro: " + payment.getMemberId());
+                System.out.println("ID Pago: " + payment.getId());
+                System.out.println("Cantidad: " + payment.getAmount());
+                System.out.println("Fecha: " + payment.getPaymentDate());
+                System.out.println("Método: " + payment.getPaymentMethod());
+                System.out.println("Válido: " + payment.PaymentIsValid());
+            }
+        } else {
+               System.out.println("No existe pago con ese ID, intente nuevamente: ");
+        }
+
+
+
+
     }
 
 }

@@ -19,7 +19,7 @@ public class Main {
         GymPresentation gymPresentation = new GymPresentation();
         PaymentPresentation paymentPresentation = new PaymentPresentation();
 
-        paymentPresentation.insertMenu();
+        paymentPresentation.listMemberPayments();
 
        /* MemberPresentation memberPresentation = new MemberPresentation();
         Scanner scanner = new Scanner(System.in);

@@ -1,16 +1,18 @@
 package entities;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Payment {
 
     private int id;
+    private int memberId;
     private float amount;
     private LocalDate paymentDate;
     private PaymentMethod paymentMethod;
 
     private boolean paymentIsValid;
+
+
     public enum PaymentMethod{
         CREDIT,
         DEBIT,
@@ -31,6 +33,7 @@ public class Payment {
     public String toString() {
         return "---------------------\n" +
                 "ID: " + id + "\n" +
+                "ID Miembro: "+ memberId + "\n" +
                 "Cantidad: " + amount + "\n" +
                 "Fecha: " + paymentDate + "\n" +
                 "Metodo: " + paymentMethod + "\n" +
@@ -41,8 +44,9 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int id, Member member, float amount, LocalDate paymentDate, Payment.PaymentMethod paymentMethod, Boolean paymentIsValid) {
+    public Payment(int id, float amount, LocalDate paymentDate, PaymentMethod paymentMethod, int memberId, Boolean paymentIsValid) {
         this.id = id;
+        this.memberId = memberId;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
@@ -55,6 +59,14 @@ public class Payment {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
     public float getAmount() {
@@ -77,7 +89,7 @@ public class Payment {
         return paymentMethod;
     }
 
-    public boolean isPaymentIsValid() {
+    public boolean PaymentIsValid() {
         return paymentIsValid;
     }
 

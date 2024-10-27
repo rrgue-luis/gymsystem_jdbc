@@ -27,9 +27,7 @@ public class MemberServiceImp implements MemberService {
 
     @Override
     public void delete(Integer key) {
-
         memberDAO.delete(key);
-
     }
 
     @Override
@@ -63,7 +61,6 @@ public class MemberServiceImp implements MemberService {
 
     @Override
     public Member searchForId(Integer key) {
-
         MemberDAO memberDAO = new MemberDAOImp();
         Member searchedMember = memberDAO.searchForId(key);
         return searchedMember;
@@ -78,15 +75,7 @@ public class MemberServiceImp implements MemberService {
 
     @Override
     public boolean memberExists(Integer key) {
-
-        MemberDAO memberDAO = new MemberDAOImp();
-        boolean memberExists = memberDAO.memberExists(key);
-
-        if (memberExists) {
-            return true;
-        } else {
-            return false;
-        }
+        return memberDAO.memberExists(key);
     }
 
 

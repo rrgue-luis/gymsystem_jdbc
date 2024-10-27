@@ -17,7 +17,16 @@ public interface PaymentService {
 
     boolean paymentExists(Integer key);
 
+    /**
+     * Revisa que la cantidad sea mayor a cero, NO revisa si alcanza o no
+     * eso es trabajo de Membership.renewMembership();
+     * @param amount
+     * @param payment
+     * @return true o false
+     */
     boolean checkPayment(Float amount, Payment payment);
+
+    List<Payment> listMemberPayments(Integer key);
 
     List<Payment> obtainAll();
 
