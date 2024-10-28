@@ -72,8 +72,9 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 String paymentMethodString = result.getString("payment_method");
                 Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(paymentMethodString.toUpperCase());
                 Boolean paymentIsValid = result.getBoolean("payment_is_valid");
+                int gymId = result.getInt("gym_id");
 
-                Payment searchedPayment = new Payment(id, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
+                Payment searchedPayment = new Payment(id, gymId, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
                 payments.add(searchedPayment);
             }
 
@@ -160,8 +161,9 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 String stringPaymentMethod = result.getString("payment_method");
                 Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
                 boolean paymentIsValid = result.getBoolean("payment_is_valid");
+                int gymId = result.getInt("gym_id");
 
-                Payment searchedPayment = new Payment(id, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
+                Payment searchedPayment = new Payment(id, gymId, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
                 memberPayments.add(searchedPayment);
             }
 
@@ -178,5 +180,85 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
 
         return memberPayments;
 
+    }
+
+    @Override
+    public List<Payment> listGymPayments(Integer key) {
+        List<Payment> gymPayments = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM payment WHERE gym_id = ?";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                int id = result.getInt("id");
+                int memberId = result.getInt("member_id");
+                float amount = result.getFloat("amount");
+                LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
+                String stringPaymentMethod = result.getString("payment_method");
+                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
+                boolean paymentIsValid = result.getBoolean("payment_is_valid");
+                int gymId = result.getInt("gym_id");
+
+                Payment searchedPayment = new Payment(id, gymId, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
+                gymPayments.add(searchedPayment);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return gymPayments;
+    }
+
+    @Override
+    public List<Payment> listPaymentsByMethod(String method) {
+        List<Payment> byMethodPayments = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM payment WHERE payment_method = ?";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setString(1, method);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                int id = result.getInt("id");
+                int memberId = result.getInt("member_id");
+                float amount = result.getFloat("amount");
+                LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
+                String stringPaymentMethod = result.getString("payment_method");
+                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
+                boolean paymentIsValid = result.getBoolean("payment_is_valid");
+                int gymId = result.getInt("gym_id");
+
+                Payment searchedPayment = new Payment(id, gymId, amount, paymentDate, paymentMethod, memberId, paymentIsValid);
+                byMethodPayments.add(searchedPayment);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return byMethodPayments;
     }
 }

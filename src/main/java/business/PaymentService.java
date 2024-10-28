@@ -28,6 +28,10 @@ public interface PaymentService {
 
     List<Payment> listMemberPayments(Integer key);
 
+    List<Payment> listGymPayments(Integer key);
+
+    List<Payment> listPaymentsByMethod(String method);
+
     List<Payment> obtainAll();
 
     LocalDate parsedDate(String parsingDate);

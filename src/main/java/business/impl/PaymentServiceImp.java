@@ -80,6 +80,20 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
+    public List<Payment> listGymPayments(Integer key) {
+        List<Payment> gymPayments;
+        gymPayments = paymentDAO.listGymPayments(key);
+        return gymPayments;
+    }
+
+    @Override
+    public List<Payment> listPaymentsByMethod(String method) {
+        List<Payment> byMethodPayments;
+        byMethodPayments = paymentDAO.listPaymentsByMethod(method);
+        return byMethodPayments;
+    }
+
+    @Override
     public List<Payment> obtainAll() {
         List<Payment> payments = new ArrayList<>();
         payments = paymentDAO.obtainAll();

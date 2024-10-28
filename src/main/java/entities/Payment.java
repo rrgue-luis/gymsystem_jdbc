@@ -6,10 +6,11 @@ public class Payment {
 
     private int id;
     private int memberId;
+
+    private int gymId;
     private float amount;
     private LocalDate paymentDate;
     private PaymentMethod paymentMethod;
-
     private boolean paymentIsValid;
 
 
@@ -34,6 +35,7 @@ public class Payment {
         return "---------------------\n" +
                 "ID: " + id + "\n" +
                 "ID Miembro: "+ memberId + "\n" +
+                "ID Gym: " + gymId + "\n" +
                 "Cantidad: " + amount + "\n" +
                 "Fecha: " + paymentDate + "\n" +
                 "Metodo: " + paymentMethod + "\n" +
@@ -44,8 +46,9 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int id, float amount, LocalDate paymentDate, PaymentMethod paymentMethod, int memberId, Boolean paymentIsValid) {
+    public Payment(int id, int gymId, float amount, LocalDate paymentDate, PaymentMethod paymentMethod, int memberId, Boolean paymentIsValid) {
         this.id = id;
+        this.gymId = gymId;
         this.memberId = memberId;
         this.amount = amount;
         this.paymentDate = paymentDate;
@@ -67,6 +70,14 @@ public class Payment {
 
     public void setMemberId(int memberId) {
         this.memberId = memberId;
+    }
+
+    public int getGymId () {
+        return gymId;
+    }
+
+    public void setGymId(int gymId) {
+        this.gymId = gymId;
     }
 
     public float getAmount() {
