@@ -18,8 +18,10 @@ public class Main {
         EmployeePresentation employeePresentation = new EmployeePresentation();
         GymPresentation gymPresentation = new GymPresentation();
         PaymentPresentation paymentPresentation = new PaymentPresentation();
+        MembershipPresentation membershipPresentation = new MembershipPresentation();
 
-        paymentPresentation.listPaymentsByMethod();
+        membershipPresentation.renewMembership();
+
 
        /* MemberPresentation memberPresentation = new MemberPresentation();
         Scanner scanner = new Scanner(System.in);
