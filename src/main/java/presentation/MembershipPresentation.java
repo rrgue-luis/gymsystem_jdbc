@@ -28,7 +28,7 @@ public class MembershipPresentation {
         boolean memberExists = memberService.memberExists(input);
 
         if(memberExists) {
-            Member member = new Member();
+            Member member = memberService.searchForId(input);
             member.setId(input);
 
             System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
@@ -42,7 +42,6 @@ public class MembershipPresentation {
                 System.out.println("Membresia: " + membershipType);
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
-                e.printStackTrace();
             }
 
 

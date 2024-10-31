@@ -42,7 +42,8 @@ public class MembershipDAOImp implements MySQLDBConnection, MembershipDAO {
         return MySQLDBConnection.super.getConnection();
     }
 
-    @Override
+   /* POR EL MOMENTO MEMBERSHIPDAO NO HACE NADA, NO FUE NECESARIO
+   @Override
     public void updateMembershipStatus(Member entity) {
         Connection connection = getConnection();
         String checkId = "SELECT COUNT(*) FROM member WHERE id=?";
@@ -71,5 +72,5 @@ public class MembershipDAOImp implements MySQLDBConnection, MembershipDAO {
             e.printStackTrace();
         }
 
-    }
+    */
 }

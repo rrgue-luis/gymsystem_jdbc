@@ -5,6 +5,6 @@ import entities.Payment;
 
 public interface MembershipDAO extends DAO<Payment, Member>{
 
-    void updateMembershipStatus(Member entity);
+    //void updateMembershipStatus(Member entity);
 
 }

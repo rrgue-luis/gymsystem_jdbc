@@ -23,7 +23,7 @@ public class MembershipServiceImp implements MembershipService {
 
         if(memberDAO.memberExists(member.getId())) {
 
-            membershipDAO.updateMembershipStatus(member);
+            memberDAO.update(member);
 
             if(payment.PaymentIsValid()) {
 
