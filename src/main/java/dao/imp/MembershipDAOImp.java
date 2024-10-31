@@ -46,7 +46,7 @@ public class MembershipDAOImp implements MySQLDBConnection, MembershipDAO {
     public void updateMembershipStatus(Member entity) {
         Connection connection = getConnection();
         String checkId = "SELECT COUNT(*) FROM member WHERE id=?";
-        String SQLSentenceUpdateMember = "UPDATE member SET membership_end_date=?, membership_type=? WHERE ID = ?;";
+        String SQLSentenceUpdateMember = "UPDATE member SET membership_end_date=?, membership_type=? WHERE id = ?;";
 
         try {
             PreparedStatement checkStmt = connection.prepareStatement(checkId);
@@ -62,8 +62,8 @@ public class MembershipDAOImp implements MySQLDBConnection, MembershipDAO {
                 updateStatement.setString(2, entity.getMembershipType().name());
                 updateStatement.setInt(3, entity.getId());
 
+                updateStatement.executeUpdate();
                 updateStatement.close();
-
             }
             result.close();
             checkStmt.close();
