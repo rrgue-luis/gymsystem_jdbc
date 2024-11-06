@@ -20,7 +20,7 @@ public class Main {
         PaymentPresentation paymentPresentation = new PaymentPresentation();
         MembershipPresentation membershipPresentation = new MembershipPresentation();
 
-        membershipPresentation.renewMembership();
+        gymPresentation.listGymEmployeesMenu();
 
 
        /* MemberPresentation memberPresentation = new MemberPresentation();

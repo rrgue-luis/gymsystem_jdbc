@@ -2,9 +2,13 @@ package presentation;
 
 import business.GymService;
 import business.impl.GymServiceImp;
+import entities.Employee;
 import entities.Gym;
+import entities.GymEmployeesDTO;
+import entities.Payment;
 import org.w3c.dom.ls.LSOutput;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -179,10 +183,21 @@ public class GymPresentation {
 
    }
 
-   public void testDelete() {
-       gymService.delete(4);
-       System.out.println("ok");
-   }
+   public void listGymEmployeesMenu() {
+       System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
+       int input = scanner.nextInt();
 
+       List<GymEmployeesDTO> gymEmployeesList = new ArrayList<>();
+       gymEmployeesList = gymService.obtainGymEmployees(input);
+
+       for(GymEmployeesDTO gymEmployees : gymEmployeesList) {
+           System.out.println("------------------");
+           System.out.println("Empleado ID: " + gymEmployees.getEmployeeId());
+           System.out.println("Nombre de empleado: " + gymEmployees.getEmployeeName());
+           System.out.println("Gym ID: " + gymEmployees.getGymId());
+           System.out.println("Gym nombre: " + gymEmployees.getGymName());
+       }
+
+   }
 
 }

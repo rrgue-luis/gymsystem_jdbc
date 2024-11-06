@@ -4,7 +4,10 @@ import business.GymService;
 import dao.GymDAO;
 import dao.imp.EmployeeDAOImp;
 import dao.imp.GymDAOImp;
+import entities.Employee;
 import entities.Gym;
+import entities.GymEmployeesDTO;
+import entities.Payment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -65,11 +68,20 @@ public class GymServiceImp implements GymService {
     @Override
     public List<Gym> obtainAll() {
 
-        List<Gym> gyms = new ArrayList<>();
+        List<Gym> gyms;
         gyms = gymDAO.obtainAll();
 
         return gyms;
 
+    }
+
+    @Override
+    public List<GymEmployeesDTO> obtainGymEmployees(Integer key) {
+
+        List<GymEmployeesDTO> gymEmployees;
+        gymEmployees = gymDAO.obtainGymEmployees(key);
+
+        return gymEmployees;
     }
 
 

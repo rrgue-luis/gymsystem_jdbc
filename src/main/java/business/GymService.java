@@ -1,6 +1,9 @@
 package business;
 
+import entities.Employee;
 import entities.Gym;
+import entities.GymEmployeesDTO;
+import entities.Payment;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +21,8 @@ public interface GymService {
     void updateGym(Gym gym);
 
     List<Gym> obtainAll();
+
+    List<GymEmployeesDTO> obtainGymEmployees(Integer key);
 
 
 }

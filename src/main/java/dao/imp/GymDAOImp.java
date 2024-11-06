@@ -3,7 +3,9 @@ package dao.imp;
 import dao.DAO;
 import dao.GymDAO;
 import dao.MySQLDBConnection;
+import entities.Employee;
 import entities.Gym;
+import entities.GymEmployeesDTO;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -223,4 +225,48 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
         }
         return false;
     }
+
+    @Override
+    public List<GymEmployeesDTO> obtainGymEmployees(Integer key) {
+        List<GymEmployeesDTO> gymEmployeesList = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT e.id AS employee_id, e.name AS employee_name, g.id AS gym_id, g.name AS gym_name\n" +
+                "FROM employee e\n" +
+                "INNER JOIN gym_employees ge ON e.id = ge.employee_id\n" +
+                "INNER JOIN gym g ON g.id = ge.gym_id\n" +
+                "WHERE g.id = ?;";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+
+                int employeeId = result.getInt("employee_id");
+                String employeeName = result.getString("employee_name");
+                int gymId = result.getInt("gym_id");
+                String gymName = result.getString("gym_name");
+
+                GymEmployeesDTO gymEmployees = new GymEmployeesDTO(gymId, employeeId, gymName, employeeName);
+
+                gymEmployeesList.add(gymEmployees);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return gymEmployeesList;
+    }
+
 }
