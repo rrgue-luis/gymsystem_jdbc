@@ -20,7 +20,8 @@ public class Main {
         PaymentPresentation paymentPresentation = new PaymentPresentation();
         MembershipPresentation membershipPresentation = new MembershipPresentation();
 
-        gymPresentation.listGymEmployeesMenu();
+        gymPresentation.listGymEmployeesByRoleMenu();
+
 
 
        /* MemberPresentation memberPresentation = new MemberPresentation();

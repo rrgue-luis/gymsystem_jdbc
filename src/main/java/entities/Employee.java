@@ -1,7 +1,6 @@
 package entities;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Employee {
 
@@ -170,4 +169,6 @@ public class Employee {
     public void setEmployeeStatus(EmployeeStatus employeeStatus) {
         this.employeeStatus = employeeStatus;
     }
+
+
 }

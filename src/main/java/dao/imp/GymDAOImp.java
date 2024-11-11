@@ -1,13 +1,12 @@
 package dao.imp;
 
-import dao.DAO;
 import dao.GymDAO;
 import dao.MySQLDBConnection;
+import entities.DTO.GymEmployeesDTO;
+import entities.DTO.GymEmployeesRoleDTO;
 import entities.Employee;
 import entities.Gym;
-import entities.GymEmployeesDTO;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -253,6 +252,53 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
                 GymEmployeesDTO gymEmployees = new GymEmployeesDTO(gymId, employeeId, gymName, employeeName);
 
                 gymEmployeesList.add(gymEmployees);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return gymEmployeesList;
+    }
+
+    @Override
+    public List<GymEmployeesRoleDTO> obtainGymEmployeesByRole(Integer key, String role) {
+        List<GymEmployeesRoleDTO> gymEmployeesList = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT e.id AS employee_id, e.name AS employee_name, e.role AS employee_role, g.id AS gym_id, g.name AS gym_name\n" +
+                "FROM employee e\n" +
+                "INNER JOIN gym_employees ge ON e.id = ge.employee_id\n" +
+                "INNER JOIN gym g ON g.id = ge.gym_id\n" +
+                "WHERE g.id = ? AND e.role = ? ORDER BY e.role ASC;";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            preparedStatement.setString(2, role);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+
+                int employeeId = result.getInt("employee_id");
+                String employeeName = result.getString("employee_name");
+                String employeeRole = result.getString("employee_role");
+                int gymId = result.getInt("gym_id");
+                String gymName = result.getString("gym_name");
+
+                GymEmployeesRoleDTO.EmployeeRole gymEmployeeDTORoles = GymEmployeesRoleDTO.EmployeeRole.valueOf(employeeRole);
+
+                GymEmployeesRoleDTO gymEmployeesRoles = new GymEmployeesRoleDTO(gymId, employeeId, gymName, employeeName, gymEmployeeDTORoles);
+
+                gymEmployeesList.add(gymEmployeesRoles);
 
             }
         } catch (SQLException e) {

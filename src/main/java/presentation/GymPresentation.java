@@ -2,13 +2,11 @@ package presentation;
 
 import business.GymService;
 import business.impl.GymServiceImp;
+import entities.DTO.GymEmployeesDTO;
+import entities.DTO.GymEmployeesRoleDTO;
 import entities.Employee;
 import entities.Gym;
-import entities.GymEmployeesDTO;
-import entities.Payment;
-import org.w3c.dom.ls.LSOutput;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -187,7 +185,7 @@ public class GymPresentation {
        System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
        int input = scanner.nextInt();
 
-       List<GymEmployeesDTO> gymEmployeesList = new ArrayList<>();
+       List<GymEmployeesDTO> gymEmployeesList;
        gymEmployeesList = gymService.obtainGymEmployees(input);
 
        for(GymEmployeesDTO gymEmployees : gymEmployeesList) {
@@ -196,6 +194,34 @@ public class GymPresentation {
            System.out.println("Nombre de empleado: " + gymEmployees.getEmployeeName());
            System.out.println("Gym ID: " + gymEmployees.getGymId());
            System.out.println("Gym nombre: " + gymEmployees.getGymName());
+       }
+
+   }
+
+   public void listGymEmployeesByRoleMenu() {
+       System.out.println("MOSTRAR MIEMBROS POR ROL");
+       System.out.println("Ingrese el ID del gym: ");
+       int option = scanner.nextInt();
+
+       scanner.nextLine();
+
+       System.out.println("Por que rol desea ordenar?: ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE')");
+       String input = scanner.nextLine();
+
+       List<GymEmployeesRoleDTO> employeesRoleList;
+
+       employeesRoleList = gymService.obtainGymEmployeesByRole(option, input);
+       if (employeesRoleList.isEmpty()) {
+           System.out.println("No se encontraron empleados con el rol especificado en el gimnasio seleccionado.");
+       } else {
+           for (GymEmployeesRoleDTO gymEmployees : employeesRoleList) {
+               System.out.println("------------------");
+               System.out.println("Rol: " + gymEmployees.getEmployeeRole());
+               System.out.println("Empleado ID: " + gymEmployees.getEmployeeId());
+               System.out.println("Nombre de empleado: " + gymEmployees.getEmployeeName());
+               System.out.println("Gym ID: " + gymEmployees.getGymId());
+               System.out.println("Gym nombre: " + gymEmployees.getGymName());
+           }
        }
 
    }

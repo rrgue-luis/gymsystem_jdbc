@@ -2,18 +2,13 @@ package business.impl;
 
 import business.GymService;
 import dao.GymDAO;
-import dao.imp.EmployeeDAOImp;
 import dao.imp.GymDAOImp;
+import entities.DTO.GymEmployeesDTO;
+import entities.DTO.GymEmployeesRoleDTO;
 import entities.Employee;
 import entities.Gym;
-import entities.GymEmployeesDTO;
-import entities.Payment;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class GymServiceImp implements GymService {
 
@@ -82,6 +77,14 @@ public class GymServiceImp implements GymService {
         gymEmployees = gymDAO.obtainGymEmployees(key);
 
         return gymEmployees;
+    }
+
+    @Override
+    public List<GymEmployeesRoleDTO> obtainGymEmployeesByRole(Integer key, String role) {
+
+        List<GymEmployeesRoleDTO> gymEmployeesRoles;
+        gymEmployeesRoles = gymDAO.obtainGymEmployeesByRole(key, role);
+        return gymEmployeesRoles;
     }
 
 
