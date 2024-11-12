@@ -3,9 +3,9 @@ package business.impl;
 import business.GymService;
 import dao.GymDAO;
 import dao.imp.GymDAOImp;
+import entities.DTO.GymEmployeeShiftDTO;
 import entities.DTO.GymEmployeesDTO;
 import entities.DTO.GymEmployeesRoleDTO;
-import entities.Employee;
 import entities.Gym;
 
 import java.util.List;
@@ -85,6 +85,14 @@ public class GymServiceImp implements GymService {
         List<GymEmployeesRoleDTO> gymEmployeesRoles;
         gymEmployeesRoles = gymDAO.obtainGymEmployeesByRole(key, role);
         return gymEmployeesRoles;
+    }
+
+    @Override
+    public List<GymEmployeeShiftDTO> obtainGymEmployeesByShift(Integer key) {
+
+        List<GymEmployeeShiftDTO> gymEmployees;
+        gymEmployees = gymDAO.obtainGymEmployeesByShift(key);
+        return gymEmployees;
     }
 
 

@@ -1,8 +1,8 @@
 package business;
 
+import entities.DTO.GymEmployeeShiftDTO;
 import entities.DTO.GymEmployeesDTO;
 import entities.DTO.GymEmployeesRoleDTO;
-import entities.Employee;
 import entities.Gym;
 
 import java.util.List;
@@ -24,6 +24,8 @@ public interface GymService {
     List<GymEmployeesDTO> obtainGymEmployees(Integer key);
 
     List<GymEmployeesRoleDTO> obtainGymEmployeesByRole(Integer key, String role);
+
+    List<GymEmployeeShiftDTO> obtainGymEmployeesByShift(Integer key);
 
 
 }

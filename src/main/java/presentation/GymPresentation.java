@@ -2,11 +2,12 @@ package presentation;
 
 import business.GymService;
 import business.impl.GymServiceImp;
+import entities.DTO.GymEmployeeShiftDTO;
 import entities.DTO.GymEmployeesDTO;
 import entities.DTO.GymEmployeesRoleDTO;
-import entities.Employee;
 import entities.Gym;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -181,6 +182,8 @@ public class GymPresentation {
 
    }
 
+   //EMPLOYEES
+
    public void listGymEmployeesMenu() {
        System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
        int input = scanner.nextInt();
@@ -225,5 +228,65 @@ public class GymPresentation {
        }
 
    }
+
+   public void listGymEmployeesByShiftMenu() {
+       System.out.println("----ORDENAR EMPLEADOS POR TURNO----");
+
+       boolean gymExists = false;
+       int input;
+
+       do {
+          try {
+
+              System.out.println("Ingrese el ID del GYM");
+              input = scanner.nextInt();
+              gymExists = gymService.gymExists(input);
+
+              if (gymExists) {
+                  List<GymEmployeeShiftDTO> gymEmployees = gymService.obtainGymEmployeesByShift(input);
+
+                  System.out.println("---- LISTADO DE EMPLEADOS ORDENADO POR TURNO ----");
+                  for (GymEmployeeShiftDTO employeesShifts : gymEmployees) {
+                      System.out.println("------------------");
+                      System.out.println("Turno: " + employeesShifts.getEmployeeShift());
+                      System.out.println("Empleado ID: " + employeesShifts.getEmployeeId());
+                      System.out.println("Nombre de empleado: " + employeesShifts.getEmployeeName());
+                      System.out.println("Gym ID: " + employeesShifts.getGymId());
+                      System.out.println("Gym nombre: " + employeesShifts.getGymName());
+                  }
+
+              } else {
+                  System.out.println("No existe un gimnasio con ese ID. Inténtelo nuevamente.");
+              }
+          }catch(InputMismatchException e) {
+              System.out.println("Entrada invalida, recuerde que Gym ID es un numero!");
+              scanner.nextLine();
+          }
+
+       } while (!gymExists);
+
+   }
+
+   public void searchEmployeeInGymMenu() {
+
+   }
+
+   public void assignEmployeeToGymMenu() {
+
+   }
+
+   public void removeEmployeeFromGymMenu() {
+
+   }
+    //GYMS
+   public void generateGymReportMenu() {
+
+   }
+   public void viewGymStatisticsMenu() {
+       //Muestra estadísticas del gimnasio, como el promedio de miembros diarios, membresías activas o ingresos por membresía.
+   }
+
+
+
 
 }
