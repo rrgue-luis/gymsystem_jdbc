@@ -3,7 +3,9 @@ package presentation;
 import business.EmployeeService;
 import business.impl.EmployeeServiceImp;
 import entities.Employee;
-import entities.Member;
+import enums.employee.EmployeeRole;
+import enums.employee.EmployeeShift;
+import enums.employee.EmployeeStatus;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +16,7 @@ public class EmployeePresentation {
     EmployeeService employeeService =  new EmployeeServiceImp();
 
 
-    public Employee insertMenu() {
+    public void insertMenu() {
 
         Employee employee = new Employee();
 
@@ -38,7 +40,7 @@ public class EmployeePresentation {
 
 
         String input = null;
-        Employee.EmployeeRole employeeRole = null;
+        EmployeeRole employeeRole = null;
         System.out.println("Ingrese el rol del empleado: ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE')");
 
         while(employeeRole == null) {
@@ -46,7 +48,7 @@ public class EmployeePresentation {
             input = scanner.nextLine().trim().toUpperCase();
 
             try {
-                employeeRole = Employee.EmployeeRole.valueOf(input);
+                employeeRole = EmployeeRole.valueOf(input);
                 System.out.println("Rol elegido: " + employeeRole);
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de ROL no valido. Intente nuevamente ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE'):");
@@ -60,7 +62,7 @@ public class EmployeePresentation {
 
         System.out.println("Sueldo asignado por defecto: " + salary);
 
-        Employee.EmployeeShift employeeShift = null;
+        EmployeeShift employeeShift = null;
         System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
 
         while(employeeShift == null) {
@@ -68,7 +70,7 @@ public class EmployeePresentation {
             input = scanner.nextLine().trim().toUpperCase();
 
             try {
-                employeeShift = Employee.EmployeeShift.valueOf(input);
+                employeeShift = EmployeeShift.valueOf(input);
                 System.out.println("Turno elegido: " + employeeShift);
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT'):");
@@ -79,7 +81,7 @@ public class EmployeePresentation {
         employee.setEmployeeShift(employeeShift);
 
         //asignacion a activo por defecto
-        employee.setEmployeeStatus(Employee.EmployeeStatus.valueOf("ACTIVE"));
+        employee.setEmployeeStatus(EmployeeStatus.valueOf("ACTIVE"));
 
         employee = employeeService.insert(employee);
 
@@ -89,7 +91,6 @@ public class EmployeePresentation {
             System.out.println("NO se creo al empleado.");
         }
 
-        return employee;
     }
 
     public void updateMenu(){
@@ -128,11 +129,11 @@ public class EmployeePresentation {
             System.out.println("Ingrese el rol del empleado: ");
             String inputString = scanner.nextLine().toUpperCase();
 
-            Employee.EmployeeRole employeeRole = null;
+            EmployeeRole employeeRole = null;
 
             try {
-                employeeRole = Employee.EmployeeRole.valueOf(inputString);
-                employee.setEmployeeRole(employeeRole);
+                employeeRole = EmployeeRole.valueOf(inputString);
+                employeeRole.valueOf(employeeRole.toString());
                 System.out.println("Rol elegido: " + employeeRole);
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
@@ -142,10 +143,10 @@ public class EmployeePresentation {
             System.out.println("Ingrese el turno del empleado: ");
             inputString = scanner.nextLine().toUpperCase();
 
-            Employee.EmployeeShift employeeShift = null;
+            EmployeeShift employeeShift = null;
 
             try {
-                employeeShift = Employee.EmployeeShift.valueOf(inputString);
+                employeeShift = EmployeeShift.valueOf(inputString);
                 employee.setEmployeeShift(employeeShift);
                 System.out.println("Turno elegido: " + employeeShift);
             } catch (IllegalArgumentException e) {
@@ -153,9 +154,9 @@ public class EmployeePresentation {
                 e.printStackTrace();
             }
 
-            employee.setEmployeeStatus(Employee.EmployeeStatus.ACTIVE);
+            employee.setEmployeeStatus(EmployeeStatus.ACTIVE);
 
-            employeeService.updateEmployee(employee);
+            employeeService.updateEmployee(employee, employeeRole);
         } else {
             System.out.println("El empleado no existe.");
         }

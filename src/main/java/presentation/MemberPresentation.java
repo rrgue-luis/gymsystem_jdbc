@@ -3,6 +3,7 @@ package presentation;
 import business.MemberService;
 import business.impl.MemberServiceImp;
 import entities.Member;
+import enums.member.MembershipType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class MemberPresentation {
         member.setRegistrationDate(parsedDate);
 
         String input = null;
-        Member.MembershipType membershipType = null;
+        MembershipType membershipType = null;
         System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY'");
 
         scanner.nextLine();
@@ -60,7 +61,7 @@ public class MemberPresentation {
             input = scanner.nextLine().trim().toUpperCase();
 
             try {
-                membershipType = Member.MembershipType.valueOf(input);
+                membershipType = MembershipType.valueOf(input);
                 System.out.println("Membresía elegida: " + membershipType);
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
@@ -192,10 +193,10 @@ public class MemberPresentation {
             System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
             String inputString = scanner.nextLine().toUpperCase();
 
-            Member.MembershipType membershipType = null;
+            MembershipType membershipType = null;
 
             try {
-                membershipType = Member.MembershipType.valueOf(inputString);
+                membershipType = MembershipType.valueOf(inputString);
                 member.setMembershipType(membershipType);
                 System.out.println("M.E: " + membershipType);
             } catch (IllegalArgumentException e) {

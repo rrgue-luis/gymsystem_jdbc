@@ -8,6 +8,7 @@ import business.impl.MembershipServiceImp;
 import business.impl.PaymentServiceImp;
 import entities.Member;
 import entities.Payment;
+import enums.member.MembershipType;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -34,10 +35,10 @@ public class MembershipPresentation {
             System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
             String membership = scanner.nextLine().toUpperCase();
 
-            Member.MembershipType membershipType = null;
+            MembershipType membershipType = null;
 
             try {
-                membershipType = Member.MembershipType.valueOf(membership);
+                membershipType = MembershipType.valueOf(membership);
                 member.setMembershipType(membershipType);
                 System.out.println("Membresia: " + membershipType);
             } catch (IllegalArgumentException e) {

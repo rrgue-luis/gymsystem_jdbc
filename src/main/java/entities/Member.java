@@ -1,6 +1,5 @@
 package entities;
-
-import business.impl.MemberServiceImp;
+import enums.member.MembershipType;
 
 import java.time.LocalDate;
 
@@ -9,30 +8,14 @@ public class Member {
     private int id;
     private String name, surname, gender, phone, address;
     private LocalDate birthDate;
-
     private LocalDate registrationDate;
     private LocalDate membershipEndDate;
     private MembershipType membershipType;
 
-    public enum MembershipType{
-        DAILY,
-        WEEKLY,
-        MONTHLY;
-
-        public static MembershipType fromString(String type) {
-            try {
-                return MembershipType.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de membresia invalido, recibido: " + type + " Esperado: ('DAILY', 'WEEKLY', 'MONTHLY')");
-            }
-        }
-
-    }
-
     public Member() {
     }
 
-    public Member(int id, String name, String surname, String gender, String phone, String address, LocalDate birthDate, LocalDate registrationDate, Member.MembershipType membershipType, LocalDate membershipEndDate) {
+    public Member(int id, String name, String surname, String gender, String phone, String address, LocalDate birthDate, LocalDate registrationDate, MembershipType membershipType, LocalDate membershipEndDate) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -116,8 +99,6 @@ public class Member {
     public void setMembershipEndDate(LocalDate membershipEndDate) {
         this.membershipEndDate = membershipEndDate;
     }
-
-    MemberServiceImp memberServiceImp;
 
     public MembershipType getMembershipType() {
         return membershipType;

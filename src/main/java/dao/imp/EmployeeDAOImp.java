@@ -3,7 +3,9 @@ package dao.imp;
 import dao.EmployeeDAO;
 import dao.MySQLDBConnection;
 import entities.Employee;
-import entities.Member;
+import enums.employee.EmployeeShift;
+import enums.employee.EmployeeRole;
+import enums.employee.EmployeeStatus;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
 
 
         try {
+
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence, Statement.RETURN_GENERATED_KEYS);
 
             SQLSentenceObject.setString(1, entity.getName());
@@ -133,13 +136,13 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 String address = result.getString("address");
 
                 String employeeRoleString = result.getString("role");
-                Employee.EmployeeRole employeeRole = Employee.EmployeeRole.valueOf(employeeRoleString.toUpperCase());
+                EmployeeRole employeeRole = EmployeeRole.valueOf(employeeRoleString.toUpperCase());
 
                 String employeeStatusString = result.getString("status");
-                Employee.EmployeeStatus employeeStatus = Employee.EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
+                EmployeeStatus employeeStatus = EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
 
                 String employeeShiftString = result.getString("shift");
-                Employee.EmployeeShift employeeShift = Employee.EmployeeShift.valueOf(employeeShiftString.toUpperCase());
+                EmployeeShift employeeShift = EmployeeShift.valueOf(employeeShiftString.toUpperCase());
 
                 float salary = result.getFloat("salary");
 
@@ -208,13 +211,13 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 float salary = result.getFloat("salary");
 
                 String employeeRoleString = result.getString("role");
-                Employee.EmployeeRole employeeRole = Employee.EmployeeRole.valueOf(employeeRoleString.toUpperCase());
+                EmployeeRole employeeRole = EmployeeRole.valueOf(employeeRoleString.toUpperCase());
 
                 String employeeShiftString = result.getString("shift");
-                Employee.EmployeeShift employeeShift = Employee.EmployeeShift.valueOf(employeeShiftString.toUpperCase());
+                EmployeeShift employeeShift = EmployeeShift.valueOf(employeeShiftString.toUpperCase());
 
                 String employeeStatusString = result.getString("status");
-                Employee.EmployeeStatus employeeStatus = Employee.EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
+                EmployeeStatus employeeStatus = EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
 
                 searchedEmployee = new Employee(id, name, surname, address, phone, hiringDate, salary, employeeRole, employeeShift, employeeStatus);
             }

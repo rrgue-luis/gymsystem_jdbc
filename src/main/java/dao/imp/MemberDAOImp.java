@@ -3,6 +3,7 @@ package dao.imp;
 import dao.MemberDAO;
 import dao.MySQLDBConnection;
 import entities.Member;
+import enums.member.MembershipType;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -164,7 +165,7 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
                 LocalDate birthDate = result.getDate("birth_date").toLocalDate();
                 LocalDate registrationDate = result.getDate("registration_date").toLocalDate();
                 String membershipTypeString = result.getString("membership_type");
-                Member.MembershipType membershipType = Member.MembershipType.valueOf(membershipTypeString.toUpperCase());
+                MembershipType membershipType = MembershipType.valueOf(membershipTypeString.toUpperCase());
                 LocalDate membershipEndDate = result.getDate("membership_end_date").toLocalDate();
 
                 Member searchedMember = new Member(id, name, surname, gender, phone, address, birthDate, registrationDate, membershipType, membershipEndDate);
@@ -203,8 +204,6 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
         }
     }
 
-
-
     @Override
     public Member searchForId(Integer key) {
         Member searchedMember = null;
@@ -231,7 +230,7 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
                 LocalDate registrationDate = result.getDate("registration_date").toLocalDate();
 
                 String membershipTypeString = result.getString("membership_type");
-                Member.MembershipType membershipType = Member.MembershipType.valueOf(membershipTypeString.toUpperCase());
+                MembershipType membershipType = MembershipType.valueOf(membershipTypeString.toUpperCase());
 
                 LocalDate membershipEndDate = result.getDate("membership_end_date").toLocalDate();
 

@@ -2,9 +2,7 @@ package dao.imp;
 
 import dao.GymDAO;
 import dao.MySQLDBConnection;
-import entities.DTO.GymEmployeeShiftDTO;
-import entities.DTO.GymEmployeesDTO;
-import entities.DTO.GymEmployeesRoleDTO;
+import entities.DTO.ResultSetDto;
 import entities.Gym;
 
 import java.sql.*;
@@ -226,8 +224,8 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
     }
 
     @Override
-    public List<GymEmployeesDTO> obtainGymEmployees(Integer key) {
-        List<GymEmployeesDTO> gymEmployeesList = new ArrayList<>();
+    public List<ResultSetDto> getGymEmployees(Integer key) {
+
         Connection connection = getConnection();
         String SQLSentence = "SELECT e.id AS employee_id, e.name AS employee_name, g.id AS gym_id, g.name AS gym_name\n" +
                 "FROM employee e\n" +
@@ -237,6 +235,8 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
         PreparedStatement preparedStatement = null;
 
+        List<ResultSetDto> data = new ArrayList<>();
+
         try {
             preparedStatement = connection.prepareStatement(SQLSentence);
             preparedStatement.setInt(1, key);
@@ -244,16 +244,16 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
             while (result.next()) {
 
-                int employeeId = result.getInt("employee_id");
-                String employeeName = result.getString("employee_name");
-                int gymId = result.getInt("gym_id");
-                String gymName = result.getString("gym_name");
+                ResultSetDto resultSetDto = new ResultSetDto();
 
-                GymEmployeesDTO gymEmployees = new GymEmployeesDTO(gymId, employeeId, gymName, employeeName);
+                resultSetDto.set("employeeId", result.getInt("employee_id"));
+                resultSetDto.set("employeeName", result.getString("employee_name"));
+                resultSetDto.set("gymId", result.getString("gym_name"));
+                resultSetDto.set("gymName", result.getString("gym_name"));
 
-                gymEmployeesList.add(gymEmployees);
-
+                data.add(resultSetDto);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -265,12 +265,12 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
             }
         }
 
-        return gymEmployeesList;
+        return data;
     }
 
     @Override
-    public List<GymEmployeesRoleDTO> obtainGymEmployeesByRole(Integer key, String role) {
-        List<GymEmployeesRoleDTO> gymEmployeesList = new ArrayList<>();
+    public List<ResultSetDto> getGymEmployeesByRole(Integer key, String role) {
+        List<ResultSetDto> data = new ArrayList<>();
         Connection connection = getConnection();
         String SQLSentence = "SELECT e.id AS employee_id, e.name AS employee_name, e.role AS employee_role, g.id AS gym_id, g.name AS gym_name\n" +
                 "FROM employee e\n" +
@@ -288,18 +288,17 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
             while (result.next()) {
 
-                int employeeId = result.getInt("employee_id");
-                String employeeName = result.getString("employee_name");
-                String employeeRole = result.getString("employee_role");
-                int gymId = result.getInt("gym_id");
-                String gymName = result.getString("gym_name");
+                ResultSetDto resultSetDto = new ResultSetDto();
 
-                GymEmployeesRoleDTO.EmployeeRole gymEmployeeDTORoles = GymEmployeesRoleDTO.EmployeeRole.valueOf(employeeRole);
+               //EmployeeRole employeeRole = EmployeeRole.valueOf(result.getString("employee_role"));
 
-                GymEmployeesRoleDTO gymEmployeesRoles = new GymEmployeesRoleDTO(gymId, employeeId, gymName, employeeName, gymEmployeeDTORoles);
+                resultSetDto.set("employeeId", result.getInt("employee_id"));
+                resultSetDto.set("employeeName", result.getString("employee_name"));
+                resultSetDto.set("employeeRole", result.getString("employee_role"));
+                resultSetDto.set("gymId", result.getString("gym_name"));
+                resultSetDto.set("gymName", result.getString("gym_name"));
 
-                gymEmployeesList.add(gymEmployeesRoles);
-
+                data.add(resultSetDto);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -311,14 +310,14 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
                 e.printStackTrace();
             }
         }
-
-        return gymEmployeesList;
+        return data;
     }
 
-    @Override
-    public List<GymEmployeeShiftDTO> obtainGymEmployeesByShift(Integer key) {
 
-        List<GymEmployeeShiftDTO> gymEmployees = new ArrayList<>();
+    @Override
+    public List<ResultSetDto> getGymEmployeesByShift(Integer key) {
+
+        List<ResultSetDto> data = new ArrayList<>();
         Connection connection = getConnection();
         String SQLSentence = "SELECT e.id AS employee_id, e.name AS employee_name, e.shift AS employee_shift, g.id AS gym_id, g.name AS gym_name\n" +
                 "FROM employee e\n" +
@@ -334,18 +333,15 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
             while (result.next()) {
 
-                int employeeId = result.getInt("employee_id");
-                String employeeName = result.getString("employee_name");
-                String employeeShiftString = result.getString("employee_shift");
-                int gymId = result.getInt("gym_id");
-                String gymName = result.getString("gym_name");
+              ResultSetDto resultSetDto = new ResultSetDto();
 
-                GymEmployeeShiftDTO.EmployeeShift EmployeeShift = GymEmployeeShiftDTO.EmployeeShift.valueOf(employeeShiftString);
+              resultSetDto.set("employeeId", result.getInt("employee_id"));
+              resultSetDto.set("employeeName",result.getString("employee_name"));
+                resultSetDto.set("employeeShift",result.getString("employee_shift"));
+                resultSetDto.set("gymId",result.getInt("gym_id"));
+                resultSetDto.set("gymName",result.getString("gym_name"));
 
-                GymEmployeeShiftDTO gymEmployeesSchedules = new GymEmployeeShiftDTO(gymId, employeeId, employeeName, gymName, EmployeeShift);
-
-                gymEmployees.add(gymEmployeesSchedules);
-
+                data.add(resultSetDto);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -358,7 +354,7 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
             }
 
         }
-        return gymEmployees;
+        return data;
     }
 
 }

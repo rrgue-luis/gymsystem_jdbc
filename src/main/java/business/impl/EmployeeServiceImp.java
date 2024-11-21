@@ -6,6 +6,7 @@ import dao.MemberDAO;
 import dao.imp.EmployeeDAOImp;
 import dao.imp.MemberDAOImp;
 import entities.Employee;
+import enums.employee.EmployeeRole;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -43,13 +44,13 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
+    public void updateEmployee(Employee employee, EmployeeRole employeeRole) {
         employeeDAO.update(employee);
     }
 
-    public float calculateSalary (Employee employee, Employee.EmployeeRole employeeRole) {
+    public float calculateSalary (Employee employee, EmployeeRole employeeRole) {
 
-        String employeeRoleString = employee.getEmployeeRole().name();
+        String employeeRoleString = employeeRole.name();
 
         float finalSalary;
 
@@ -67,11 +68,10 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
-    public float updateSalary(Employee employee, float newSalary) {
+    public void updateSalary(Employee employee, float newSalary) {
 
         employeeDAO.updateSalary(employee, newSalary);
 
-        return 0;
     }
 
 

@@ -1,67 +1,21 @@
 package entities;
 
+import enums.employee.EmployeeRole;
+import enums.employee.EmployeeShift;
+import enums.employee.EmployeeStatus;
+
 import java.time.LocalDate;
 
 public class Employee {
-
     private int id;
     private String name, surname, phone, address;
     private LocalDate hiringDate;
     private float salary;
-
-    private EmployeeRole employeeRole;
     private EmployeeShift employeeShift;
-
+    public EmployeeRole employeeRole;
     private EmployeeStatus employeeStatus;
 
-    public enum EmployeeStatus{
-        ACTIVE,
-        INACTIVE,
-        VACATIONS;
-
-        public static EmployeeStatus fromString(String type) {
-            try {
-                return EmployeeStatus.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de estado inválido, recibido: " + type + " Esperado: ('ACTIVE', 'INACTIVE, 'VACATIONS')");
-            }
-        }
-    }
-
-    public enum EmployeeShift {
-        MORNING,
-        AFTERNOON,
-        NIGHT;
-
-        public static EmployeeShift fromString(String type) {
-            try {
-                return EmployeeShift.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de turno inválido, recibido: " + type + " Esperado: ('MORNING', 'AFTERNOON, 'NIGHT')");
-            }
-        }
-    }
-
-    public enum EmployeeRole{
-        BOSS,
-        MANAGER,
-        TRAINER,
-        EMPLOYEE;
-
-        public static EmployeeRole fromString(String type) {
-            try {
-                return EmployeeRole.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de rol inválido, recibido: " + type + " Esperado: ('BOSS', 'MANAGER, 'TRAINER', 'EMPLOYEE')");
-            }
-        }
-
-    }
-
-    public Employee() {
-    }
-
-    public Employee(int id, String name, String surname, String phone, String address, LocalDate hiringDate, float salary, Employee.EmployeeRole employeeRole, Employee.EmployeeShift employeeShift, Employee.EmployeeStatus employeeStatus) {
+    public Employee(int id, String name, String surname, String phone, String address, LocalDate hiringDate, float salary, EmployeeRole employeeRole, EmployeeShift employeeShift, EmployeeStatus employeeStatus) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -74,6 +28,8 @@ public class Employee {
         this.employeeStatus = employeeStatus;
     }
 
+    public Employee() {
+    }
     public int getId() {
         return id;
     }
@@ -126,16 +82,16 @@ public class Employee {
         return salary;
     }
 
-    public void setSalary(float salary) {
-        this.salary = salary;
-    }
-
     public EmployeeRole getEmployeeRole() {
         return employeeRole;
     }
 
     public void setEmployeeRole(EmployeeRole employeeRole) {
         this.employeeRole = employeeRole;
+    }
+
+    public void setSalary(float salary) {
+        this.salary = salary;
     }
 
     public EmployeeShift getEmployeeShift() {
@@ -150,6 +106,9 @@ public class Employee {
         return employeeStatus;
     }
 
+    public void setEmployeeStatus(EmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
     @Override
     public String toString() {
         return "---------------------\n" +
@@ -160,15 +119,11 @@ public class Employee {
                 "Telefono: " + phone + "\n" +
                 "Direccion: " + address + "\n" +
                 "Fecha contrato: " + hiringDate + "\n" +
-                "Rol: " + employeeRole + "\n" +
                 "Horario: " + employeeShift + "\n" +
                 "Estado: " + employeeStatus + "\n"
                 ;
     }
 
-    public void setEmployeeStatus(EmployeeStatus employeeStatus) {
-        this.employeeStatus = employeeStatus;
-    }
 
 
 }
