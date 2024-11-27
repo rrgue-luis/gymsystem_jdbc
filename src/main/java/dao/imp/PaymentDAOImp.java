@@ -5,7 +5,9 @@ import dao.MySQLDBConnection;
 import dao.PaymentDAO;
 import entities.Member;
 import entities.Payment;
+import enums.payment.PaymentMethod;
 
+import javax.swing.text.html.parser.Entity;
 import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.LocalDate;
@@ -52,7 +54,6 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
     public void update(Payment entity) {
 
     }
-
     @Override
     public List<Payment> obtainAll() {
         List<Payment> payments = new ArrayList<>();
@@ -70,7 +71,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 float amount = result.getFloat("amount");
                 LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
                 String paymentMethodString = result.getString("payment_method");
-                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(paymentMethodString.toUpperCase());
+                PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentMethodString.toUpperCase());
                 Boolean paymentIsValid = result.getBoolean("payment_is_valid");
                 int gymId = result.getInt("gym_id");
 
@@ -159,7 +160,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 float amount = result.getFloat("amount");
                 LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
                 String stringPaymentMethod = result.getString("payment_method");
-                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
+                PaymentMethod paymentMethod = PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
                 boolean paymentIsValid = result.getBoolean("payment_is_valid");
                 int gymId = result.getInt("gym_id");
 
@@ -200,7 +201,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 float amount = result.getFloat("amount");
                 LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
                 String stringPaymentMethod = result.getString("payment_method");
-                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
+                PaymentMethod paymentMethod = PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
                 boolean paymentIsValid = result.getBoolean("payment_is_valid");
                 int gymId = result.getInt("gym_id");
 
@@ -240,7 +241,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
                 float amount = result.getFloat("amount");
                 LocalDate paymentDate = result.getDate("payment_date").toLocalDate();
                 String stringPaymentMethod = result.getString("payment_method");
-                Payment.PaymentMethod paymentMethod = Payment.PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
+                PaymentMethod paymentMethod = PaymentMethod.valueOf(stringPaymentMethod.toUpperCase());
                 boolean paymentIsValid = result.getBoolean("payment_is_valid");
                 int gymId = result.getInt("gym_id");
 
@@ -260,5 +261,31 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
         }
 
         return byMethodPayments;
+    }
+
+    @Override
+    public void assignPaymentToAGym(Payment payment, int selectedGym) {
+        Connection connection = getConnection();
+        String SQLSentence = "UPDATE PAYMENT SET gym_id = ? WHERE id = ?";
+
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+
+            SQLSentenceObject.setInt(1, selectedGym);
+            SQLSentenceObject.setInt(2, payment.getId());
+
+            int rowsInserted = SQLSentenceObject.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("Pago ID " + payment.getId() + " fue asignado correctamente al GYM con ID " + payment.getGymId() + ".");
+            } else {
+                System.out.println("No se encontró el pago con ID " + payment.getId() + ". No se realizó ninguna actualización.");
+            }
+
+            SQLSentenceObject.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

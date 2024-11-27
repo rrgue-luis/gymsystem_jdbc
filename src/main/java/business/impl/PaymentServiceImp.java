@@ -30,9 +30,8 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Payment insert(Payment payment) {
-        payment = paymentDAO.insert(payment);
-        return payment;
+    public void insert(Payment payment) {
+        paymentDAO.insert(payment);
     }
 
     @Override
@@ -121,5 +120,10 @@ public class PaymentServiceImp implements PaymentService {
         }
 
         return parsedDate;
+    }
+
+    @Override
+    public void assignPaymentToAGym(Payment payment, int selectedGym) {
+        paymentDAO.assignPaymentToAGym(payment, selectedGym);
     }
 }

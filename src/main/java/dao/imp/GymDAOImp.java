@@ -4,7 +4,10 @@ import dao.GymDAO;
 import dao.MySQLDBConnection;
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Payment;
+import enums.gym.GymStatus;
 
+import javax.swing.text.html.parser.Entity;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,6 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
             SQLSentenceObject.setString(1, entity.getName());
             SQLSentenceObject.setString(2, entity.getAddress());
             SQLSentenceObject.setString(3, entity.getSchedule());
-            //SQLSentenceObject.setString(3, entity.getSchedule().toString());
             SQLSentenceObject.setString(4, entity.getPhone());
             SQLSentenceObject.setString(5, entity.getEmail());
             SQLSentenceObject.setString(6, entity.getStatus().name());
@@ -109,12 +111,12 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
                 String phone = result.getString("phone");
                 String email = result.getString("email");
 
-                Gym.Status status;
+                GymStatus status;
                 String statusString = result.getString("status");
                 try {
-                    status = Gym.Status.valueOf(statusString.toUpperCase());
+                    status = GymStatus.valueOf(statusString.toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    status = Gym.Status.UNKNOWN;
+                    status = GymStatus.UNKNOWN;
                 }
 
 
@@ -176,7 +178,7 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
                 String email = result.getString("email");
 
                 String statusString = result.getString("status");
-                Gym.Status status = Gym.Status.valueOf(statusString.toUpperCase());
+                GymStatus status = GymStatus.valueOf(statusString.toUpperCase());
 
                 searchedGym = new Gym(id, name, address, phone, email, schedule, status);
 
@@ -290,8 +292,6 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
 
                 ResultSetDto resultSetDto = new ResultSetDto();
 
-               //EmployeeRole employeeRole = EmployeeRole.valueOf(result.getString("employee_role"));
-
                 resultSetDto.set("employeeId", result.getInt("employee_id"));
                 resultSetDto.set("employeeName", result.getString("employee_name"));
                 resultSetDto.set("employeeRole", result.getString("employee_role"));
@@ -356,5 +356,37 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
         }
         return data;
     }
+
+    @Override
+    public String showName(Integer key) {
+        String searchedGym = null;
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT name FROM gym WHERE id=?;";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, key);
+            ResultSet result = preparedStatement.executeQuery();
+
+            if(result.next()) {
+
+                searchedGym = result.getString("name");
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return searchedGym;
+    }
+
+
 
 }

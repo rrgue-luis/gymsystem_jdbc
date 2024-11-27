@@ -8,11 +8,14 @@ import entities.Member;
 
 import java.sql.SQLOutput;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
 
         MemberPresentation memberPresentation = new MemberPresentation();
         EmployeePresentation employeePresentation = new EmployeePresentation();
@@ -20,90 +23,134 @@ public class Main {
         PaymentPresentation paymentPresentation = new PaymentPresentation();
         MembershipPresentation membershipPresentation = new MembershipPresentation();
 
-        gymPresentation.listGymEmployeesByShiftMenu();
+        int input = 0;
+        int selectedGym = 0;
 
 
+            System.out.println("-----GYM SYSTEM-----");
 
-       /* MemberPresentation memberPresentation = new MemberPresentation();
-        Scanner scanner = new Scanner(System.in);
-        int input;
-        //funcionando abstraido:
+            System.out.println("SELECCIONE LA SUCURSAL A MANEJAR: ");
+            String inputString;
 
-        //memberPresentation.insertMenu();
-        //memberPresentation.obtainAll();
-        //memberPresentation.deleteMember();
-        //memberPresentation.updateMemberMenu();
-        //memberPresentation.searchForIdMenu();
 
-        //primer menu temporal
+                System.out.print("Ingrese el ID del gym (o presione Enter para mantener el actual): ");
+                inputString = scanner.nextLine();
+
+                if(!inputString.equals("")) {
+                    try {
+                        selectedGym = Integer.parseInt(inputString);
+                    } catch(NumberFormatException e) {
+                        System.out.println("Error: El valor ingresado no es un numero valido");
+                    }
+                } else {
+                    selectedGym = 2;
+                    System.out.println("GYM Seleccionado: ACTUAL " + gymPresentation.showName(selectedGym));
+                }
+
 
         do {
-            System.out.println("-------MENU-------");
-            System.out.println("--//--GYMSYSTEM--//--");
-            System.out.println("//1 - Cargar miembro");
-            System.out.println("//2 - Eliminar miembro");
-            System.out.println("//3 - Editar miembro");
-            System.out.println("//4 - Mostrar todos los miembros");
-            System.out.println("//5 - Buscar miembro por ID");
-            System.out.println("//6 - Salir \n");
+            System.out.println("-----------SUCURSAL " + gymPresentation.showName(selectedGym) + "-----------");
+            System.out.println("--1-- MIEMBROS");
+            System.out.println("--2-- PAGOS");
+            System.out.println("--3-- SUCURSALES");
+            System.out.println("--4-- EMPLEADOS");
+
             input = scanner.nextInt();
 
-            switch(input) {
-                case 1:
-                    memberPresentation.insertMenu();
-                    break;
+            try {
+                switch(input){
 
-                case 2:
-                    memberPresentation.deleteMemberMenu();
-                    break;
+                    case 1:
+                    System.out.println("--1-- AGREGAR MIEMBRO");
+                    System.out.println("--2-- EDITAR MIEMBRO");
+                    System.out.println("--3-- ELIMINAR MIEMBRO");
+                    System.out.println("--4-- RENOVAR MEMBRESÍA");
+                    System.out.println("--5-- MOSTRAR *TODOS* LOS MIEMBROS");
+                    System.out.println("--6-- LISTAR MIEMBROS *DE UN GYM*");
 
-                case 3:
-                    memberPresentation.updateMemberMenu();
-                    break;
+                    input = scanner.nextInt();
 
-                case 4:
-                    memberPresentation.obtainAllMenu();
-                    break;
+                    switch(input) {
+                        case 1:
+                            memberPresentation.insertMenu(selectedGym);
+                            break;
 
-                case 5:
-                    memberPresentation.searchForIdMenu();
-                    break;
+                        case 2:
+                            memberPresentation.updateMenu();
+                            break;
 
-                case 6:
-                    System.out.println("Saliendo...");
-                    break;
+                        case 3:
+                            memberPresentation.deleteMenu();
+                            break;
 
-                default:
-                    System.out.println("Opción no válida. Intente nuevamente");
-                    break;
+                        case 4:
+                            membershipPresentation.renewMembership();
+                            break;
 
+                        case 5:
+                            memberPresentation.obtainAllMenu();
+                            break;
+
+                        case 6:
+                            gymPresentation.listGymEmployeesMenu(selectedGym);
+
+                        default:
+                            break;
+                    }
+
+                    case 2:
+                        System.out.println("--1-- AGREGAR PAGO MANUALMENTE");
+                        System.out.println("--2-- ELIMINAR PAGO MANUALMENTE");
+                        System.out.println("--3-- EDITAR PAGO MANUALMENTE");
+                        System.out.println("--------VER PAGOS--------");
+                        System.out.println("\n--4-- TODOS LOS PAGOS");
+                        System.out.println("--5-- DE UN MIEMBRO");
+                        System.out.println("--6-- EN UN GYM");
+                        System.out.println("--7-- POR METODO DE PAGO");
+
+                        input = scanner.nextInt();
+
+                        switch(input) {
+                            case 1:
+                                paymentPresentation.insertMenu(selectedGym);
+                                break;
+
+                            case 2:
+                                paymentPresentation.deleteMenu();
+                                break;
+
+                            case 3:
+                                paymentPresentation.updateMenu();
+                                break;
+
+                            case 4:
+                                paymentPresentation.obtainAllMenu();
+                                break;
+
+                            case 5:
+                                paymentPresentation.listMemberPayments();
+                                break;
+
+                            case 6:
+                                paymentPresentation.listGymPayments();
+                                break;
+
+                            case 7:
+                                paymentPresentation.listPaymentsByMethod();
+                                break;
+
+                        }
+
+
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Debe ingresar un numero, porfavor, intentelo nuevamente.");
             }
 
-        } while (input!=6);
 
-        */
+        } while(input!=0);
 
-        //EmployeePresentation employeePresentation = new EmployeePresentation();
-
-        //metodos funcionando:
-
-
-        //employeePresentation.updateSalary();
-        //employeePresentation.searchForIdMenu();
-        //employeePresentation.insertMenu();
-        //employeePresentation.obtainAllMenu();
-        //employeePresentation.deleteMenu();
-        //employeePresentation.updateEmployee();
-
-
-
-        //funcionando:
-
-        //gymPresentation.insertMenu();
-        //gymPresentation.obtainAllMenu();
-        //gymPresentation.searchForIdMenu();
-        //gymPresentation.deleteMenu();
-        //gymPresentation.updateMenu();
+        scanner.close();
 
     }
 

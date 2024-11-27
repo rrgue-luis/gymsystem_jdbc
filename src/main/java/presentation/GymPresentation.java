@@ -4,6 +4,7 @@ import business.GymService;
 import business.impl.GymServiceImp;
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import enums.gym.GymStatus;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -34,7 +35,7 @@ public class GymPresentation {
        gym.setSchedule(scanner.nextLine());
 
        String input = null;
-       Gym.Status gymStatus = null;
+       GymStatus gymStatus = null;
        System.out.println("Ingrese el estado de la sucursal: ('OPERATIVE', 'MAINTENANCE')");
 
        while(gymStatus == null) {
@@ -42,7 +43,7 @@ public class GymPresentation {
            input = scanner.nextLine().trim().toUpperCase();
 
            try {
-               gymStatus = Gym.Status.valueOf(input);
+               gymStatus = GymStatus.valueOf(input);
                System.out.println("Estado elegido: " + gymStatus);
            }catch (IllegalArgumentException e) {
                System.out.println("Tipo de estado invalido. Intente nuevamente: ('OPERATIVE', 'MAINTENANCE')");
@@ -157,7 +158,7 @@ public class GymPresentation {
 
 
            String status = null;
-           Gym.Status gymStatus = null;
+           GymStatus gymStatus = null;
            System.out.println("Ingrese el estado del GYM: ('OPERATIVE', 'MAINTENANCE')");
 
            while(gymStatus == null) {
@@ -165,7 +166,7 @@ public class GymPresentation {
                status = scanner.nextLine().trim().toUpperCase();
 
                try {
-                   gymStatus = Gym.Status.valueOf(status);
+                   gymStatus = GymStatus.valueOf(status);
                    System.out.println("Estado elegido: " + gymStatus);
                }catch (IllegalArgumentException e) {
                    System.out.println("Tipo de estado invalido. Intente nuevamente: ('OPERATIVE', 'MAINTENANCE')");
@@ -180,14 +181,22 @@ public class GymPresentation {
 
    }
 
+   public String showName(Integer key){
+       return gymService.showName(key);
+   }
+
    //EMPLOYEES
 
-   public void listGymEmployeesMenu() {
-       System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
-       int input = scanner.nextInt();
-
+   public void listGymEmployeesMenu(int selectedGym) {
        List<ResultSetDto> gymEmployeesList;
-       gymEmployeesList = gymService.getGymEmployees(input);
+
+       if (selectedGym > 0) {
+           gymEmployeesList = gymService.getGymEmployees(selectedGym);
+       } else {
+           System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
+           int input = scanner.nextInt();
+           gymEmployeesList = gymService.getGymEmployees(input);
+       }
 
        for(ResultSetDto gymEmployees : gymEmployeesList) {
            System.out.println("------------------");
@@ -196,6 +205,7 @@ public class GymPresentation {
            System.out.println("Gym ID: " + gymEmployees.getString("gymId"));
            System.out.println("Gym nombre: " + gymEmployees.getString("gymName"));
        }
+
    }
 
    public void listGymEmployeesByRoleMenu() {
@@ -267,51 +277,7 @@ public class GymPresentation {
 
    }
 
-   /*
-   public void assignEmployeeToGymMenu() {
 
-
-       System.out.println("----ASIGNAR EMPLEADO A UN GYM----");
-
-       boolean gymExists = false;
-       ;
-
-       do {
-           try {
-
-               System.out.println("Ingrese el ID del EMPLEADO");
-               int employeeId = scanner.nextInt();
-
-               System.out.println("Ingrese el ID del Gym");
-               int gymId = scanner.nextInt();
-
-               gymExists = gymService.gymExists(gymId);
-
-               if (gymExists) {
-                   List<GymEmployeeShiftDTO> gymEmployees = gymService.obtainGymEmployeesByShift(input);
-
-                   System.out.println("---- LISTADO DE EMPLEADOS ORDENADO POR TURNO ----");
-                   for (GymEmployeeShiftDTO employeesShifts : gymEmployees) {
-                       System.out.println("------------------");
-                       System.out.println("Turno: " + employeesShifts.getEmployeeShift());
-                       System.out.println("Empleado ID: " + employeesShifts.getEmployeeId());
-                       System.out.println("Nombre de empleado: " + employeesShifts.getEmployeeName());
-                       System.out.println("Gym ID: " + employeesShifts.getGymId());
-                       System.out.println("Gym nombre: " + employeesShifts.getGymName());
-                   }
-
-               } else {
-                   System.out.println("No existe un gimnasio con ese ID. Inténtelo nuevamente.");
-               }
-           }catch(InputMismatchException e) {
-               System.out.println("Entrada invalida, recuerde que Gym ID es un numero!");
-               scanner.nextLine();
-           }
-
-       } while (!gymExists);
-
-   }
-   */
 
 
    public void removeEmployeeFromGymMenu() {

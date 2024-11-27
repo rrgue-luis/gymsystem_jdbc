@@ -9,6 +9,7 @@ import business.impl.PaymentServiceImp;
 import entities.Member;
 import entities.Payment;
 import enums.member.MembershipType;
+import enums.payment.PaymentMethod;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -91,7 +92,7 @@ public class MembershipPresentation {
             }
 
             String method;
-            Payment.PaymentMethod paymentMethod = null;
+            PaymentMethod paymentMethod = null;
 
             System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
 
@@ -100,7 +101,7 @@ public class MembershipPresentation {
                 method = scanner.nextLine().trim().toUpperCase();
 
                 try {
-                    paymentMethod = Payment.PaymentMethod.valueOf(method);
+                    paymentMethod = PaymentMethod.valueOf(method);
                     System.out.println("Tipo de pago elegido: " + paymentMethod);
                 } catch (IllegalArgumentException e) {
                     System.out.println("ERROR");
@@ -116,8 +117,6 @@ public class MembershipPresentation {
         } else {
             System.out.println("El miembro no existe");
         }
-
-
 
 
     }

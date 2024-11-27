@@ -1,7 +1,7 @@
 package entities;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import enums.gym.GymStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,29 +9,16 @@ public class Gym {
 
     private int id;
     private String name, address, phone, email;
-    public Status status;
+    public GymStatus status;
     private String schedule;
     private List<Employee> employees = new ArrayList<>();
     private List<String> members = new ArrayList<>();
-    public enum Status{
-        OPERATIVE,
-        MAINTENANCE,
-        UNKNOWN;
 
-        public static Status fromString(String type) {
-            try {
-                return Status.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de estado invalido, recibido: " + type + " Esperado: ('OPERATIVE', 'MAINTENANCE')");
-            }
-        }
-
-    }
 
     public Gym() {
     }
 
-    public Gym(int id, String name, String address, String schedule, String phone, String email, Gym.Status status) {//, List<Employee> employees, List<String> members) {
+    public Gym(int id, String name, String address, String schedule, String phone, String email, GymStatus status) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -39,8 +26,6 @@ public class Gym {
         this.phone = phone;
         this.email = email;
         this.status = status;
-        //this.employees = employees;
-        //this.members = members;
     }
 
     public int getId() {
@@ -104,10 +89,10 @@ public class Gym {
         this.email = email;
     }
 
-    public Gym.Status getStatus() {
+    public GymStatus getStatus() {
         return status;
     }
-    public void setStatus(Gym.Status status) {
+    public void setStatus(GymStatus status) {
         this.status = status;
     }
 
@@ -126,4 +111,5 @@ public class Gym {
     public void setRegisteredMembersList(List<String> membersList) {
         this.members = membersList;
     }
+
 }

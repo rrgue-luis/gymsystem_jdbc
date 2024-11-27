@@ -59,6 +59,12 @@ public class GymServiceImp implements GymService {
     }
 
     @Override
+    public String showName(Integer key) {
+
+        return gymDAO.showName(key);
+    }
+
+    @Override
     public List<Gym> obtainAll() {
 
         List<Gym> gyms;

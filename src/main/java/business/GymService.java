@@ -2,6 +2,7 @@ package business;
 
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Payment;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface GymService {
     boolean gymExists(Integer key);
 
     void updateGym(Gym gym);
+
+    String showName(Integer key);
 
     List<Gym> obtainAll();
 

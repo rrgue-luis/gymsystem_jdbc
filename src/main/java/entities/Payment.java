@@ -1,34 +1,18 @@
 package entities;
 
+import enums.payment.PaymentMethod;
+
 import java.time.LocalDate;
 
 public class Payment {
 
     private int id;
     private int memberId;
-
     private int gymId;
     private float amount;
     private LocalDate paymentDate;
     private PaymentMethod paymentMethod;
     private boolean paymentIsValid;
-
-
-    public enum PaymentMethod{
-        CREDIT,
-        DEBIT,
-        CASH,
-        TRANSFER;
-
-        public static PaymentMethod fromString(String type) {
-            try {
-                return PaymentMethod.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo de pago invalido, recibido: " + type + " Esperado: ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
-            }
-        }
-
-    }
 
     @Override
     public String toString() {
@@ -96,7 +80,7 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public Payment.PaymentMethod getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
@@ -108,7 +92,7 @@ public class Payment {
         this.paymentIsValid = paymentIsValid;
     }
 
-    public void setPaymentMethod(Payment.PaymentMethod paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 }

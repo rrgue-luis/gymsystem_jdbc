@@ -2,6 +2,7 @@ package dao;
 
 import entities.Payment;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 public interface PaymentDAO extends DAO<Payment, Integer>{
@@ -12,6 +13,8 @@ public interface PaymentDAO extends DAO<Payment, Integer>{
     List<Payment> listGymPayments(Integer key);
 
     List<Payment> listPaymentsByMethod(String method);
+
+    void assignPaymentToAGym(Payment payment, int selectedGym);
 
 
 }

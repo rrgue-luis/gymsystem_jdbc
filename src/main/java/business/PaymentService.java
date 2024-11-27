@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PaymentService {
 
-    Payment insert(Payment payment);
+    void insert(Payment payment);
 
     void delete(Integer key);
 
@@ -35,5 +35,7 @@ public interface PaymentService {
     List<Payment> obtainAll();
 
     LocalDate parsedDate(String parsingDate);
+
+    void assignPaymentToAGym(Payment payment, int selectedGym);
 
 }

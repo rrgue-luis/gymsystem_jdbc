@@ -6,6 +6,7 @@ import business.impl.GymServiceImp;
 import business.impl.PaymentServiceImp;
 import dao.imp.GymDAOImp;
 import entities.Payment;
+import enums.payment.PaymentMethod;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,13 +17,14 @@ public class PaymentPresentation {
     Scanner scanner =  new Scanner(System.in);
 
     PaymentService paymentService = new PaymentServiceImp();
+    GymService gymService = new GymServiceImp();
 
     /**
      * Funcion encargada de subir pagos a mano
      * ideal para solucionar problemas de caja.
      * @return devuelve un pago.
      */
-    public Payment insertMenu() {
+    public void insertMenu(int selectedGym) {
 
         Payment payment = new Payment();
         boolean checkPayment;
@@ -51,7 +53,7 @@ public class PaymentPresentation {
         }
 
         String input = null;
-        Payment.PaymentMethod paymentMethod = null;
+        PaymentMethod paymentMethod = null;
 
         System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
 
@@ -60,7 +62,7 @@ public class PaymentPresentation {
             input = scanner.nextLine().trim().toUpperCase();
 
             try {
-                paymentMethod = Payment.PaymentMethod.valueOf(input);
+                paymentMethod = PaymentMethod.valueOf(input);
                 System.out.println("Tipo de pago elegido: " + paymentMethod);
             } catch (IllegalArgumentException e) {
                 System.out.println("ERROR");
@@ -71,15 +73,17 @@ public class PaymentPresentation {
         System.out.println("Ingrese el ID del miembro que realizó el pago: ");
         payment.setMemberId(scanner.nextInt());
 
-        payment = paymentService.insert(payment);
+        paymentService.insert(payment);
+        System.out.println(selectedGym);
+        paymentService.assignPaymentToAGym(payment, selectedGym);
+
 
         if (payment.getId() > 0) {
-            System.out.println("Se creó correctamente el pago ID: " + payment.getId());
+            System.out.println("Se creó correctamente el pago ID: " + selectedGym);
         } else {
             System.out.println("ERROR. No se creó el pago.");
         }
 
-        return payment;
     }
 
     /**
@@ -132,7 +136,7 @@ public class PaymentPresentation {
             }
 
             String stringInput = null;
-            Payment.PaymentMethod paymentMethod = null;
+            PaymentMethod paymentMethod = null;
             System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
 
             while(paymentMethod == null) {
@@ -140,7 +144,7 @@ public class PaymentPresentation {
                 stringInput = scanner.nextLine().trim().toUpperCase();
 
                 try {
-                    paymentMethod = Payment.PaymentMethod.valueOf(stringInput);
+                    paymentMethod = PaymentMethod.valueOf(stringInput);
                     System.out.println("Tipo de pago elegido: " + paymentMethod);
                 } catch (IllegalArgumentException e) {
                     System.out.println("ERROR");
@@ -217,7 +221,7 @@ public class PaymentPresentation {
         System.out.println("------ORDENAR POR TIPO DE PAGO------");
 
         String method = null;
-        Payment.PaymentMethod paymentMethod = null;
+        PaymentMethod paymentMethod = null;
 
         System.out.println("Ingrese el tipo de pago por el cual ordenar: ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
 
@@ -225,7 +229,7 @@ public class PaymentPresentation {
             method = scanner.nextLine().trim().toUpperCase();
 
             try {
-                paymentMethod = Payment.PaymentMethod.valueOf(method);
+                paymentMethod = PaymentMethod.valueOf(method);
                 System.out.println("Método elegido: CASH");
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de pago invalido, recibido: " + method + " Esperado: ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
