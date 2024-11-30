@@ -181,11 +181,34 @@ public class PaymentPresentation {
      * Pide un ID de un pago y lo elimina.
      */
     public void deleteMenu() {
-        System.out.println("Ingrese el ID del pago a eliminar: ");
+        System.out.println("Ingrese el ID del pago a eliminar, 0 para salir: ");
         obtainAllMenu();
-        int option = scanner.nextInt();
-        paymentService.delete(option);
-        System.out.println("Pago borrado, ID: " + option);
+        int input = -1;
+        do {
+
+            try {
+                System.out.print("ID del pago a eliminar, 0 para salir: ");
+                input = scanner.nextInt(); // Leer el input
+
+                if (input == 0) {
+                    System.out.println("Saliendo del menú de eliminación de pagos.");
+                    break;
+                }
+
+                if (paymentService.paymentExists(input)) {
+                    System.out.println("Pago encontrado: " + paymentService.searchForId(input));
+                    paymentService.delete(input); // Eliminar el pago
+                    System.out.println("Pago eliminado exitosamente.");
+                } else {
+                    System.out.println("El pago no existe, intente nuevamente.");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Error: El dato ingresado no es un número válido. Intente de nuevo.");
+                scanner.nextLine();
+            }
+        } while (true);
+
     }
 
     public void listMemberPayments(){
