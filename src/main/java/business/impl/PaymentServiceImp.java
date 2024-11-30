@@ -79,9 +79,9 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public List<Payment> listGymPayments(Integer key) {
+    public List<Payment> listGymPayments(int selectedGym) {
         List<Payment> gymPayments;
-        gymPayments = paymentDAO.listGymPayments(key);
+        gymPayments = paymentDAO.listGymPayments(selectedGym);
         return gymPayments;
     }
 
@@ -94,7 +94,7 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public List<Payment> obtainAll() {
-        List<Payment> payments = new ArrayList<>();
+        List<Payment> payments;
         payments = paymentDAO.obtainAll();
         return payments;
     }
@@ -104,10 +104,9 @@ public class PaymentServiceImp implements PaymentService {
         LocalDate parsedDate = null;
 
         while (parsedDate == null) {
-
             if (parsingDate == null || parsingDate.isEmpty()) {
-                System.out.println("Por favor, ingrese una fecha en el formato correcto: 'AAAA-MM-DD'");
-                parsingDate = scanner.nextLine();
+                System.out.println("Fecha del pago: Hoy" + LocalDate.now());
+                return LocalDate.now();
             }
 
             try {
@@ -115,7 +114,8 @@ public class PaymentServiceImp implements PaymentService {
                 System.out.println("Fecha OK");
             } catch (DateTimeParseException e) {
                 System.out.println("ERROR de sintaxis al ingresar fecha, recuerde que el formato es: 'AAAA-MM-DD'");
-                parsingDate = null;
+                System.out.println("Por favor, ingrese una fecha válida, o ENTER para que la fecha sea la de hoy");
+                parsingDate = scanner.nextLine();
             }
         }
 

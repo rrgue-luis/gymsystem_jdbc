@@ -28,7 +28,7 @@ public interface PaymentService {
 
     List<Payment> listMemberPayments(Integer key);
 
-    List<Payment> listGymPayments(Integer key);
+    List<Payment> listGymPayments(int selectedGym);
 
     List<Payment> listPaymentsByMethod(String method);
 

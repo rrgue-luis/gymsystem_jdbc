@@ -9,6 +9,7 @@ import entities.Payment;
 import enums.payment.PaymentMethod;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,65 +26,85 @@ public class PaymentPresentation {
      * @return devuelve un pago.
      */
     public void insertMenu(int selectedGym) {
+        int exit = 1;
+        while(exit != 0) {
 
-        Payment payment = new Payment();
-        boolean checkPayment;
-        float amount;
-        do {
-            System.out.println("Ingrese la cantidad del pago: ");
-            amount = scanner.nextFloat();
-            //checkeamos que el pago sea mayor que cero, si alcanza o no, se encarga memberservice
-            checkPayment = paymentService.checkPayment(amount, payment);
-        } while(!checkPayment);
+            setSelectedGym(selectedGym);
+            Payment payment = new Payment();
 
-        payment.setAmount(amount);
+            float amount = 0;
+            boolean inputIsValid = false;
+            do {
 
-        scanner.nextLine();
+                System.out.println("Ingrese la cantidad del pago: ");
 
-        System.out.println("Ingrese la fecha (ENTER: FECHA ACTUAL)");
-        String parsingDate = scanner.nextLine();
+                try {
+                    amount = scanner.nextFloat();
+                    if(paymentService.checkPayment(amount, payment)) {
+                        System.out.println("Pago OK");
+                        inputIsValid = true;
+                    } else {
+                        System.out.println("El pago ingresado no es válido, intente nuevamente.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Error. El dato ingresado no es un número. Intente nuevamente");
+                    scanner.nextLine();
+                }
 
-        if(parsingDate.equals("")) {
-            System.out.println("Fecha del pago: Hoy " + LocalDate.now());
-            payment.setPaymentDate(LocalDate.now());
-        } else {
-            LocalDate parsedDate = paymentService.parsedDate(parsingDate);
-            System.out.println("Fecha asignada: " + parsedDate);
-            payment.setPaymentDate(parsedDate);
-        }
+            } while(!inputIsValid);
 
-        String input = null;
-        PaymentMethod paymentMethod = null;
+            payment.setAmount(amount);
+            scanner.nextLine();
 
-        System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
+            System.out.println("Ingrese la fecha (ENTER: FECHA ACTUAL)");
+            String parsingDate = scanner.nextLine();
 
-        while(paymentMethod == null) {
+            if (parsingDate.equals("")) {
+                System.out.println("Fecha del pago: Hoy " + LocalDate.now());
+                payment.setPaymentDate(LocalDate.now());
+            } else {
+                LocalDate parsedDate = paymentService.parsedDate(parsingDate);
+                System.out.println("Fecha asignada: " + parsedDate);
+                payment.setPaymentDate(parsedDate);
+            }
 
-            input = scanner.nextLine().trim().toUpperCase();
+            String input = null;
+            PaymentMethod paymentMethod = null;
+            System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
 
+            while (paymentMethod == null) {
+                input = scanner.nextLine().trim().toUpperCase();
+
+                try {
+                    paymentMethod = PaymentMethod.valueOf(input);
+                    System.out.println("Tipo de pago elegido: " + paymentMethod);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("ERROR: Metodo no reconocido. Intente nuevamente ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
+                }
+            }
+            payment.setPaymentMethod(paymentMethod);
+
+            System.out.println("Ingrese el ID del miembro que realizó el pago: ");
+            payment.setMemberId(scanner.nextInt());
+            paymentService.insert(payment);
+            paymentService.assignPaymentToAGym(payment, selectedGym);
+
+            if (payment.getId() > 0) {
+                System.out.println("Se creó correctamente el pago ID: " + payment.getId() + " Al gimnasio: " + gymService.showName(selectedGym));
+            } else {
+                System.out.println("ERROR. No se creó el pago.");
+            }
+            System.out.println("\nPulse 0 para salir, o cualquier numero para seguir agregando pagos.");
             try {
-                paymentMethod = PaymentMethod.valueOf(input);
-                System.out.println("Tipo de pago elegido: " + paymentMethod);
-            } catch (IllegalArgumentException e) {
-                System.out.println("ERROR");
+                exit = scanner.nextInt();
+                if(exit == 0) {
+                    scanner.nextLine();
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Saliendo...");
             }
         }
-        payment.setPaymentMethod(paymentMethod);
-
-        System.out.println("Ingrese el ID del miembro que realizó el pago: ");
-        payment.setMemberId(scanner.nextInt());
-
-        paymentService.insert(payment);
-        System.out.println(selectedGym);
-        paymentService.assignPaymentToAGym(payment, selectedGym);
-
-
-        if (payment.getId() > 0) {
-            System.out.println("Se creó correctamente el pago ID: " + selectedGym);
-        } else {
-            System.out.println("ERROR. No se creó el pago.");
-        }
-
     }
 
     /**
@@ -191,15 +212,13 @@ public class PaymentPresentation {
 
     }
 
-    public void listGymPayments() {
+    public void listGymPayments(int selectedGym) {
 
         GymService gymService = new GymServiceImp();
 
-        System.out.println("Ingrese el ID del gym del que desea conocer sus pagos");
-        int input = scanner.nextInt();
+        setSelectedGym(selectedGym);
 
-        if(gymService.gymExists(input)) {
-            List<Payment> gymPayments = paymentService.listGymPayments(input);
+            List<Payment> gymPayments = paymentService.listGymPayments(selectedGym);
             for (Payment payment : gymPayments) {
                 System.out.println("---------------------");
                 System.out.println("ID Miembro: " + payment.getMemberId());
@@ -210,11 +229,6 @@ public class PaymentPresentation {
                 System.out.println("Método: " + payment.getPaymentMethod());
                 System.out.println("Válido: " + payment.PaymentIsValid());
             }
-
-        } else {
-                System.out.println("El ID de GYM ingresado no existe, porfavor intentelo nuevamente");
-            }
-
     }
 
     public void listPaymentsByMethod() {
@@ -250,4 +264,45 @@ public class PaymentPresentation {
 
         }
     }
+
+    /**
+     * Muestra toda la presentacion de setear el
+     * gimnasio actual, permitiendo cambiarlo o
+     * simplemente apretar enter para mantener el gimnasio
+     * por defecto desde el main
+     * @param selectedGym seteado desde el main
+     */
+    public void setSelectedGym(int selectedGym) {
+        System.out.print("Ingrese el ID del gym (o presione Enter para mantener el actual): ");
+        String inputString;
+        boolean inputIsValid = false;
+        do {
+            inputString = scanner.nextLine().trim();
+
+            if (inputString.equals("")) {
+                if(!gymService.gymExists(selectedGym)) {
+                    System.out.println("ERROR: El gimnasio no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                } else {
+                    System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                    inputIsValid = true;
+                }
+            } else {
+                try {
+                    int gymId = Integer.parseInt(inputString);
+                    if(!gymService.gymExists(gymId)) {
+                        System.out.println("EL gimnasio ingresado no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                    } else {
+                        selectedGym = gymId;
+                        System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                        inputIsValid = true;
+                    }
+                } catch (NumberFormatException e){
+                    System.out.println("Error: EL dato ingresado no es un numero valido. Intente nuevamente con un numero o ENTER para mantener el actual");
+
+                }
+            }
+
+        }while (!inputIsValid);
+    }
+
 }

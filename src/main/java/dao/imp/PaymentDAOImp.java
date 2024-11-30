@@ -184,7 +184,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
     }
 
     @Override
-    public List<Payment> listGymPayments(Integer key) {
+    public List<Payment> listGymPayments(int selectedGym) {
         List<Payment> gymPayments = new ArrayList<>();
         Connection connection = getConnection();
         String SQLSentence = "SELECT * FROM payment WHERE gym_id = ?";
@@ -192,7 +192,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
 
         try {
             preparedStatement = connection.prepareStatement(SQLSentence);
-            preparedStatement.setInt(1, key);
+            preparedStatement.setInt(1, selectedGym);
             ResultSet result = preparedStatement.executeQuery();
 
             while(result.next()) {
@@ -277,7 +277,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
             int rowsInserted = SQLSentenceObject.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("Pago ID " + payment.getId() + " fue asignado correctamente al GYM con ID " + payment.getGymId() + ".");
+                System.out.println("Pago ID " + payment.getId() + " fue asignado correctamente al GYM con ID " + selectedGym + ".");
             } else {
                 System.out.println("No se encontró el pago con ID " + payment.getId() + ". No se realizó ninguna actualización.");
             }
