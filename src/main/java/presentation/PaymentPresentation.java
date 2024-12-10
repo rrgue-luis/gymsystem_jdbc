@@ -1,8 +1,10 @@
 package presentation;
 
 import business.GymService;
+import business.MemberService;
 import business.PaymentService;
 import business.impl.GymServiceImp;
+import business.impl.MemberServiceImp;
 import business.impl.PaymentServiceImp;
 import dao.imp.GymDAOImp;
 import entities.Payment;
@@ -19,6 +21,8 @@ public class PaymentPresentation {
 
     PaymentService paymentService = new PaymentServiceImp();
     GymService gymService = new GymServiceImp();
+
+    MemberService memberService = new MemberServiceImp();
 
     /**
      * Funcion encargada de subir pagos a mano
@@ -128,52 +132,103 @@ public class PaymentPresentation {
     /**
      * Pide un ID de un pago y lo actualiza.
      */
-    public void updateMenu() {
-
+    public void updateMenu(int selectedGym) {
+        Payment payment = new Payment();
         System.out.println("Ingrese el ID del pago a modificar: ");
-        int input = scanner.nextInt();
-        boolean paymentExists = paymentService.paymentExists(input);
+        int input = -1;
+        boolean paymentExists = false;
 
-        if(paymentExists) {
-            Payment payment = new Payment();
-
-            payment.setId(input);
-            System.out.println("Ingrese el ID del miembro que hizo el pago: ");
-            payment.setMemberId(scanner.nextInt());
-
-            System.out.println("Ingrese el monto: ");
-            payment.setAmount(scanner.nextFloat());
-
-            System.out.println("Ingrese la fecha del pago: (ENTER: FECHA ACTUAL)");
-            String parsingDate = scanner.nextLine();
-
-            if(parsingDate.equals("")) {
-                System.out.println("Fecha del pago: Hoy " + LocalDate.now());
-                payment.setPaymentDate(LocalDate.now());
-            } else {
-                LocalDate parsedDate = paymentService.parsedDate(parsingDate);
-                System.out.println("Fecha asignada: " + parsedDate);
-                payment.setPaymentDate(parsedDate);
-            }
-
-            String stringInput = null;
-            PaymentMethod paymentMethod = null;
-            System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
-
-            while(paymentMethod == null) {
-
-                stringInput = scanner.nextLine().trim().toUpperCase();
-
-                try {
-                    paymentMethod = PaymentMethod.valueOf(stringInput);
-                    System.out.println("Tipo de pago elegido: " + paymentMethod);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("ERROR");
+        do {
+            try {
+                input = scanner.nextInt();
+                paymentExists = paymentService.paymentExists(input);
+                if (!paymentExists) {
+                    System.out.println("El pago no existe, intente nuevamente.");
+                } else {
+                    paymentExists = true;
                 }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: el dato ingresado no es un numero valido.");
+                scanner.nextLine();
+                paymentExists = false;
+            }
+        } while (!paymentExists);
+
+        payment.setId(input);
+
+        System.out.println("Ingrese el id del miembro que realizó el pago: ");
+        boolean memberExists = false;
+        do {
+            try {
+                input = scanner.nextInt();
+                memberExists = memberService.memberExists(input);
+                if (!memberExists) {
+                    System.out.println("No existe miembro con ese ID. Intente nuevamente");
+                } else {
+                    memberExists = true;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Ingrese el id del miembro que realizó el pago: ");
+                scanner.nextLine();
+                memberExists = false;
             }
 
+        } while (!memberExists);
+        scanner.nextLine();
+        setSelectedGym(selectedGym);
 
+        payment.setGymId(selectedGym);
+
+        System.out.println("Ingrese el monto: ");
+
+        boolean paymentIsValid = false;
+        do {
+            try {
+                float amount = scanner.nextFloat();
+                paymentIsValid = paymentService.checkPayment(amount, payment);
+                if(paymentIsValid) {
+                    payment.setAmount(amount);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("El dato ingresado no es un un numero, intente nuevamente");
+                scanner.nextLine();
+            }
+        } while (!paymentIsValid);
+
+
+        scanner.nextLine();
+        System.out.println("Ingrese la fecha del pago: (ENTER: FECHA ACTUAL)");
+        String parsingDate = scanner.nextLine();
+
+        if (parsingDate.equals("")) {
+            System.out.println("Fecha del pago: Hoy " + LocalDate.now());
+            payment.setPaymentDate(LocalDate.now());
+        } else {
+            LocalDate parsedDate = paymentService.parsedDate(parsingDate);
+            System.out.println("Fecha asignada: " + parsedDate);
+            payment.setPaymentDate(parsedDate);
         }
+
+        String inputString = null;
+        PaymentMethod paymentMethod = null;
+        System.out.println("Ingrese el metodo de pago utilizado ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT') ");
+
+        while (paymentMethod == null) {
+            inputString = scanner.nextLine().trim().toUpperCase();
+
+            try {
+                paymentMethod = PaymentMethod.valueOf(inputString);
+                System.out.println("Tipo de pago elegido: " + paymentMethod);
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: Metodo no reconocido. Intente nuevamente ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
+            }
+        }
+        payment.setPaymentMethod(paymentMethod);
+        payment.setPaymentIsValid(true);
+
+        paymentService.updatePayment(payment);
+
+        System.out.println("Actualizado el pago: " + paymentService.searchForId(payment.getId()));
 
     }
 
