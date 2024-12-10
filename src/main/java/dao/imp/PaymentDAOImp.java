@@ -52,6 +52,34 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
 
     @Override
     public void update(Payment entity) {
+        Connection connection = getConnection();
+        String SQLSentence = "UPDATE payment SET member_id=?, amount =?, payment_date=?, payment_method=?, payment_is_valid=?, gym_id=? WHERE id=?;";
+
+
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence);
+
+            SQLSentenceObject.setInt(1, entity.getMemberId());
+            SQLSentenceObject.setFloat(2, entity.getAmount());
+            SQLSentenceObject.setDate(3, java.sql.Date.valueOf(entity.getPaymentDate()));
+            SQLSentenceObject.setString(4, entity.getPaymentMethod().name());
+            SQLSentenceObject.setBoolean(5, entity.PaymentIsValid());
+            SQLSentenceObject.setObject(6, entity.getGymId(), java.sql.Types.INTEGER);
+            SQLSentenceObject.setInt(7, entity.getId());
+
+            int rowsInserted = SQLSentenceObject.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("El pago con ID " + entity.getId() + " fue actualizado exitosamente.");
+            } else {
+                System.out.println("No se encontró un registro con ID " + entity.getId() + " para actualizar.");
+            }
+            SQLSentenceObject.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
     @Override

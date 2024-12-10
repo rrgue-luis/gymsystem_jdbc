@@ -11,6 +11,7 @@ import entities.Payment;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,6 +42,7 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public void updatePayment(Payment payment) {
+        paymentDAO.update(payment);
     }
 
     @Override
@@ -60,15 +62,26 @@ public class PaymentServiceImp implements PaymentService {
      */
     @Override
     public boolean checkPayment(Float amount, Payment payment) {
+        boolean isValid = false;
 
-            if (amount > 0) {
-                payment.setPaymentIsValid(true);
-                return true;
-            } else {
-                payment.setPaymentIsValid(false);
-                System.out.println("El pago ingresado es menor a cero. Ingreselo nuevamente");
+        while (!isValid) {
+            try {
+
+                if (amount > 0) {
+                    payment.setPaymentIsValid(true);
+                    isValid = true;
+                    return true;
+                } else {
+                    System.out.println("El monto debe ser mayor a 0. Por favor, inténtelo nuevamente.");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Error: El dato ingresado no es un número válido. Intente nuevamente.");
+                scanner.nextLine();
             }
-            return false;
+        }
+        payment.setPaymentIsValid(false);
+        return false;
     }
 
     @Override
