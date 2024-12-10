@@ -72,12 +72,14 @@ public class Main {
                 switch (input) {
 
                     case 1:
+                        do {
                         System.out.println("--1-- AGREGAR MIEMBRO");
                         System.out.println("--2-- EDITAR MIEMBRO");
                         System.out.println("--3-- ELIMINAR MIEMBRO");
                         System.out.println("--4-- RENOVAR MEMBRESÍA");
                         System.out.println("--5-- MOSTRAR *TODOS* LOS MIEMBROS");
                         System.out.println("--6-- LISTAR MIEMBROS *DE UN GYM*");
+                        System.out.println("--PRESIONE 0 PARA SALIR--");
 
                         input = scanner.nextInt();
 
@@ -108,6 +110,9 @@ public class Main {
                             default:
                                 break;
                         }
+                        } while (input != 0);
+                        input = -1;
+                        break;
 
                     case 2:
                         do {
@@ -134,7 +139,7 @@ public class Main {
                                     break;
 
                                 case 3:
-                                    paymentPresentation.updateMenu();
+                                    paymentPresentation.updateMenu(selectedGym);
                                     break;
 
                                 case 4:
