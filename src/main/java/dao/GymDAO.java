@@ -2,6 +2,7 @@ package dao;
 
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Member;
 import entities.Payment;
 
 import javax.swing.text.html.parser.Entity;
@@ -15,5 +16,7 @@ public interface GymDAO extends DAO<Gym, Integer>{
     List<ResultSetDto> getGymEmployeesByRole (Integer key, String role);
     List<ResultSetDto> getGymEmployeesByShift(Integer key);
     String showName(Integer key);
+
+    void setMemberToAGym(Integer key, Member member);
 
 }

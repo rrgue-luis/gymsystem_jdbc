@@ -188,14 +188,16 @@ public class GymPresentation {
    //EMPLOYEES
 
    public void listGymEmployeesMenu(int selectedGym) {
+
+       selectedGym = setSelectedGym(selectedGym);
+
        List<ResultSetDto> gymEmployeesList;
 
        if (selectedGym > 0) {
            gymEmployeesList = gymService.getGymEmployees(selectedGym);
        } else {
-           System.out.println("Ingrese el ID del gym del que desea saber sus empleados: ");
-           int input = scanner.nextInt();
-           gymEmployeesList = gymService.getGymEmployees(input);
+           System.out.println("Viendo empleados del GYM: " + gymService.showName(selectedGym));
+           gymEmployeesList = gymService.getGymEmployees(selectedGym);
        }
 
        for(ResultSetDto gymEmployees : gymEmployeesList) {
@@ -291,7 +293,40 @@ public class GymPresentation {
        //Muestra estadísticas del gimnasio, como el promedio de miembros diarios, membresías activas o ingresos por membresía.
    }
 
+    public int setSelectedGym(int selectedGym) {
+        System.out.print("Ingrese el ID del gym (o presione Enter para mantener el actual): ");
+        String inputString;
+        boolean inputIsValid = false;
+        do {
+            inputString = scanner.nextLine().trim();
 
+            if (inputString.equals("")) {
+                if(!gymService.gymExists(selectedGym)) {
+                    System.out.println("ERROR: El gimnasio no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                } else {
+                    System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                    inputIsValid = true;
+                }
+            } else {
+                try {
+                    int gymId = Integer.parseInt(inputString);
+                    if(!gymService.gymExists(gymId)) {
+                        System.out.println("EL gimnasio ingresado no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                    } else {
+                        selectedGym = gymId;
+                        System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                        inputIsValid = true;
+                    }
+                } catch (NumberFormatException e){
+                    System.out.println("Error: EL dato ingresado no es un numero valido. Intente nuevamente con un numero o ENTER para mantener el actual");
+
+                }
+            }
+
+        }while (!inputIsValid);
+
+        return selectedGym;
+    }
 
 
 }

@@ -2,6 +2,7 @@ package business;
 
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Member;
 import entities.Payment;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public interface GymService {
     String showName(Integer key);
 
     List<Gym> obtainAll();
+
+    void setMemberToAGym(Integer key, Member member);
 
     List<ResultSetDto> getGymEmployees(Integer key);
 

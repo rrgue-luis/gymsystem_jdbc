@@ -4,8 +4,10 @@ import dao.GymDAO;
 import dao.MySQLDBConnection;
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Member;
 import entities.Payment;
 import enums.gym.GymStatus;
+import presentation.GymPresentation;
 
 import javax.swing.text.html.parser.Entity;
 import java.sql.*;
@@ -387,6 +389,30 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
         return searchedGym;
     }
 
+    @Override
+    public void setMemberToAGym(Integer key, Member member) {
+        Connection connection = getConnection();
+        String SQLSentence = "INSERT INTO gym_members (gym_id, member_id) VALUES (?, ?)";
+        try {
+            PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence, Statement.RETURN_GENERATED_KEYS);
+
+            SQLSentenceObject.setInt(1, key);
+            SQLSentenceObject.setInt(2, member.getId());
+
+            int rowsAffected = SQLSentenceObject.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Miembro asignado correctamente al gimnasio ");
+            } else {
+                System.out.println("No se pudo asignar el miembro al gimnasio.");
+            }
+
+            SQLSentenceObject.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

@@ -5,6 +5,7 @@ import dao.GymDAO;
 import dao.imp.GymDAOImp;
 import entities.DTO.ResultSetDto;
 import entities.Gym;
+import entities.Member;
 
 import java.util.List;
 
@@ -72,6 +73,11 @@ public class GymServiceImp implements GymService {
 
         return gyms;
 
+    }
+
+    @Override
+    public void setMemberToAGym(Integer key, Member member) {
+        gymDAO.setMemberToAGym(key, member);
     }
 
     @Override
