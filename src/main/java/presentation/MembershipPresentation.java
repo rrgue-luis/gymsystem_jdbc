@@ -49,6 +49,7 @@ public class MembershipPresentation {
                         String membership = scanner.nextLine().toUpperCase();
                         MembershipType membershipType;
 
+
                         try {
                             membershipType = MembershipType.valueOf(membership);
                             member.setMembershipType(membershipType);
