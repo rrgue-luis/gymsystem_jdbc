@@ -279,9 +279,6 @@ public class GymPresentation {
 
    }
 
-
-
-
    public void removeEmployeeFromGymMenu() {
 
    }

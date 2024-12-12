@@ -181,71 +181,87 @@ public class MemberPresentation {
         }
     }
 
-    public void updateMenu() {
+    public void updateMenu(int selectedGym) {
 
-        System.out.println("Ingrese el ID del miembro a modificar: ");
-        int input = scanner.nextInt();
-        scanner.nextLine();
-        boolean memberExists = memberService.memberExists(input);
+        System.out.println("Ingrese el ID del miembro a modificar: (--0-- PARA VOLVER AL MENÚ)");
+        boolean inputIsValid = false;
 
+        do {
+            String inputString = scanner.nextLine().trim();
+            if(inputString.equals("")) {
+                System.out.println("No ingresó ninguna opción, --0-- para salir");
+            } else {
+                try {
+                    int input = Integer.parseInt(inputString);
+                    if(input == 0) {
+                        System.out.println("Saliendo...");
+                        break;
+                    }
+                    boolean memberExists = memberService.memberExists(input);
+                    if (memberExists) {
+                        Member member = new Member();
 
-        if(memberExists) {
+                        member.setId(input);
+                        System.out.println("Ingrese el nombre del miembro:");
+                        member.setName(scanner.nextLine());
 
-            Member member = new Member();
+                        System.out.println("Ingrese el apellido del miembro:");
+                        member.setSurname(scanner.nextLine());
 
-            member.setId(input);
-            System.out.println("Ingrese el nombre del miembro:");
-            member.setName(scanner.nextLine());
+                        System.out.println("Ingrese el genero del miembro:");
+                        member.setGender(scanner.nextLine());
 
-            System.out.println("Ingrese el apellido del miembro:");
-            member.setSurname(scanner.nextLine());
+                        System.out.println("Ingrese el numero de telefono del miembro:");
+                        member.setPhone(scanner.nextLine());
 
-            System.out.println("Ingrese el genero del miembro:");
-            member.setGender(scanner.nextLine());
+                        System.out.println("Ingrese la direccion del miembro:");
+                        member.setAddress(scanner.nextLine());
 
-            System.out.println("Ingrese el numero de telefono del miembro:");
-            member.setPhone(scanner.nextLine());
+                        System.out.println("Ingrese la fecha de nacimiento del miembro:");
+                        String parsingDate = scanner.nextLine();
+                        LocalDate parsedDate = memberService.parsedDate(parsingDate);
+                        member.setBirthDate(parsedDate);
 
-            System.out.println("Ingrese la direccion del miembro:");
-            member.setAddress(scanner.nextLine());
+                        parsedDate = setRegistrationDate(parsedDate);
+                        member.setRegistrationDate(parsedDate);
 
+                        System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
 
-            System.out.println("Ingrese la fecha de nacimiento del miembro:");
-            String parsingDate = scanner.nextLine();
+                        MembershipType membershipType = null;
 
-            LocalDate parsedDate = memberService.parsedDate(parsingDate);
-            member.setBirthDate(parsedDate);
+                        while(membershipType == null) {
 
+                            inputString = scanner.nextLine().toUpperCase();
 
-            System.out.println("Ingrese la fecha de registro del miembro:");
-            parsingDate = scanner.nextLine();
-            parsedDate = memberService.parsedDate(parsingDate);
-            member.setRegistrationDate(parsedDate);
+                            try {
+                                membershipType = MembershipType.valueOf(inputString);
+                                System.out.println("Membresía elegida: " + membershipType);
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
+                            }
 
-            LocalDate membershipEndDate = parsedDate;
+                        }
 
-            member.setMembershipEndDate(membershipEndDate);
+                        member.setMembershipType(membershipType);
 
-            System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
-            String inputString = scanner.nextLine().toUpperCase();
+                        LocalDate membershipEndDate = memberService.membershipEndDate(member, parsedDate);
+                        member.setMembershipEndDate(membershipEndDate);
 
-            MembershipType membershipType = null;
+                        selectedGym = setSelectedGym((selectedGym));
+                        setMemberToAGym(selectedGym, member);
+                        memberService.updateMember(member);
 
-            try {
-                membershipType = MembershipType.valueOf(inputString);
-                member.setMembershipType(membershipType);
-                System.out.println("M.E: " + membershipType);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
-                e.printStackTrace();
+                        inputIsValid = true;
+
+                    } else {
+                        System.out.println("El miembro no existe");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("s: El dato ingresado no es un numero valido. Intente nuevamente o presione --0-- para salir");
+                }
             }
 
-            memberService.updateMember(member);
-
-        } else {
-            System.out.println("El miembro no existe");
-        }
-
+        } while (!inputIsValid);
     }
 
     public void searchForIdMenu() {
@@ -290,5 +306,28 @@ public class MemberPresentation {
     public void setMemberToAGym(int selectedgym, Member member) {
         System.out.println("Asignando miembro " + member + "al GYM: " + gymService.showName(selectedgym));
         gymService.setMemberToAGym(selectedgym, member);
+    }
+
+    public LocalDate setRegistrationDate(LocalDate parsedDate) {
+        String parsingDate;
+        do {
+            System.out.println("Ingrese la fecha de registro: (ENTER: FECHA ACTUAL)");
+            parsingDate = scanner.nextLine();
+
+            if(parsingDate.equals("")) {
+                System.out.println("Fecha de registro: Hoy " + LocalDate.now());
+                parsedDate = LocalDate.now();
+                break;
+            } else {
+                try {
+                    parsedDate = LocalDate.parse(parsingDate);
+                    System.out.println("Fecha asignada: " + parsingDate);
+                    break;
+                } catch(DateTimeParseException e){
+                    System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                }
+            }
+        } while (true);
+        return parsedDate;
     }
 }

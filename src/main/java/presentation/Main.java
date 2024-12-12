@@ -89,7 +89,7 @@ public class Main {
                                 break;
 
                             case 2:
-                                memberPresentation.updateMenu();
+                                memberPresentation.updateMenu(selectedGym);
                                 break;
 
                             case 3:

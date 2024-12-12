@@ -392,12 +392,14 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
     @Override
     public void setMemberToAGym(Integer key, Member member) {
         Connection connection = getConnection();
-        String SQLSentence = "INSERT INTO gym_members (gym_id, member_id) VALUES (?, ?)";
+        String SQLSentence = "INSERT INTO gym_members (gym_id, member_id) VALUES (?, ?) " +
+                "ON DUPLICATE KEY UPDATE gym_id = ?";
         try {
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence, Statement.RETURN_GENERATED_KEYS);
 
             SQLSentenceObject.setInt(1, key);
             SQLSentenceObject.setInt(2, member.getId());
+            SQLSentenceObject.setInt(3, key);
 
             int rowsAffected = SQLSentenceObject.executeUpdate();
 
@@ -410,6 +412,7 @@ public class GymDAOImp implements MySQLDBConnection, GymDAO {
             SQLSentenceObject.close();
 
         } catch (SQLException e) {
+            System.out.println("Error.");
             e.printStackTrace();
         }
     }
