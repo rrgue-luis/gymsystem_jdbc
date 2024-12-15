@@ -10,6 +10,7 @@ import enums.member.MembershipType;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,99 +20,102 @@ public class MemberPresentation {
     MemberService memberService = new MemberServiceImp();
     GymService gymService = new GymServiceImp();
 
-    public Member insertMenu(int selectedGym) {
+    public void insertMenu(int selectedGym) {
 
         //En java los objetos se pasan por referencia
         Scanner scanner = new Scanner(System.in);
         Member member = new Member();
+        int exit = 1;
+        while(exit != 0) {
 
-        selectedGym = setSelectedGym(selectedGym);
+            System.out.println("Ingrese el nombre del miembro:");
+            member.setName(scanner.nextLine());
 
-        System.out.println("Ingrese el nombre del miembro:");
-        member.setName(scanner.nextLine());
+            System.out.println("Ingrese el apellido del miembro:");
+            member.setSurname(scanner.nextLine());
 
-        System.out.println("Ingrese el apellido del miembro:");
-        member.setSurname(scanner.nextLine());
+            System.out.println("Ingrese el genero del miembro:");
+            member.setGender(scanner.nextLine());
 
-        System.out.println("Ingrese el genero del miembro:");
-        member.setGender(scanner.nextLine());
+            System.out.println("Ingrese el numero de telefono del miembro:");
+            member.setPhone(scanner.nextLine());
 
-        System.out.println("Ingrese el numero de telefono del miembro:");
-        member.setPhone(scanner.nextLine());
-
-        System.out.println("Ingrese la direccion del miembro:");
-        member.setAddress(scanner.nextLine());
+            System.out.println("Ingrese la direccion del miembro:");
+            member.setAddress(scanner.nextLine());
 
 
-        System.out.println("Ingrese la fecha de nacimiento del miembro:");
-        String parsingDate = scanner.nextLine();
+            System.out.println("Ingrese la fecha de nacimiento del miembro:");
+            String parsingDate = scanner.nextLine();
 
-        LocalDate parsedDate = memberService.parsedDate(parsingDate);
-        member.setBirthDate(parsedDate);
+            LocalDate parsedDate = memberService.parsedDate(parsingDate);
+            member.setBirthDate(parsedDate);
 
-        do {
-            System.out.println("Ingrese la fecha de registro: (ENTER: FECHA ACTUAL)");
-            parsingDate = scanner.nextLine();
+            do {
+                System.out.println("Ingrese la fecha de registro: (ENTER: FECHA ACTUAL)");
+                parsingDate = scanner.nextLine();
 
-            if(parsingDate.equals("")) {
-                System.out.println("Fecha de registro: Hoy " + LocalDate.now());
-                parsedDate = LocalDate.now();
-                break;
-            } else {
-                try {
-                    parsedDate = LocalDate.parse(parsingDate);
-                    System.out.println("Fecha asignada: " + parsingDate);
+                if (parsingDate.equals("")) {
+                    System.out.println("Fecha de registro: Hoy " + LocalDate.now());
+                    parsedDate = LocalDate.now();
+                    member.setRegistrationDate(parsedDate);
                     break;
-                } catch(DateTimeParseException e){
-                    System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                } else {
+                    try {
+                        parsedDate = LocalDate.parse(parsingDate);
+                        member.setRegistrationDate(parsedDate);
+                        System.out.println("Fecha asignada: " + parsedDate);
+                        break;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                    }
                 }
+            } while (true);
+
+            System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
+
+            MembershipType membershipType = null;
+            String inputString;
+
+            while (membershipType == null) {
+
+                inputString = scanner.nextLine().toUpperCase();
+
+                try {
+                    membershipType = MembershipType.valueOf(inputString);
+                    System.out.println("Membresía elegida: " + membershipType);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
+                }
+
             }
-        } while (true);
 
+            member.setMembershipType(membershipType);
 
-        String input = null;
-        MembershipType membershipType = null;
-        System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY'");
+            LocalDate membershipEndDate = memberService.membershipEndDate(member, parsedDate);
+            member.setMembershipEndDate(membershipEndDate);
 
-        scanner.nextLine();
+            System.out.println("A que gimnasio está siendo anotado el miembro?:");
 
-        while(membershipType == null) {
+            memberService.insert(member);
 
-            input = scanner.nextLine().trim().toUpperCase();
-
-            try {
-                membershipType = MembershipType.valueOf(input);
-                System.out.println("Membresía elegida: " + membershipType);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
-            }
-
-        }
-
-        member.setMembershipType(membershipType);
-
-
-
-        // Member se crea por primera vez en MemberPresentation (UN OBJETO SIEMPRE NACE CON new )
-        // -> viaja a MemberService
-        // -> viaja a MemberDao
-        // -> viaja MemberService
-        // -> viaja MemberPresentation
-
-        LocalDate membershipEndDate = memberService.membershipEndDate(member, parsedDate);
-
-        member.setMembershipEndDate(membershipEndDate);
-
-        member = memberService.insert(member);
-
-        if (member.getId() > 0) {
-            System.out.println("SE CREO CORRECTAMENTE AL MIEMBRO CON EL ID: " + member.getId());
+            selectedGym = setSelectedGym((selectedGym));
             setMemberToAGym(selectedGym, member);
-        } else {
-            System.out.println("NO SE CREO CORRECTAMENTE AL MIEMBRO");
-        }
 
-        return member;
+
+
+            System.out.println("SE CREO CORRECTAMENTE AL MIEMBRO CON EL ID: " + member.getId());
+
+            System.out.println("Desea seguir agregando miembros? (0: SALIR | CUALQUIER TECLA: CONTINUAR)");
+            try {
+                exit = scanner.nextInt();
+                if(exit == 0) {
+                    scanner.nextLine();
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Saliendo...");
+            }
+        }
     }
 
     public void deleteMenu() {

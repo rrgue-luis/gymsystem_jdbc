@@ -142,7 +142,6 @@ public class MemberDAOImp implements MySQLDBConnection, MemberDAO{
        return false;
 
     }
-
     @Override
     public List<Member> obtainAll() {
 
