@@ -68,9 +68,8 @@ public class MembershipPresentation {
                             member.setMembershipEndDate(membershipEndDate);
                         } else {
                             LocalDate parsedDate = memberService.parsedDate(parsingDate);
-                            memberService.membershipEndDate(member, parsedDate);
                             System.out.println("Fecha asignada de renovación: " + parsedDate);
-                            member.setMembershipEndDate(parsedDate);
+                            member.setMembershipEndDate(memberService.membershipEndDate(member, parsedDate));
                         }
 
                         /*
@@ -114,7 +113,7 @@ public class MembershipPresentation {
                                 paymentMethod = PaymentMethod.valueOf(method);
                                 System.out.println("Tipo de pago elegido: " + paymentMethod);
                             } catch (IllegalArgumentException e) {
-                                System.out.println("ERROR");
+                                System.out.println("Error de syntaxis, elija una opcion valida ('CASH', 'TRANSFER', 'CREDIT', 'DEBIT')");
                             }
                         }
                         payment.setPaymentMethod(paymentMethod);
@@ -126,7 +125,7 @@ public class MembershipPresentation {
                         inputIsValid = true;
 
                     } else {
-                        System.out.println("El miembro no existe. Intente nuevamente.");
+                        System.out.println("El miembro no existe. Intente nuevamente. o presione --0-- para salir");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Error: El dato ingresado no es un numero valido. Intente nuevamente o presione --0-- para salir");

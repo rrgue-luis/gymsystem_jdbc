@@ -128,17 +128,25 @@ public class MemberPresentation {
                 System.out.print("ID: ");
                 int option = scanner.nextInt();
 
-                memberService.delete(option);
-                System.out.println("Miembro borrado, ID: " + option);
+                boolean memberExists = memberService.memberExists(option);
 
-                System.out.println("¿Desea seguir eliminando miembros? (1: SI, 0: SALIR AL MENÚ)");
-                System.out.print("Opción: ");
+                if(memberExists) {
+                    memberService.delete(option);
+                    System.out.println("Miembro borrado, ID: " + option);
 
-                int continueOption = scanner.nextInt();
+                    System.out.println("¿Desea seguir eliminando miembros? (1: SI, 0: SALIR AL MENÚ)");
+                    System.out.print("Opción: ");
 
-                if (continueOption != 1) {
-                    break;
+                    int continueOption = scanner.nextInt();
+
+                    if (continueOption != 1) {
+                        break;
+                    }
+                } else {
+                    System.out.println("El miembro no existe. Intente nuevamente");
                 }
+
+
             } catch (Exception e) {
                 System.out.println("Ocurrió un error");
                 scanner.nextLine();

@@ -39,7 +39,7 @@ public class MemberServiceImp implements MemberService {
             parsedDate = parsedDate.plusDays(1);
         } else if (membershipType.equals("WEEKLY")) {
             parsedDate = parsedDate.plusWeeks(1);
-        } else {
+        } else if(membershipType.equals("MONTHLY")){
             parsedDate = parsedDate.plusMonths(1);
         }
         return parsedDate;
