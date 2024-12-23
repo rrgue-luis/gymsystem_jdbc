@@ -33,8 +33,9 @@ public class PaymentPresentation {
         int exit = 1;
         while(exit != 0) {
 
-            setSelectedGym(selectedGym);
+            selectedGym = setSelectedGym(selectedGym);
             Payment payment = new Payment();
+            payment.setGymId(selectedGym);
 
             float amount = 0;
             boolean inputIsValid = false;
@@ -88,13 +89,30 @@ public class PaymentPresentation {
             }
             payment.setPaymentMethod(paymentMethod);
 
-            System.out.println("Ingrese el ID del miembro que realizó el pago: ");
-            payment.setMemberId(scanner.nextInt());
-            paymentService.insert(payment);
-            paymentService.assignPaymentToAGym(payment, selectedGym);
+            inputIsValid = false;
+            while(!inputIsValid) {
+                System.out.println("Ingrese el ID del miembro que realizó el pago: ");
+                try {
+                    int memberId = scanner.nextInt();
+                    if(memberService.memberExists(memberId)) {
+                        payment.setMemberId(memberId);
+                        paymentService.insert(payment);
+                        //paymentService.assignPaymentToAGym(payment, selectedGym);
+                        inputIsValid = true;
+                    } else {
+                        System.out.println("El miembro no existe. Intente nuevamente");
+                    }
+                } catch(InputMismatchException e) {
+                    System.out.println("El dato ingresado no es un ID valido.");
+                    scanner.nextLine();
+                }
+            }
 
             if (payment.getId() > 0) {
                 System.out.println("Se creó correctamente el pago ID: " + payment.getId() + " Al gimnasio: " + gymService.showName(selectedGym));
+                System.out.println("Cantidad: " + payment.getAmount());
+                System.out.println("Miembro: " + payment.getMemberId());
+                System.out.println("Gym al que fue el pago: " + payment.getGymId());
             } else {
                 System.out.println("ERROR. No se creó el pago.");
             }
@@ -350,7 +368,7 @@ public class PaymentPresentation {
      * por defecto desde el main
      * @param selectedGym seteado desde el main
      */
-    public void setSelectedGym(int selectedGym) {
+    public int setSelectedGym(int selectedGym) {
         System.out.print("Ingrese el ID del gym (o presione Enter para mantener el actual): ");
         String inputString;
         boolean inputIsValid = false;
@@ -381,6 +399,7 @@ public class PaymentPresentation {
             }
 
         }while (!inputIsValid);
+        return selectedGym;
     }
 
 }
