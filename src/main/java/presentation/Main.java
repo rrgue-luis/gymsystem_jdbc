@@ -97,7 +97,7 @@ public class Main {
                                 break;
 
                             case 4:
-                                membershipPresentation.renewMembership();
+                                membershipPresentation.renewMembership(selectedGym);
                                 break;
 
                             case 5:

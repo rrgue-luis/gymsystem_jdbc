@@ -12,6 +12,7 @@ import enums.member.MembershipType;
 import enums.payment.PaymentMethod;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -21,9 +22,11 @@ public class MembershipPresentation {
     MemberService memberService = new MemberServiceImp();
     PaymentService paymentService = new PaymentServiceImp();
     MembershipService membershipService = new MembershipServiceImp();
+    MemberPresentation memberPresentation = new MemberPresentation();
 
+    public void renewMembership(int selectedGym) {
 
-    public void renewMembership() {
+        selectedGym = memberPresentation.setSelectedGym(selectedGym);
 
         System.out.println("Ingrese el ID del miembro a renovar: (--0-- PARA VOLVER AL MENÚ)");
         boolean inputIsValid = false;
@@ -41,53 +44,77 @@ public class MembershipPresentation {
                         break;
                     }
                     boolean memberExists = memberService.memberExists(input);
+
+                    String parsingDate;
+                    LocalDate parsedDate;
+                    do {
+                        System.out.println("Ingrese la fecha de renovación: (ENTER: FECHA ACTUAL)");
+                        parsingDate = scanner.nextLine();
+
+                        if(parsingDate.equals("")) {
+                            System.out.println("Fecha de renovación: Hoy " + LocalDate.now());
+                            parsedDate = LocalDate.now();
+                            break;
+                        } else {
+                            try {
+                                parsedDate = LocalDate.parse(parsingDate);
+                                System.out.println("Fecha de renovación asignada: " + parsingDate);
+                                break;
+                            } catch(DateTimeParseException e){
+                                System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                            }
+                        }
+                    } while (true);
+
+
                     if (memberExists) {
                         Member member = memberService.searchForId(input);
                         member.setId(input);
 
                         System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
-                        String membership = scanner.nextLine().toUpperCase();
-                        MembershipType membershipType;
+                        MembershipType membershipType = null;
 
+                        while(membershipType == null) {
 
-                        try {
-                            membershipType = MembershipType.valueOf(membership);
-                            member.setMembershipType(membershipType);
-                            System.out.println("Membresia: " + membershipType);
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Tipo de membresia no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY')");
+                            inputString = scanner.nextLine().toUpperCase();
+
+                            try {
+                                membershipType = MembershipType.valueOf(inputString);
+                                System.out.println("Membresía elegida: " + membershipType);
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Tipo de membresía no valido. Intente nuevamente ('DAILY', 'WEEKLY', 'MONTHLY'):");
+                            }
+
                         }
-
-
-                        System.out.println("Ingrese la fecha de renovación (ENTER: FECHA ACTUAL)");
-                        String parsingDate = scanner.nextLine();
-
-                        if (parsingDate.equals("")) {
-                            System.out.println("Fecha de renovacion: Hoy " + LocalDate.now());
-                            LocalDate membershipEndDate = memberService.membershipEndDate(member, LocalDate.now());
-                            member.setMembershipEndDate(membershipEndDate);
-                        } else {
-                            LocalDate parsedDate = memberService.parsedDate(parsingDate);
-                            System.out.println("Fecha asignada de renovación: " + parsedDate);
-                            member.setMembershipEndDate(memberService.membershipEndDate(member, parsedDate));
-                        }
-
+                        member.setMembershipType(membershipType);
+                        LocalDate memberShipEndDate = memberService.membershipEndDate(member, parsedDate);
+                        member.setMembershipEndDate(memberShipEndDate);
                         /*
                         SI LLEGÓ ACÁ EL MIEMBRO ESTÁ OK,
                         CREACION DEl PAGO
                          */
                         Payment payment = new Payment();
 
-                        boolean checkPayment;
-                        float amount;
-                        do {
-                            System.out.println("Ingrese la cantidad del pago: ");
-                            amount = scanner.nextFloat();
-                            checkPayment = paymentService.checkPayment(amount, payment);
-                        } while (!checkPayment);
+                        payment.setGymId(selectedGym);
 
-                        payment.setAmount(amount);
-                        scanner.nextLine();
+                        boolean checkPayment = false;
+                        float amount = 0;
+
+                        while (!checkPayment) {
+                            try {
+                                System.out.println("Ingrese la cantidad del pago: ");
+                                amount = scanner.nextFloat();
+                                if(amount <= 0) {
+                                    System.out.println("El monto ingresado es menor a 0, intente nuevamente");
+
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("El dato ingresado no es numero valido, intente nuevamente.");
+                            }
+                            checkPayment = paymentService.checkPayment(amount, payment);
+                            payment.setAmount(amount);
+                            scanner.nextLine();
+                        }
 
                         System.out.println("Ingrese la fecha del pago. (ENTER: FECHA ACTUAL)");
                         parsingDate = scanner.nextLine();
@@ -96,7 +123,7 @@ public class MembershipPresentation {
                             System.out.println("Fecha del pago: Hoy " + LocalDate.now());
                             payment.setPaymentDate(LocalDate.now());
                         } else {
-                            LocalDate parsedDate = paymentService.parsedDate(parsingDate);
+                            parsedDate = paymentService.parsedDate(parsingDate);
                             System.out.println("Fecha asignada: " + parsedDate);
                             payment.setPaymentDate(parsedDate);
                         }

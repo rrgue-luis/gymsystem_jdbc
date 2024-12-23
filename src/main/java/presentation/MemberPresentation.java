@@ -75,7 +75,7 @@ public class MemberPresentation {
 
             MembershipType membershipType = null;
             String inputString;
-
+            //mejor en un do while y no poner breaks
             while (membershipType == null) {
 
                 inputString = scanner.nextLine().toUpperCase();
@@ -238,7 +238,6 @@ public class MemberPresentation {
                         member.setRegistrationDate(parsedDate);
 
                         System.out.println("Ingrese el tipo de membresía: 'DAILY', 'WEEKLY', 'MONTHLY' ");
-
                         MembershipType membershipType = null;
 
                         while(membershipType == null) {
@@ -253,7 +252,6 @@ public class MemberPresentation {
                             }
 
                         }
-
                         member.setMembershipType(membershipType);
 
                         LocalDate membershipEndDate = memberService.membershipEndDate(member, parsedDate);
@@ -266,7 +264,7 @@ public class MemberPresentation {
                         inputIsValid = true;
 
                     } else {
-                        System.out.println("El miembro no existe");
+                        System.out.println("El miembro no existe. Intente nuevamente");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("s: El dato ingresado no es un numero valido. Intente nuevamente o presione --0-- para salir");
@@ -317,6 +315,7 @@ public class MemberPresentation {
 
     public void setMemberToAGym(int selectedgym, Member member) {
         System.out.println("Asignando miembro " + member + "al GYM: " + gymService.showName(selectedgym));
+        //assignMemberToGym mejor nombre
         gymService.setMemberToAGym(selectedgym, member);
     }
 

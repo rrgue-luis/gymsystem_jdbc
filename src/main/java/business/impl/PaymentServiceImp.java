@@ -62,24 +62,22 @@ public class PaymentServiceImp implements PaymentService {
      */
     @Override
     public boolean checkPayment(Float amount, Payment payment) {
-        boolean isValid = false;
 
-        while (!isValid) {
             try {
-
-                if (amount > 0) {
-                    payment.setPaymentIsValid(true);
-                    isValid = true;
-                    return true;
-                } else {
-                    System.out.println("El monto debe ser mayor a 0. Por favor, inténtelo nuevamente.");
+                if (amount == null) {
+                    throw new NumberFormatException();
                 }
 
-            } catch (InputMismatchException e) {
+                if(amount > 0) {
+                    payment.setPaymentIsValid(true);
+                    return true;
+                } else if (amount < 0) {
+                    System.out.println("El monto debe ser mayor a 0. Intente nuevamente");
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Error: El dato ingresado no es un número válido. Intente nuevamente.");
                 scanner.nextLine();
             }
-        }
         payment.setPaymentIsValid(false);
         return false;
     }
@@ -118,7 +116,7 @@ public class PaymentServiceImp implements PaymentService {
 
         while (parsedDate == null) {
             if (parsingDate == null || parsingDate.isEmpty()) {
-                System.out.println("Fecha del pago: Hoy" + LocalDate.now());
+                System.out.println("Fecha del pago: Hoy " + LocalDate.now());
                 return LocalDate.now();
             }
 

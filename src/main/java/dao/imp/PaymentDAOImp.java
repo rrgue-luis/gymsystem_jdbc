@@ -19,7 +19,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
     public Payment insert(Payment entity) {
 
         Connection connection = getConnection();
-        String SQLSentence = "INSERT INTO payment(member_id, amount, payment_date, payment_method, payment_is_valid) " + "VALUES(?,?,?,?,?)";
+        String SQLSentence = "INSERT INTO payment(member_id, amount, payment_date, payment_method, payment_is_valid, gym_id) " + "VALUES(?,?,?,?,?,?)";
 
         try {
             PreparedStatement SQLSentenceObject = connection.prepareStatement(SQLSentence, Statement.RETURN_GENERATED_KEYS);
@@ -29,6 +29,7 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
             SQLSentenceObject.setDate(3, java.sql.Date.valueOf(entity.getPaymentDate()));
             SQLSentenceObject.setString(4, entity.getPaymentMethod().name());
             SQLSentenceObject.setBoolean(5, entity.PaymentIsValid());
+            SQLSentenceObject.setInt(6, entity.getGymId());
 
             int rowsInserted = SQLSentenceObject.executeUpdate();
 
@@ -46,8 +47,6 @@ public class PaymentDAOImp implements MySQLDBConnection, PaymentDAO {
             e.printStackTrace();
             return entity;
         }
-
-
     }
 
     @Override
