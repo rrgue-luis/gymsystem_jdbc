@@ -16,7 +16,7 @@ public class EmployeePresentation {
     EmployeeService employeeService =  new EmployeeServiceImp();
 
 
-    public void insertMenu() {
+    public void insertMenu(int selectedGym) {
 
         Employee employee = new Employee();
 
@@ -93,10 +93,10 @@ public class EmployeePresentation {
 
     }
 
-    public void updateMenu(){
+    public void updateMenu(int selectedGym){
 
         System.out.println("Ingrese el ID del empleado a actualizar:");
-        obtainAllMenu();
+       // obtainAllMenu();
         int input = scanner.nextInt();
 
         boolean employeeExists = employeeService.employeeExists(input);
@@ -169,7 +169,7 @@ public class EmployeePresentation {
         boolean employeeExists;
         do {
             System.out.println("Ingrese el id del miembro a eliminar: ");
-            obtainAllMenu();
+            //obtainAllMenu(int selectedGym);
             System.out.println("-----------LISTA-----------");
             int input = scanner.nextInt();
 
@@ -184,7 +184,7 @@ public class EmployeePresentation {
 
     }
 
-    public void obtainAllMenu() {
+    public void obtainAllMenu(int selectedGym) {
 
         List<Employee> employeeList = employeeService.obtainAll();
 
@@ -202,6 +202,10 @@ public class EmployeePresentation {
             System.out.println("Turno: " + employee.getEmployeeShift());
             System.out.println("Salario: " + employee.getSalary());
         }
+
+    }
+
+    public void getAllGymEmployees(int selectedGym) {
 
     }
 

@@ -178,6 +178,45 @@ public class Main {
                         input = -1;
                         break;
 
+                    case 3:
+                        do {
+                            System.out.println("--1-- AGREGAR EMPLEADO");
+                            System.out.println("--2-- EDITAR EMPLEADO");
+                            System.out.println("--3-- ELIMINAR EMPLEADO");
+                            System.out.println("--4-- MOSTRAR *TODOS* LOS EMPLEADOS");
+                            System.out.println("--5-- LISTAR EMPLEADOS *DE UN GYM*");
+                            System.out.println("--PRESIONE 0 PARA SALIR--");
+
+                            input = scanner.nextInt();
+
+                            switch (input) {
+                                case 1:
+                                    employeePresentation.insertMenu(selectedGym);
+                                    break;
+
+                                case 2:
+                                    employeePresentation.updateMenu(selectedGym);
+                                    break;
+
+                                case 3:
+                                    employeePresentation.deleteMenu();
+                                    break;
+
+                                case 4:
+                                    employeePresentation.obtainAllMenu(selectedGym);
+                                    break;
+
+                                case 5:
+                                    employeePresentation.getAllGymEmployees(selectedGym);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        } while (input != 0);
+                        input = -1;
+                        break;
+
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Error, el dato ingresado no es válido. Intentelo nuevamente.");
