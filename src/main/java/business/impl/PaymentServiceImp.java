@@ -86,6 +86,9 @@ public class PaymentServiceImp implements PaymentService {
     public List<Payment> listMemberPayments(Integer key) {
         List<Payment> memberPayments;
         memberPayments = paymentDAO.listMemberPayments(key);
+        if(memberPayments.isEmpty()) {
+            System.out.println("EL miembro no tiene pagos hechos.");
+        }
         return memberPayments;
     }
 

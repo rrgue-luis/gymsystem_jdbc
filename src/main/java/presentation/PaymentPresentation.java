@@ -285,25 +285,46 @@ public class PaymentPresentation {
     }
 
     public void listMemberPayments(){
+        int exit = -1;
+        while(exit != 0) {
+            boolean inputIsValid = false;
+            while (!inputIsValid) {
 
-        System.out.println("Ingrese el ID del miembro del que desea saber sus pagos: ");
-        int input = scanner.nextInt();
-        boolean paymentExists = paymentService.paymentExists(input);
+                try {
+                    System.out.println("Ingrese el ID del miembro del que desea saber sus pagos: ");
+                    int input = scanner.nextInt();
+                    boolean paymentExists = paymentService.paymentExists(input);
 
-        if(paymentExists) {
-            List<Payment> memberPayments = paymentService.listMemberPayments(input);
-            for(Payment payment : memberPayments) {
-                System.out.println("---------------------");
-                System.out.println("ID Miembro: " + payment.getMemberId());
-                System.out.println("ID Gym: " + payment.getGymId());
-                System.out.println("ID Pago: " + payment.getId());
-                System.out.println("Cantidad: " + payment.getAmount());
-                System.out.println("Fecha: " + payment.getPaymentDate());
-                System.out.println("Método: " + payment.getPaymentMethod());
-                System.out.println("Válido: " + payment.PaymentIsValid());
+                    if(paymentExists) {
+                        List<Payment> memberPayments = paymentService.listMemberPayments(input);
+                        for(Payment payment : memberPayments) {
+                            System.out.println("---------------------");
+                            System.out.println("ID Miembro: " + payment.getMemberId());
+                            System.out.println("ID Gym: " + payment.getGymId());
+                            System.out.println("ID Pago: " + payment.getId());
+                            System.out.println("Cantidad: " + payment.getAmount());
+                            System.out.println("Fecha: " + payment.getPaymentDate());
+                            System.out.println("Método: " + payment.getPaymentMethod());
+                            System.out.println("Válido: " + payment.PaymentIsValid());
+                        }
+                    } else {
+                        System.out.println("No existe pago con ese ID, intente nuevamente: ");
+                    }
+                    inputIsValid = true;
+                } catch(InputMismatchException e) {
+                    System.out.println("Error, el dato ingresado no es un ID válido. Intente nuevamente");
+                    scanner.nextLine();
+                }
             }
-        } else {
-               System.out.println("No existe pago con ese ID, intente nuevamente: ");
+            System.out.println("\nPulse 0 para salir, o cualquier tecla para seguir consultando pagos.");
+            try {
+                exit = scanner.nextInt();
+                if(exit == 0) {
+                    scanner.nextLine();
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+            }
         }
 
     }
