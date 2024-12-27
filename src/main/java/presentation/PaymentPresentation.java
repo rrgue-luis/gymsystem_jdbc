@@ -175,7 +175,7 @@ public class PaymentPresentation {
         payment.setId(input);
 
         System.out.println("Ingrese el id del miembro que realizó el pago: ");
-        boolean memberExists = false;
+        boolean memberExists;
         do {
             try {
                 input = scanner.nextInt();
@@ -183,10 +183,11 @@ public class PaymentPresentation {
                 if (!memberExists) {
                     System.out.println("No existe miembro con ese ID. Intente nuevamente");
                 } else {
+                    payment.setMemberId(input);
                     memberExists = true;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Ingrese el id del miembro que realizó el pago: ");
+                System.out.println("El dato ingresado no es correcto, intente nuevamente.: ");
                 scanner.nextLine();
                 memberExists = false;
             }
@@ -293,22 +294,26 @@ public class PaymentPresentation {
                 try {
                     System.out.println("Ingrese el ID del miembro del que desea saber sus pagos: ");
                     int input = scanner.nextInt();
-                    boolean paymentExists = paymentService.paymentExists(input);
+                    if (memberService.memberExists(input)) {
+                        boolean paymentExists = paymentService.paymentExists(input);
 
-                    if(paymentExists) {
-                        List<Payment> memberPayments = paymentService.listMemberPayments(input);
-                        for(Payment payment : memberPayments) {
-                            System.out.println("---------------------");
-                            System.out.println("ID Miembro: " + payment.getMemberId());
-                            System.out.println("ID Gym: " + payment.getGymId());
-                            System.out.println("ID Pago: " + payment.getId());
-                            System.out.println("Cantidad: " + payment.getAmount());
-                            System.out.println("Fecha: " + payment.getPaymentDate());
-                            System.out.println("Método: " + payment.getPaymentMethod());
-                            System.out.println("Válido: " + payment.PaymentIsValid());
+                        if(paymentExists) {
+                            List<Payment> memberPayments = paymentService.listMemberPayments(input);
+                            for(Payment payment : memberPayments) {
+                                System.out.println("---------------------");
+                                System.out.println("ID Miembro: " + payment.getMemberId());
+                                System.out.println("ID Gym: " + payment.getGymId());
+                                System.out.println("ID Pago: " + payment.getId());
+                                System.out.println("Cantidad: " + payment.getAmount());
+                                System.out.println("Fecha: " + payment.getPaymentDate());
+                                System.out.println("Método: " + payment.getPaymentMethod());
+                                System.out.println("Válido: " + payment.PaymentIsValid());
+                            }
+                        } else {
+                            System.out.println("No existe pago con ese ID, intente nuevamente: ");
                         }
                     } else {
-                        System.out.println("No existe pago con ese ID, intente nuevamente: ");
+                        System.out.println("El miembro no existe.");
                     }
                     inputIsValid = true;
                 } catch(InputMismatchException e) {

@@ -71,7 +71,7 @@ public class PaymentServiceImp implements PaymentService {
                 if(amount > 0) {
                     payment.setPaymentIsValid(true);
                     return true;
-                } else if (amount < 0) {
+                } else if (amount <= 0) {
                     System.out.println("El monto debe ser mayor a 0. Intente nuevamente");
                 }
             } catch (NumberFormatException e) {

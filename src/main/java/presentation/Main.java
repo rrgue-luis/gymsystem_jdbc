@@ -45,6 +45,7 @@ public class Main {
                     selectedGym = Integer.parseInt(inputString);
                 } catch (NumberFormatException e) {
                     System.out.println("Error: El valor ingresado no es un numero valido");
+                    System.out.println("Ingrese el ID del gym (o presione Enter para mantener el actual):");
                 }
             } else {
                 selectedGym = 2;
@@ -52,10 +53,9 @@ public class Main {
             }
 
             gymExists = gymService.gymExists(selectedGym);
+            System.out.println(gymExists ? "" : "El gym ingresado no existe, intentelo nuevamente.");
 
-            System.out.println(gymExists ? "": "El gym ingresado no existe, intentelo nuevamente.");
-
-        }while (!gymExists);
+        } while (!gymExists);
 
 
         do {
@@ -66,56 +66,58 @@ public class Main {
             System.out.println("--4-- EMPLEADOS");
             System.out.println("**PRESIONE 0 PARA SALIR DEL SISTEMA**");
 
-            input = scanner.nextInt();
+
 
             try {
+                input = scanner.nextInt();
                 switch (input) {
 
                     case 1:
                         do {
-                        System.out.println("--1-- AGREGAR MIEMBRO");
-                        System.out.println("--2-- EDITAR MIEMBRO");
-                        System.out.println("--3-- ELIMINAR MIEMBRO");
-                        System.out.println("--4-- RENOVAR MEMBRESÍA");
-                        System.out.println("--5-- MOSTRAR *TODOS* LOS MIEMBROS");
-                        System.out.println("--6-- LISTAR MIEMBROS *DE UN GYM*");
-                        System.out.println("--PRESIONE 0 PARA SALIR--");
+                            System.out.println("--1-- AGREGAR MIEMBRO");
+                            System.out.println("--2-- EDITAR MIEMBRO");
+                            System.out.println("--3-- ELIMINAR MIEMBRO");
+                            System.out.println("--4-- RENOVAR MEMBRESÍA");
+                            System.out.println("--5-- MOSTRAR *TODOS* LOS MIEMBROS");
+                            System.out.println("--6-- LISTAR MIEMBROS *DE UN GYM*");
+                            System.out.println("--PRESIONE 0 PARA SALIR--");
 
-                        input = scanner.nextInt();
+                            input = scanner.nextInt();
 
-                        switch (input) {
-                            case 1:
-                                memberPresentation.insertMenu(selectedGym);
-                                break;
+                            switch (input) {
+                                case 1:
+                                    memberPresentation.insertMenu(selectedGym);
+                                    break;
 
-                            case 2:
-                                memberPresentation.updateMenu(selectedGym);
-                                break;
+                                case 2:
+                                    memberPresentation.updateMenu(selectedGym);
+                                    break;
 
-                            case 3:
-                                memberPresentation.deleteMenu();
-                                break;
+                                case 3:
+                                    memberPresentation.deleteMenu();
+                                    break;
 
-                            case 4:
-                                membershipPresentation.renewMembership(selectedGym);
-                                break;
+                                case 4:
+                                    membershipPresentation.renewMembership(selectedGym);
+                                    break;
 
-                            case 5:
-                                memberPresentation.obtainAllMenu();
-                                break;
+                                case 5:
+                                    memberPresentation.obtainAllMenu();
+                                    break;
 
-                            case 6:
-                                gymPresentation.listGymEmployeesMenu(selectedGym);
+                                case 6:
+                                    gymPresentation.listGymEmployeesMenu(selectedGym);
 
-                            default:
-                                break;
-                        }
+                                default:
+                                    break;
+                            }
                         } while (input != 0);
                         input = -1;
                         break;
 
                     case 2:
                         do {
+
                             System.out.println("\n--MENU PAGOS--");
                             System.out.println("--1-- AGREGAR PAGO MANUALMENTE");
                             System.out.println("--2-- ELIMINAR PAGO MANUALMENTE");
@@ -128,60 +130,64 @@ public class Main {
                             System.out.println("--PRESIONE 0 PARA SALIR--");
 
                             input = scanner.nextInt();
+                            try {
 
-                            switch (input) {
-                                case 1:
-                                    paymentPresentation.insertMenu(selectedGym);
-                                    break;
 
-                                case 2:
-                                    paymentPresentation.deleteMenu();
-                                    break;
+                                switch (input) {
+                                    case 1:
+                                        paymentPresentation.insertMenu(selectedGym);
+                                        break;
 
-                                case 3:
-                                    paymentPresentation.updateMenu(selectedGym);
-                                    break;
+                                    case 2:
+                                        paymentPresentation.deleteMenu();
+                                        break;
 
-                                case 4:
-                                    paymentPresentation.obtainAllMenu();
-                                    break;
+                                    case 3:
+                                        paymentPresentation.updateMenu(selectedGym);
+                                        break;
 
-                                case 5:
-                                    paymentPresentation.listMemberPayments();
-                                    break;
+                                    case 4:
+                                        paymentPresentation.obtainAllMenu();
+                                        break;
 
-                                case 6:
-                                    paymentPresentation.listGymPayments(selectedGym);
-                                    break;
+                                    case 5:
+                                        paymentPresentation.listMemberPayments();
+                                        break;
 
-                                case 7:
-                                    paymentPresentation.listPaymentsByMethod();
-                                    break;
+                                    case 6:
+                                        paymentPresentation.listGymPayments(selectedGym);
+                                        break;
 
-                                case 0:
-                                    System.out.println("Saliendo menu pagos...");
-                                    break;
+                                    case 7:
+                                        paymentPresentation.listPaymentsByMethod();
+                                        break;
 
-                                default:
-                                    System.out.println("Opcion no valida.");
-                                    break;
+                                    case 0:
+                                        System.out.println("Saliendo menu pagos...");
+                                        break;
+
+                                    default:
+                                        System.out.println("Opcion no valida.");
+                                        break;
+                                }
+
+                            } catch (InputMismatchException e) {
+                                System.out.println("Error. El dato ingresado no es válido. Intentelo nuevamente.");
                             }
-
-
                         } while (input != 0);
                         input = -1;
                         break;
 
                 }
-            }catch(InputMismatchException e) {
-                System.out.println("ERROR.");
+            } catch (InputMismatchException e) {
+                System.out.println("Error, el dato ingresado no es válido. Intentelo nuevamente.");
+                scanner.nextLine();
             }
 
+        } while (input != 0);
 
-            } while (input != 0) ;
-
-            scanner.close();
-
-        }
+        scanner.close();
 
     }
+
+}
