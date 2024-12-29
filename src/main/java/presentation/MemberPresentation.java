@@ -267,7 +267,7 @@ public class MemberPresentation {
                         System.out.println("El miembro no existe. Intente nuevamente");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("s: El dato ingresado no es un numero valido. Intente nuevamente o presione --0-- para salir");
+                    System.out.println("El dato ingresado no es un numero valido. Intente nuevamente o presione --0-- para salir");
                 }
             }
 
@@ -313,10 +313,10 @@ public class MemberPresentation {
         return selectedGym;
     }
 
-    public void setMemberToAGym(int selectedgym, Member member) {
-        System.out.println("Asignando miembro " + member + "al GYM: " + gymService.showName(selectedgym));
+    public void setMemberToAGym(int selectedGym, Member member) {
+        System.out.println("Asignando miembro " + member + "al GYM: " + gymService.showName(selectedGym));
         //assignMemberToGym mejor nombre
-        gymService.setMemberToAGym(selectedgym, member);
+        gymService.setMemberToAGym(selectedGym, member);
     }
 
     public LocalDate setRegistrationDate(LocalDate parsedDate) {

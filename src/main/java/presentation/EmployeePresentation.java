@@ -1,24 +1,32 @@
 package presentation;
 
 import business.EmployeeService;
+import business.GymService;
 import business.impl.EmployeeServiceImp;
+import business.impl.GymServiceImp;
 import entities.Employee;
 import enums.employee.EmployeeRole;
 import enums.employee.EmployeeShift;
 import enums.employee.EmployeeStatus;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
 public class EmployeePresentation {
     Scanner scanner = new Scanner(System.in);
     EmployeeService employeeService =  new EmployeeServiceImp();
+    GymService gymService = new GymServiceImp();
 
 
     public void insertMenu(int selectedGym) {
 
         Employee employee = new Employee();
+
+        selectedGym = setSelectedGym(selectedGym);
+
+        employee.setGymId(selectedGym);
 
         System.out.println("Ingrese el nombre del empleado: ");
         employee.setName(scanner.nextLine());
@@ -32,11 +40,26 @@ public class EmployeePresentation {
         System.out.println("Ingrese la direccion del empleado: ");
         employee.setAddress(scanner.nextLine());
 
-        System.out.println("Ingrese la fecha de contratacion del empleado: ");
-        String parsingDate = scanner.nextLine();
+        do {
+            System.out.println("Ingrese la fecha de contratacion del empleado: (ENTER: FECHA ACTUAL)");
+            String parsingDate = scanner.nextLine();
 
-        LocalDate parsedDate = employeeService.parseDate(parsingDate);
-        employee.setHiringDate(parsedDate);
+            if (parsingDate.equals("")) {
+                System.out.println("Fecha de contratacion: Hoy " + LocalDate.now());
+                LocalDate parsedDate = LocalDate.now();
+                employee.setHiringDate(parsedDate);
+                break;
+            } else {
+                try {
+                    LocalDate parsedDate = LocalDate.parse(parsingDate);
+                    employee.setHiringDate(parsedDate);
+                    System.out.println("Fecha asignada: " + parsedDate);
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD' (ENTER: FECHA ACTUAL)");
+                }
+            }
+        } while (true);
 
 
         String input = null;
@@ -207,6 +230,39 @@ public class EmployeePresentation {
 
     public void getAllGymEmployees(int selectedGym) {
 
+    }
+
+    public int setSelectedGym(int selectedGym) {
+        System.out.print("Ingrese el ID del gym (o presione Enter para mantener el actual): ");
+        String inputString;
+        boolean inputIsValid = false;
+        do {
+            inputString = scanner.nextLine().trim();
+
+            if (inputString.equals("")) {
+                if(!gymService.gymExists(selectedGym)) {
+                    System.out.println("ERROR: El gimnasio no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                } else {
+                    System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                    inputIsValid = true;
+                }
+            } else {
+                try {
+                    int gymId = Integer.parseInt(inputString);
+                    if(!gymService.gymExists(gymId)) {
+                        System.out.println("EL gimnasio ingresado no existe. Intente nuevamente (o presione Enter para mantener el actual)");
+                    } else {
+                        selectedGym = gymId;
+                        System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
+                        inputIsValid = true;
+                    }
+                } catch (NumberFormatException e){
+                    System.out.println("Error: EL dato ingresado no es un numero valido. Intente nuevamente con un numero o ENTER para mantener el actual");
+                }
+            }
+        } while (!inputIsValid);
+
+        return selectedGym;
     }
 
     /**Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.

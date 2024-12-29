@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 public class Employee {
     private int id;
+
+    private int gymId;
     private String name, surname, phone, address;
     private LocalDate hiringDate;
     private float salary;
@@ -15,7 +17,7 @@ public class Employee {
     public EmployeeRole employeeRole;
     private EmployeeStatus employeeStatus;
 
-    public Employee(int id, String name, String surname, String phone, String address, LocalDate hiringDate, float salary, EmployeeRole employeeRole, EmployeeShift employeeShift, EmployeeStatus employeeStatus) {
+    public Employee(int id, String name, String surname, String phone, String address, LocalDate hiringDate, float salary, EmployeeRole employeeRole, EmployeeShift employeeShift, EmployeeStatus employeeStatus, int gymId) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -26,6 +28,7 @@ public class Employee {
         this.employeeRole = employeeRole;
         this.employeeShift = employeeShift;
         this.employeeStatus = employeeStatus;
+        this.gymId = gymId;
     }
 
     public Employee() {
@@ -109,6 +112,11 @@ public class Employee {
     public void setEmployeeStatus(EmployeeStatus employeeStatus) {
         this.employeeStatus = employeeStatus;
     }
+
+    public int getGymId() { return gymId; }
+
+    public void setGymId(int gymId) { this.gymId = gymId; }
+
     @Override
     public String toString() {
         return "---------------------\n" +
@@ -120,6 +128,7 @@ public class Employee {
                 "Direccion: " + address + "\n" +
                 "Fecha contrato: " + hiringDate + "\n" +
                 "Horario: " + employeeShift + "\n" +
+                "Gimnasio: " + gymId + "\n" +
                 "Estado: " + employeeStatus + "\n"
                 ;
     }

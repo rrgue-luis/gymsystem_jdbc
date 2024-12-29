@@ -17,9 +17,8 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
     public Employee insert(Employee entity) {
 
         Connection connection = getConnection();
-        String SQLSentence = "INSERT INTO employee(name, surname, phone, address, hiring_date, salary, role, status, shift) " +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
-
+        String SQLSentence = "INSERT INTO employee(name, surname, phone, address, hiring_date, salary, role, status, shift, gym_id) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try {
 
@@ -34,6 +33,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
             SQLSentenceObject.setString(7, entity.getEmployeeRole().name());
             SQLSentenceObject.setString(8, entity.getEmployeeStatus().name());
             SQLSentenceObject.setString(9, entity.getEmployeeShift().name());
+            SQLSentenceObject.setInt(10, entity.getGymId());
 
 
             // ID | NOMBRE | DNI
@@ -144,11 +144,13 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 String employeeShiftString = result.getString("shift");
                 EmployeeShift employeeShift = EmployeeShift.valueOf(employeeShiftString.toUpperCase());
 
+                int gymId = result.getInt("gym_id");
+
                 float salary = result.getFloat("salary");
 
                 LocalDate hiringDate = result.getDate("hiring_date").toLocalDate();
 
-                Employee searchedEmployee = new Employee(id, name, surname, phone, address, hiringDate, salary, employeeRole, employeeShift, employeeStatus);
+                Employee searchedEmployee = new Employee(id, name, surname, phone, address, hiringDate, salary, employeeRole, employeeShift, employeeStatus, gymId);
                 employees.add(searchedEmployee);
             }
 
@@ -202,7 +204,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 int id = result.getInt("id");
                 String name = result.getString("name");
                 String surname = result.getString("surname");
-                String gender = result.getString("phone");
+                int gymId = result.getInt("gym_id");
                 String phone = result.getString("address");
                 String address = result.getString("address");
 
@@ -219,7 +221,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 String employeeStatusString = result.getString("status");
                 EmployeeStatus employeeStatus = EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
 
-                searchedEmployee = new Employee(id, name, surname, address, phone, hiringDate, salary, employeeRole, employeeShift, employeeStatus);
+                searchedEmployee = new Employee(id, name, surname, address, phone, hiringDate, salary, employeeRole, employeeShift, employeeStatus, gymId);
             }
 
         } catch (SQLException e) {
