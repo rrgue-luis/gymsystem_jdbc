@@ -196,7 +196,7 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    employeePresentation.updateMenu();
+                                    employeePresentation.updateMenu(selectedGym);
                                     break;
 
                                 case 3:

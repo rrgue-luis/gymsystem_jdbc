@@ -75,6 +75,11 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
+    public List<Employee> getEmployeesByGymId(int selectedGym) {
+        return employeeDAO.getEmployeesByGymId(selectedGym);
+    }
+
+    @Override
     public boolean employeeExists(Integer key) {
         return employeeDAO.employeeExists(key);
     }

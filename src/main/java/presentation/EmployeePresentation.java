@@ -117,7 +117,10 @@ public class EmployeePresentation {
 
     }
 
-    public void updateMenu() {
+    public void updateMenu(int selectedGym) {
+
+        selectedGym = setSelectedGym(selectedGym);
+
 
         System.out.println("Ingrese el ID del empleado a actualizar:");
         obtainAllMenu();
@@ -133,7 +136,7 @@ public class EmployeePresentation {
                 employeeExists = employeeService.employeeExists(input);
                 if (employeeExists) {
                     Employee employee = new Employee();
-
+                    employee.setGymId(selectedGym);
                     employee.setId(input);
 
                     System.out.println("Ingrese el nombre del empleado: ");
@@ -294,6 +297,25 @@ public class EmployeePresentation {
     }
 
     public void getAllGymEmployees(int selectedGym) {
+
+        selectedGym = setSelectedGym(selectedGym);
+
+
+        List<Employee> employeeList = employeeService.getEmployeesByGymId(selectedGym);
+        for(Employee employee : employeeList) {
+            System.out.println("---------------------");
+            System.out.println("Id: " + employee.getId());
+            System.out.println("Nombre: " + employee.getName());
+            System.out.println("Apellido: " + employee.getSurname());
+            System.out.println("Fecha de contratacion: " + employee.getHiringDate());
+            System.out.println("Sueldo: " + employee.getSalary());
+            System.out.println("Rol: " + employee.getEmployeeRole());
+            System.out.println("Turno: " + employee.getEmployeeShift());
+            System.out.println("Telefono: " + employee.getPhone());
+            System.out.println("Direccion: " + employee.getAddress());
+            System.out.println("Gym ID: " + employee.getGymId());
+            System.out.println("ACTIVO: " + employee.getEmployeeStatus());
+        }
 
     }
 

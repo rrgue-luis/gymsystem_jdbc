@@ -75,7 +75,7 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
 
         Connection connection = getConnection();
         String checkId = "SELECT COUNT(*) FROM employee WHERE id=?";
-        String SQLSentenceUpdate = "UPDATE employee SET name=?, surname=?, hiring_date=?, salary=?, role=?, status=?, shift=?, phone=?, address=? WHERE id=?";
+        String SQLSentenceUpdate = "UPDATE employee SET name=?, surname=?, hiring_date=?, salary=?, role=?, status=?, shift=?, phone=?, address=?, gym_id=? WHERE id=?";
 
         try {
 
@@ -98,7 +98,8 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
                 updateStmt.setString(7, entity.getEmployeeShift().name());
                 updateStmt.setString(8, entity.getPhone());
                 updateStmt.setString(9, entity.getAddress());
-                updateStmt.setInt(10, entity.getId());
+                updateStmt.setInt(10,entity.getGymId());
+                updateStmt.setInt(11, entity.getId());
 
                 updateStmt.executeUpdate();
                 updateStmt.close();
@@ -302,5 +303,60 @@ public class EmployeeDAOImp implements MySQLDBConnection, EmployeeDAO {
         }
 
         return false;
+    }
+
+    @Override
+    public List<Employee> getEmployeesByGymId(int selectedGym) {
+
+        List<Employee> employees = new ArrayList<>();
+        Connection connection = getConnection();
+        String SQLSentence = "SELECT * FROM employee WHERE gym_id = ?";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQLSentence);
+            preparedStatement.setInt(1, selectedGym);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String surname = result.getString("surname");
+                int gymId = result.getInt("gym_id");
+                String phone = result.getString("address");
+                String address = result.getString("address");
+
+                LocalDate hiringDate = result.getDate("hiring_date").toLocalDate();
+
+                float salary = result.getFloat("salary");
+
+                String employeeRoleString = result.getString("role");
+                EmployeeRole employeeRole = EmployeeRole.valueOf(employeeRoleString.toUpperCase());
+
+                String employeeShiftString = result.getString("shift");
+                EmployeeShift employeeShift = EmployeeShift.valueOf(employeeShiftString.toUpperCase());
+
+                String employeeStatusString = result.getString("status");
+                EmployeeStatus employeeStatus = EmployeeStatus.valueOf(employeeStatusString.toUpperCase());
+
+                Employee searchedEmployee = new Employee(id, name, surname, address, phone, hiringDate, salary, employeeRole, employeeShift, employeeStatus, gymId);
+                employees.add(searchedEmployee);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return employees;
     }
 }
