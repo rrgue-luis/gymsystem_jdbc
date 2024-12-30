@@ -62,8 +62,8 @@ public class Main {
             System.out.println("-----------SUCURSAL " + gymPresentation.showName(selectedGym) + "-----------");
             System.out.println("--1-- MIEMBROS");
             System.out.println("--2-- PAGOS");
-            System.out.println("--3-- SUCURSALES");
-            System.out.println("--4-- EMPLEADOS");
+            System.out.println("--3-- EMPLEADOS");
+            System.out.println("--4-- SUCURSALES");
             System.out.println("**PRESIONE 0 PARA SALIR DEL SISTEMA**");
 
 
@@ -185,6 +185,7 @@ public class Main {
                             System.out.println("--3-- ELIMINAR EMPLEADO");
                             System.out.println("--4-- MOSTRAR *TODOS* LOS EMPLEADOS");
                             System.out.println("--5-- LISTAR EMPLEADOS *DE UN GYM*");
+                            System.out.println("--6-- ACTUALIZAR SUELDO");
                             System.out.println("--PRESIONE 0 PARA SALIR--");
 
                             input = scanner.nextInt();
@@ -195,7 +196,7 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    employeePresentation.updateMenu(selectedGym);
+                                    employeePresentation.updateMenu();
                                     break;
 
                                 case 3:
@@ -203,11 +204,15 @@ public class Main {
                                     break;
 
                                 case 4:
-                                    employeePresentation.obtainAllMenu(selectedGym);
+                                    employeePresentation.obtainAllMenu();
                                     break;
 
                                 case 5:
                                     employeePresentation.getAllGymEmployees(selectedGym);
+                                    break;
+
+                                case 6:
+                                    employeePresentation.updateSalary();
                                     break;
 
                                 default:

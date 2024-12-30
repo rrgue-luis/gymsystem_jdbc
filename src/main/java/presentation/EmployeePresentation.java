@@ -11,12 +11,13 @@ import enums.employee.EmployeeStatus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class EmployeePresentation {
     Scanner scanner = new Scanner(System.in);
-    EmployeeService employeeService =  new EmployeeServiceImp();
+    EmployeeService employeeService = new EmployeeServiceImp();
     GymService gymService = new GymServiceImp();
 
 
@@ -66,7 +67,7 @@ public class EmployeePresentation {
         EmployeeRole employeeRole = null;
         System.out.println("Ingrese el rol del empleado: ('BOSS', 'MANAGER', 'TRAINER', 'EMPLOYEE')");
 
-        while(employeeRole == null) {
+        while (employeeRole == null) {
 
             input = scanner.nextLine().trim().toUpperCase();
 
@@ -88,7 +89,7 @@ public class EmployeePresentation {
         EmployeeShift employeeShift = null;
         System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
 
-        while(employeeShift == null) {
+        while (employeeShift == null) {
 
             input = scanner.nextLine().trim().toUpperCase();
 
@@ -116,102 +117,166 @@ public class EmployeePresentation {
 
     }
 
-    public void updateMenu(int selectedGym){
+    public void updateMenu() {
 
         System.out.println("Ingrese el ID del empleado a actualizar:");
-       // obtainAllMenu();
-        int input = scanner.nextInt();
-
-        boolean employeeExists = employeeService.employeeExists(input);
-
-        if(employeeExists) {
-            Employee employee = new Employee();
-
-            employee.setId(input);
-
-            System.out.println("Ingrese el nombre del empleado: ");
-            scanner.nextLine();
-            employee.setName(scanner.nextLine());
-
-            System.out.println("Ingrese el apellido del empleado: ");
-            employee.setSurname(scanner.nextLine());
-
-            System.out.println("Ingrese el telefono del empleado: ");
-            employee.setPhone(scanner.nextLine());
-
-            System.out.println("Ingrese la direccion del empleado");
-            employee.setAddress(scanner.nextLine());
-
-            System.out.println("Ingrese la fecha de contrato del empleado");
-            String parsingDate = scanner.nextLine();
-
-            LocalDate parsedDate = employeeService.parseDate(parsingDate);
-
-            employee.setHiringDate(parsedDate);
-
-            System.out.println("Ingrese el rol del empleado: ");
-            String inputString = scanner.nextLine().toUpperCase();
-
-            EmployeeRole employeeRole = null;
-
+        obtainAllMenu();
+        boolean inputIsValid = false;
+        boolean employeeExists = false;
+        int input = -1;
+        do {
             try {
-                employeeRole = EmployeeRole.valueOf(inputString);
-                employeeRole.valueOf(employeeRole.toString());
-                System.out.println("Rol elegido: " + employeeRole);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
-                e.printStackTrace();
+                do {
+                input = scanner.nextInt();
+                inputIsValid = true;
+
+                employeeExists = employeeService.employeeExists(input);
+                if (employeeExists) {
+                    Employee employee = new Employee();
+
+                    employee.setId(input);
+
+                    System.out.println("Ingrese el nombre del empleado: ");
+                    scanner.nextLine();
+                    employee.setName(scanner.nextLine());
+
+                    System.out.println("Ingrese el apellido del empleado: ");
+                    employee.setSurname(scanner.nextLine());
+
+                    System.out.println("Ingrese el telefono del empleado: ");
+                    employee.setPhone(scanner.nextLine());
+
+                    System.out.println("Ingrese la direccion del empleado");
+                    employee.setAddress(scanner.nextLine());
+
+                    do {
+                        System.out.println("Ingrese la fecha de contratación: (ENTER: FECHA ACTUAL)");
+                        String parsingDate = scanner.nextLine();
+
+                        if (parsingDate.equals("")) {
+                            System.out.println("Fecha de contratación: Hoy " + LocalDate.now());
+                            LocalDate parsedDate = LocalDate.now();
+                            employee.setHiringDate(parsedDate);
+                            break;
+                        } else {
+                            try {
+                                LocalDate parsedDate = LocalDate.parse(parsingDate);
+                                employee.setHiringDate(parsedDate);
+                                System.out.println("Fecha asignada: " + parsedDate);
+                                break;
+                            } catch (DateTimeParseException e) {
+                                System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                            }
+                        }
+                    } while (true);
+
+                    System.out.println("Ingrese el rol del empleado: ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+
+                    String inputString;
+                    EmployeeRole employeeRole = null;
+                    while(employeeRole == null) {
+
+                        inputString = scanner.nextLine().toUpperCase();
+
+                        try {
+                            employeeRole = EmployeeRole.valueOf(inputString);
+                            EmployeeRole.valueOf(employeeRole.toString());
+                            System.out.println("Rol elegido: " + employeeRole);
+                            employee.setEmployeeRole(employeeRole);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+                        }
+                    }
+
+                    employee.setSalary(employeeService.calculateSalary(employee, employeeRole));
+                    System.out.println("Sueldo asignado por defecto: " + employee.getSalary());
+
+                    System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
+
+                    EmployeeShift employeeShift = null;
+                    while (employeeShift == null) {
+
+                        inputString = scanner.nextLine().toUpperCase();
+                        try {
+                            employeeShift = EmployeeShift.valueOf(inputString);
+                            employee.setEmployeeShift(employeeShift);
+                            System.out.println("Turno elegido: " + employeeShift);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT')");
+                        }
+                    }
+
+
+                    employee.setEmployeeStatus(EmployeeStatus.ACTIVE);
+
+                    employeeService.updateEmployee(employee, employeeRole);
+                } else {
+                    System.out.println("El miembro seleccionado no existe.");
+                    employeeExists = false;
+                }
+            }while(!employeeExists);
+
+            } catch (InputMismatchException e) {
+                System.out.println("El dato ingresado no es un ID válido");
+                scanner.nextLine();
             }
-
-            System.out.println("Ingrese el turno del empleado: ");
-            inputString = scanner.nextLine().toUpperCase();
-
-            EmployeeShift employeeShift = null;
-
-            try {
-                employeeShift = EmployeeShift.valueOf(inputString);
-                employee.setEmployeeShift(employeeShift);
-                System.out.println("Turno elegido: " + employeeShift);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT')");
-                e.printStackTrace();
-            }
-
-            employee.setEmployeeStatus(EmployeeStatus.ACTIVE);
-
-            employeeService.updateEmployee(employee, employeeRole);
-        } else {
-            System.out.println("El empleado no existe.");
-        }
+        } while(!inputIsValid);
 
 
-    }
+
+
+
+
+}
 
     public void deleteMenu() {
 
         boolean employeeExists;
+        boolean inputIsValid = false;
+        int input = -1;
         do {
-            System.out.println("Ingrese el id del miembro a eliminar: ");
-            //obtainAllMenu(int selectedGym);
-            System.out.println("-----------LISTA-----------");
-            int input = scanner.nextInt();
+            System.out.println("Ingrese el id del empleado a eliminar: --0-- para salir");
+            obtainAllMenu();
+            System.out.println("-----------LISTA (PRESIONE 0 PARA SALIR)-----------");
+            try {
+                do {
+                    input = scanner.nextInt();
+                    if(input == 0) {
+                        System.out.println("Saliendo...");
+                        return;
+                    }
+                    employeeExists = employeeService.employeeExists(input);
+                    if(!employeeExists) {
+                        System.out.println("El empleado seleccionado no existe. Intente nuevamente. O presione --0-- para salir");
+                    } else {
+                        employeeService.delete(input);
+                        System.out.println("Desea seguir eliminando empleados? --0-- para SALIR, --Cualquier tecla-- SEGUIR ELIMINANDO");
+                        try {
+                            input = scanner.nextInt();
+                            if(input == 0){
+                                return;
+                            }
+                        } catch(InputMismatchException e) {
+                            System.out.println("Saliendo...");
+                        }
 
-            employeeExists = employeeService.employeeExists(input);
-            if (employeeService.employeeExists(input)) {
-                System.out.println("Empleado eliminado: " + input);
-                employeeService.delete(input);
-            } else {
-                System.out.println("No existe empleado con ese ID, intente nuevamente");
+                    }
+                } while(!employeeExists);
+
+            } catch(InputMismatchException e) {
+                System.out.println("El dato ingresado no es válido. Intente nuevamente o --0-- para salir");
+                scanner.nextLine();
             }
-        } while (!employeeExists);
+
+        } while (true);
 
     }
 
-    public void obtainAllMenu(int selectedGym) {
+    public void obtainAllMenu() {
 
         List<Employee> employeeList = employeeService.obtainAll();
 
-        for(Employee employee : employeeList) {
+        for (Employee employee : employeeList) {
 
             System.out.println("---------------");
             System.out.println("ID: " + employee.getId());
@@ -240,7 +305,7 @@ public class EmployeePresentation {
             inputString = scanner.nextLine().trim();
 
             if (inputString.equals("")) {
-                if(!gymService.gymExists(selectedGym)) {
+                if (!gymService.gymExists(selectedGym)) {
                     System.out.println("ERROR: El gimnasio no existe. Intente nuevamente (o presione Enter para mantener el actual)");
                 } else {
                     System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
@@ -249,14 +314,14 @@ public class EmployeePresentation {
             } else {
                 try {
                     int gymId = Integer.parseInt(inputString);
-                    if(!gymService.gymExists(gymId)) {
+                    if (!gymService.gymExists(gymId)) {
                         System.out.println("EL gimnasio ingresado no existe. Intente nuevamente (o presione Enter para mantener el actual)");
                     } else {
                         selectedGym = gymId;
                         System.out.println("Gimnasio seleccionado: " + selectedGym + "" + gymService.showName(selectedGym));
                         inputIsValid = true;
                     }
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.out.println("Error: EL dato ingresado no es un numero valido. Intente nuevamente con un numero o ENTER para mantener el actual");
                 }
             }
@@ -265,7 +330,8 @@ public class EmployeePresentation {
         return selectedGym;
     }
 
-    /**Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.
+    /**
+     * Modifica manualmente el sueldo asignado por defecto, ideal para aumentos.
      * No recibe nada
      */
     public void updateSalary() {
@@ -277,11 +343,12 @@ public class EmployeePresentation {
         System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
         float newSalary = scanner.nextFloat();
 
-       employeeService.updateSalary(searchedEmployee, newSalary);
+        employeeService.updateSalary(searchedEmployee, newSalary);
 
     }
 
-    /**Muestra los datos del empleado, buscandolo por ID
+    /**
+     * Muestra los datos del empleado, buscandolo por ID
      * Devuelve todos los datos
      */
     public void searchForIdMenu() {
@@ -295,18 +362,18 @@ public class EmployeePresentation {
 
             searchedEmployee = employeeService.searchForId(input);
 
-            if(searchedEmployee!= null) {
+            if (searchedEmployee != null) {
                 System.out.println(searchedEmployee);
             } else {
                 System.out.println("No existe ese miembro, intente con otro ID. \n Volver al menú: --(0)--");
             }
 
-            if(input == 0) {
+            if (input == 0) {
                 System.out.println("Volviendo al menú");
                 break;
             }
 
-        } while(searchedEmployee == null);
+        } while (searchedEmployee == null);
 
     }
 

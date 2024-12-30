@@ -76,14 +76,7 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public boolean employeeExists(Integer key) {
-
-        boolean employeeExists = employeeDAO.employeeExists(key);
-
-        if (employeeExists) {
-            return true;
-        } else {
-            return false;
-        }
+        return employeeDAO.employeeExists(key);
     }
 
     @Override
