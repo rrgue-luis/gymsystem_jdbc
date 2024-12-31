@@ -75,6 +75,15 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
+    public boolean isValidSalary(float salary) {
+        if(salary <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
     public List<Employee> getEmployeesByGymId(int selectedGym) {
         return employeeDAO.getEmployeesByGymId(selectedGym);
     }

@@ -130,107 +130,103 @@ public class EmployeePresentation {
         do {
             try {
                 do {
-                input = scanner.nextInt();
-                inputIsValid = true;
+                    input = scanner.nextInt();
+                    inputIsValid = true;
 
-                employeeExists = employeeService.employeeExists(input);
-                if (employeeExists) {
-                    Employee employee = new Employee();
-                    employee.setGymId(selectedGym);
-                    employee.setId(input);
+                    employeeExists = employeeService.employeeExists(input);
+                    if (employeeExists) {
+                        Employee employee = new Employee();
+                        employee.setGymId(selectedGym);
+                        employee.setId(input);
 
-                    System.out.println("Ingrese el nombre del empleado: ");
-                    scanner.nextLine();
-                    employee.setName(scanner.nextLine());
+                        System.out.println("Ingrese el nombre del empleado: ");
+                        scanner.nextLine();
+                        employee.setName(scanner.nextLine());
 
-                    System.out.println("Ingrese el apellido del empleado: ");
-                    employee.setSurname(scanner.nextLine());
+                        System.out.println("Ingrese el apellido del empleado: ");
+                        employee.setSurname(scanner.nextLine());
 
-                    System.out.println("Ingrese el telefono del empleado: ");
-                    employee.setPhone(scanner.nextLine());
+                        System.out.println("Ingrese el telefono del empleado: ");
+                        employee.setPhone(scanner.nextLine());
 
-                    System.out.println("Ingrese la direccion del empleado");
-                    employee.setAddress(scanner.nextLine());
+                        System.out.println("Ingrese la direccion del empleado");
+                        employee.setAddress(scanner.nextLine());
 
-                    do {
-                        System.out.println("Ingrese la fecha de contratación: (ENTER: FECHA ACTUAL)");
-                        String parsingDate = scanner.nextLine();
+                        do {
+                            System.out.println("Ingrese la fecha de contratación: (ENTER: FECHA ACTUAL)");
+                            String parsingDate = scanner.nextLine();
 
-                        if (parsingDate.equals("")) {
-                            System.out.println("Fecha de contratación: Hoy " + LocalDate.now());
-                            LocalDate parsedDate = LocalDate.now();
-                            employee.setHiringDate(parsedDate);
-                            break;
-                        } else {
-                            try {
-                                LocalDate parsedDate = LocalDate.parse(parsingDate);
+                            if (parsingDate.equals("")) {
+                                System.out.println("Fecha de contratación: Hoy " + LocalDate.now());
+                                LocalDate parsedDate = LocalDate.now();
                                 employee.setHiringDate(parsedDate);
-                                System.out.println("Fecha asignada: " + parsedDate);
                                 break;
-                            } catch (DateTimeParseException e) {
-                                System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                            } else {
+                                try {
+                                    LocalDate parsedDate = LocalDate.parse(parsingDate);
+                                    employee.setHiringDate(parsedDate);
+                                    System.out.println("Fecha asignada: " + parsedDate);
+                                    break;
+                                } catch (DateTimeParseException e) {
+                                    System.out.println("Error de syntaxis, recuerde que el formato es: 'AAAA-MM-DD'");
+                                }
+                            }
+                        } while (true);
+
+                        System.out.println("Ingrese el rol del empleado: ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+
+                        String inputString;
+                        EmployeeRole employeeRole = null;
+                        while (employeeRole == null) {
+
+                            inputString = scanner.nextLine().toUpperCase();
+
+                            try {
+                                employeeRole = EmployeeRole.valueOf(inputString);
+                                EmployeeRole.valueOf(employeeRole.toString());
+                                System.out.println("Rol elegido: " + employeeRole);
+                                employee.setEmployeeRole(employeeRole);
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
                             }
                         }
-                    } while (true);
 
-                    System.out.println("Ingrese el rol del empleado: ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+                        employee.setSalary(employeeService.calculateSalary(employee, employeeRole));
+                        System.out.println("Sueldo asignado por defecto: " + employee.getSalary());
 
-                    String inputString;
-                    EmployeeRole employeeRole = null;
-                    while(employeeRole == null) {
+                        System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
 
-                        inputString = scanner.nextLine().toUpperCase();
+                        EmployeeShift employeeShift = null;
+                        while (employeeShift == null) {
 
-                        try {
-                            employeeRole = EmployeeRole.valueOf(inputString);
-                            EmployeeRole.valueOf(employeeRole.toString());
-                            System.out.println("Rol elegido: " + employeeRole);
-                            employee.setEmployeeRole(employeeRole);
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Tipo de ROL no valido. Intente nuevamente ('TRAINER', 'EMPLOYEE', 'MANAGER', 'BOSS')");
+                            inputString = scanner.nextLine().toUpperCase();
+                            try {
+                                employeeShift = EmployeeShift.valueOf(inputString);
+                                employee.setEmployeeShift(employeeShift);
+                                System.out.println("Turno elegido: " + employeeShift);
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT')");
+                            }
                         }
+
+
+                        employee.setEmployeeStatus(EmployeeStatus.ACTIVE);
+
+                        employeeService.updateEmployee(employee, employeeRole);
+                    } else {
+                        System.out.println("El miembro seleccionado no existe.");
+                        employeeExists = false;
                     }
-
-                    employee.setSalary(employeeService.calculateSalary(employee, employeeRole));
-                    System.out.println("Sueldo asignado por defecto: " + employee.getSalary());
-
-                    System.out.println("Ingrese el turno del empleado: ('MORNING', 'AFTERNOON', 'NIGHT')");
-
-                    EmployeeShift employeeShift = null;
-                    while (employeeShift == null) {
-
-                        inputString = scanner.nextLine().toUpperCase();
-                        try {
-                            employeeShift = EmployeeShift.valueOf(inputString);
-                            employee.setEmployeeShift(employeeShift);
-                            System.out.println("Turno elegido: " + employeeShift);
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Turno no valido. Intente nuevamente ('MORNING', 'AFTERNOON', 'NIGHT')");
-                        }
-                    }
-
-
-                    employee.setEmployeeStatus(EmployeeStatus.ACTIVE);
-
-                    employeeService.updateEmployee(employee, employeeRole);
-                } else {
-                    System.out.println("El miembro seleccionado no existe.");
-                    employeeExists = false;
-                }
-            }while(!employeeExists);
+                } while (!employeeExists);
 
             } catch (InputMismatchException e) {
                 System.out.println("El dato ingresado no es un ID válido");
                 scanner.nextLine();
             }
-        } while(!inputIsValid);
+        } while (!inputIsValid);
 
 
-
-
-
-
-}
+    }
 
     public void deleteMenu() {
 
@@ -244,29 +240,29 @@ public class EmployeePresentation {
             try {
                 do {
                     input = scanner.nextInt();
-                    if(input == 0) {
+                    if (input == 0) {
                         System.out.println("Saliendo...");
                         return;
                     }
                     employeeExists = employeeService.employeeExists(input);
-                    if(!employeeExists) {
+                    if (!employeeExists) {
                         System.out.println("El empleado seleccionado no existe. Intente nuevamente. O presione --0-- para salir");
                     } else {
                         employeeService.delete(input);
                         System.out.println("Desea seguir eliminando empleados? --0-- para SALIR, --Cualquier tecla-- SEGUIR ELIMINANDO");
                         try {
                             input = scanner.nextInt();
-                            if(input == 0){
+                            if (input == 0) {
                                 return;
                             }
-                        } catch(InputMismatchException e) {
+                        } catch (InputMismatchException e) {
                             System.out.println("Saliendo...");
                         }
 
                     }
-                } while(!employeeExists);
+                } while (!employeeExists);
 
-            } catch(InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("El dato ingresado no es válido. Intente nuevamente o --0-- para salir");
                 scanner.nextLine();
             }
@@ -302,7 +298,7 @@ public class EmployeePresentation {
 
 
         List<Employee> employeeList = employeeService.getEmployeesByGymId(selectedGym);
-        for(Employee employee : employeeList) {
+        for (Employee employee : employeeList) {
             System.out.println("---------------------");
             System.out.println("Id: " + employee.getId());
             System.out.println("Nombre: " + employee.getName());
@@ -358,14 +354,53 @@ public class EmployeePresentation {
      */
     public void updateSalary() {
         System.out.println("Ingrese el ID del empleado a modificar el sueldo: ");
-        int input = scanner.nextInt();
+        boolean inputIsValid = false;
+        boolean employeeExists = false;
+        boolean salaryIsValid = false;
+        int input = -1;
+        float newSalary = -1;
+        do {
+            try {
+                while (!employeeExists) {
+                    input = scanner.nextInt();
+                    inputIsValid = true;
 
-        Employee searchedEmployee = employeeService.searchForId(input);
+                    Employee searchedEmployee = employeeService.searchForId(input);
+                    employeeExists = employeeService.employeeExists(input);
 
-        System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
-        float newSalary = scanner.nextFloat();
+                    if (employeeExists) {
+                        do  {
+                            try {
+                                System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
+                                newSalary = scanner.nextFloat();
+                                salaryIsValid = employeeService.isValidSalary(newSalary);
+                                if(salaryIsValid) {
+                                    employeeService.updateSalary(searchedEmployee, newSalary);
+                                    searchedEmployee = employeeService.searchForId(input);
+                                    System.out.println("Nuevo sueldo para empleado " + searchedEmployee.getName() + " Sueldo: " + searchedEmployee.getSalary());
+                                } else {
+                                    System.out.println("El sueldo ingresado no es válido. Intente nuevamente.");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("El dato ingresado no es un sueldo válido. Intente nuevamente.");
+                                scanner.nextLine();
+                            }
+                        } while (!salaryIsValid);
+                    } else {
+                        System.out.println("El empleado no existe. Intente nuevamente. \nO presione --0-- para salir al menú");
+                        scanner.nextLine();
+                    }
+                    if (input == 0) {
+                        return;
+                    }
+                }
 
-        employeeService.updateSalary(searchedEmployee, newSalary);
+            } catch (InputMismatchException e) {
+                System.out.println("El dato ingresado no es un ID de empleado válido. Intente nuevamente \nO presione --0-- para salir al menú");
+                scanner.nextLine();
+            }
+
+        } while (!inputIsValid);
 
     }
 

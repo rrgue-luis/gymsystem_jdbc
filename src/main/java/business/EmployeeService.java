@@ -27,6 +27,8 @@ public interface EmployeeService {
 
     void updateSalary(Employee entity, float newSalary);
 
+    boolean isValidSalary(float salary);
+
     List<Employee> getEmployeesByGymId(int selectedGym);
 
 }
