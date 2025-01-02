@@ -6,7 +6,6 @@ import business.PaymentService;
 import business.impl.GymServiceImp;
 import business.impl.MemberServiceImp;
 import business.impl.PaymentServiceImp;
-import dao.imp.GymDAOImp;
 import entities.Payment;
 import enums.payment.PaymentMethod;
 
