@@ -183,7 +183,7 @@ public class Main {
                             System.out.println("--1-- AGREGAR EMPLEADO");
                             System.out.println("--2-- EDITAR EMPLEADO");
                             System.out.println("--3-- ELIMINAR EMPLEADO");
-                            System.out.println("--4-- MOSTRAR *TODOS* LOS EMPLEADOS");
+                            System.out.println("--4-- LISTAR *TODOS* LOS EMPLEADOS");
                             System.out.println("--5-- LISTAR EMPLEADOS *DE UN GYM*");
                             System.out.println("--6-- ACTUALIZAR SUELDO");
                             System.out.println("--PRESIONE 0 PARA SALIR--");
@@ -204,7 +204,7 @@ public class Main {
                                     break;
 
                                 case 4:
-                                    employeePresentation.obtainAllMenu();
+                                    employeePresentation.getAllMenu();
                                     break;
 
                                 case 5:

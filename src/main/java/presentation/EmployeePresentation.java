@@ -123,7 +123,7 @@ public class EmployeePresentation {
 
 
         System.out.println("Ingrese el ID del empleado a actualizar:");
-        obtainAllMenu();
+        getAllMenu();
         boolean inputIsValid = false;
         boolean employeeExists = false;
         int input = -1;
@@ -235,7 +235,7 @@ public class EmployeePresentation {
         int input = -1;
         do {
             System.out.println("Ingrese el id del empleado a eliminar: --0-- para salir");
-            obtainAllMenu();
+            getAllMenu();
             System.out.println("-----------LISTA (PRESIONE 0 PARA SALIR)-----------");
             try {
                 do {
@@ -271,7 +271,7 @@ public class EmployeePresentation {
 
     }
 
-    public void obtainAllMenu() {
+    public void getAllMenu() {
 
         List<Employee> employeeList = employeeService.obtainAll();
 
@@ -369,12 +369,12 @@ public class EmployeePresentation {
                     employeeExists = employeeService.employeeExists(input);
 
                     if (employeeExists) {
-                        do  {
+                        do {
                             try {
                                 System.out.println("Ingrese el nuevo sueldo para el empleado ID: " + input);
                                 newSalary = scanner.nextFloat();
                                 salaryIsValid = employeeService.isValidSalary(newSalary);
-                                if(salaryIsValid) {
+                                if (salaryIsValid) {
                                     employeeService.updateSalary(searchedEmployee, newSalary);
                                     searchedEmployee = employeeService.searchForId(input);
                                     System.out.println("Nuevo sueldo para empleado " + searchedEmployee.getName() + " Sueldo: " + searchedEmployee.getSalary());
@@ -399,9 +399,7 @@ public class EmployeePresentation {
                 System.out.println("El dato ingresado no es un ID de empleado válido. Intente nuevamente \nO presione --0-- para salir al menú");
                 scanner.nextLine();
             }
-
         } while (!inputIsValid);
-
     }
 
     /**
