@@ -1,17 +1,8 @@
 package presentation;
 
-import business.EmployeeService;
 import business.GymService;
-import business.MemberService;
-import business.impl.EmployeeServiceImp;
 import business.impl.GymServiceImp;
-import business.impl.MemberServiceImp;
-import entities.Member;
-
-import java.sql.SQLOutput;
-import java.time.LocalDate;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
