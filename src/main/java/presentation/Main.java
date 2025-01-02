@@ -102,7 +102,7 @@ public class Main {
                                     break;
 
                                 case 5:
-                                    memberPresentation.obtainAllMenu();
+                                    memberPresentation.getAllMenu();
                                     break;
 
                                 case 6:
@@ -147,19 +147,19 @@ public class Main {
                                         break;
 
                                     case 4:
-                                        paymentPresentation.obtainAllMenu();
+                                        paymentPresentation.getAllMenu();
                                         break;
 
                                     case 5:
-                                        paymentPresentation.listMemberPayments();
+                                        paymentPresentation.getMemberPayments();
                                         break;
 
                                     case 6:
-                                        paymentPresentation.listGymPayments(selectedGym);
+                                        paymentPresentation.getGymPayments(selectedGym);
                                         break;
 
                                     case 7:
-                                        paymentPresentation.listPaymentsByMethod();
+                                        paymentPresentation.getPaymentsByMethod();
                                         break;
 
                                     case 0:

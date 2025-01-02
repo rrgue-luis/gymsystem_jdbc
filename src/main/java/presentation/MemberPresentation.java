@@ -123,7 +123,7 @@ public class MemberPresentation {
             try {
                 System.out.println("Ingrese el ID del miembro a eliminar: ");
 
-                obtainAllMenu();
+                getAllMenu();
 
                 System.out.print("ID: ");
                 int option = scanner.nextInt();
@@ -154,7 +154,7 @@ public class MemberPresentation {
         } while (true);
     }
 
-    public void obtainAllMenu() {
+    public void getAllMenu() {
 
         List<Member> memberList = memberService.obtainAll();
         for (Member member : memberList){

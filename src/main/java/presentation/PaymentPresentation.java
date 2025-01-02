@@ -132,7 +132,7 @@ public class PaymentPresentation {
     /**
      * Muestra todos los pagos y los miembros a los que están asociados
      */
-    public void obtainAllMenu() {
+    public void getAllMenu() {
 
         List<Payment> payments = paymentService.obtainAll();
         for(Payment payment : payments) {
@@ -256,7 +256,7 @@ public class PaymentPresentation {
      */
     public void deleteMenu() {
         System.out.println("Ingrese el ID del pago a eliminar, 0 para salir: ");
-        obtainAllMenu();
+        getAllMenu();
         int input = -1;
         do {
 
@@ -285,7 +285,7 @@ public class PaymentPresentation {
 
     }
 
-    public void listMemberPayments(){
+    public void getMemberPayments(){
         int exit = -1;
         while(exit != 0) {
             boolean inputIsValid = false;
@@ -334,7 +334,7 @@ public class PaymentPresentation {
 
     }
 
-    public void listGymPayments(int selectedGym) {
+    public void getGymPayments(int selectedGym) {
 
         GymService gymService = new GymServiceImp();
 
@@ -353,7 +353,7 @@ public class PaymentPresentation {
             }
     }
 
-    public void listPaymentsByMethod() {
+    public void getPaymentsByMethod() {
         System.out.println("------ORDENAR POR TIPO DE PAGO------");
 
         String method = null;
